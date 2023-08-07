@@ -1,5 +1,5 @@
 {
-    "name": "noumecha/booking_system",
+    "name": "habeuk/booking_system",
     "description": "\"A booking module for drupal booking system\"",
     "type": "drupal-module-custom",
     "license": "MIT",
