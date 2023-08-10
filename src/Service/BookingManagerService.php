@@ -37,16 +37,8 @@ class BookingManagerService extends ControllerBase {
     $disabledDaysOfTheWeek = $this->getDisabledDaysOfTheWeek($config["jours"]);
     $data["disabledDays"] = $disabledDaysOfTheWeek;
 
-    /**
-     *
-     * @var \Drupal\booking_system\Entity\BookingDateEntity $entity
-     */
-    $disabledDays = $this->entityTypeManager->getStorage('booking_system_date')->loadMultiple(); // getQuery
-                                                                                                 // permet
-                                                                                                 // de
-                                                                                                 // construire
-                                                                                                 // une
-                                                                                                 // requête
+    //
+    $disabledDays = $this->entityTypeManager->getStorage('booking_system_date')->loadMultiple();
     /*
      * $disabledDates = $this->getDisabledDates($disabledDays);
      * $data['disabledDates'] = $disabledDates;
@@ -62,12 +54,7 @@ class BookingManagerService extends ControllerBase {
    */
   public function generateDisabledDates() {
     $data = [];
-    $entities = $this->entityTypeManager->getStorage('booking_system_date')->loadMultiple(); // getQuery
-                                                                                             // permet
-                                                                                             // de
-                                                                                             // construire
-                                                                                             // une
-                                                                                             // requête
+    $entities = $this->entityTypeManager->getStorage('booking_system_date')->loadMultiple();
     $today = strtotime('today');
     /**
      *

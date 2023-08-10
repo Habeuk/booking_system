@@ -11,34 +11,29 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Drupal\Component\Serialization\Json;
+
 /**
  * Returns responses for booking_system routes.
  */
-class BookingSystemController extends ControllerBase
-{
+class BookingSystemController extends ControllerBase {
+  protected $manager;
 
-  protected  $manager;
-
-  public function __construct(BookingManagerService $manager)
-  {
+  public function __construct(BookingManagerService $manager) {
     $this->manager = $manager;
   }
 
-
   /**
+   *
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container)
-  {
+  public static function create(ContainerInterface $container) {
     return new static($container->get('booking_system.manager'));
   }
-
 
   /**
    * Builds the response to showing the Vue-js app
    */
-  public function build()
-  {
+  public function build() {
     $build['content'] = [
       '#type' => 'html_tag',
       '#tag' => 'section',
@@ -51,28 +46,27 @@ class BookingSystemController extends ControllerBase
       ]
     ];
     $build['content']['#attached']['library'][] = 'booking_system/booking_system_app';
-    //dump($build);
+    // dump($build);
     return $build;
   }
 
   /**
-   *
    * Give the days to disable
-   *
    */
-  public function dates()
-  {
+  public function dates() {
     try {
 
       $data = $this->manager->generateDates();
       $data['disabledDates'] = $this->manager->generateDisabledDates();
       return HttpResponse::response($data);
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $errors = ExceptionExtractMessage::errorAll($e);
       $this->getLogger('boobooking_system.settingsking_system')->critical(ExceptionExtractMessage::errorAllToString($e));
       return HttpResponse::response($errors, 400, $e->getMessage());
     }
   }
+
   /**
    * Permet de recupérer la reservation d'un utilisateur.
    *
@@ -99,44 +93,44 @@ class BookingSystemController extends ControllerBase
       return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 400, $e->getMessage());
     }
   }
+
   /**
-   *
    * Give the differents schedule of a day
-   *
    */
-  public function schedule($day)
-  {
-      $day = (int) $day;
+  public function schedule($day) {
+    $day = (int) $day;
 
-      $data = $this->manager->generateSchdules($day);
-      if (isset($data["error"])) {
-        return new JsonResponse($data, Response::HTTP_BAD_REQUEST);
-      }
+    $data = $this->manager->generateSchdules($day);
+    if (isset($data["error"])) {
+      return new JsonResponse($data, Response::HTTP_BAD_REQUEST);
+    }
 
-      return new JsonResponse($data, Response::HTTP_OK);
+    return new JsonResponse($data, Response::HTTP_OK);
   }
 
   /**
-   *{@inheritdoc}
-   *return the the number of seat left
+   *
+   * {@inheritdoc} return the the number of seat left
    */
-  public function getSeatsNumber($day, $hour){
+  public function getSeatsNumber($day, $hour) {
     $day = (int) $day;
     $data = $this->manager->getSeats($day, $hour);
-    if(isset($data['error'])) {
+    if (isset($data['error'])) {
       return new JsonResponse($data, Response::HTTP_BAD_REQUEST);
     }
     return HttpResponse::response($data);
   }
+
   /**
+   *
    * @inheritdoc
    */
-  public function default()
-  {
+  public function default() {
     $build['content'] = [
       '#type' => 'item',
-      '#markup' => $this->t('Starting default page for testing purpose!'),
+      '#markup' => $this->t('Starting default page for testing purpose!')
     ];
     return $build;
   }
+
 }
