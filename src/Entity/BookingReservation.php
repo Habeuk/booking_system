@@ -12,7 +12,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\user\UserInterface;
 
 /**
- * Defines the Booking reservation entity.
+ * Permet de sauvegarder les données utilisateurs.
  *
  * @ingroup booking_system
  *
@@ -53,11 +53,11 @@ use Drupal\user\UserInterface;
  *     "langcode" = "langcode",
  *     "published" = "status",
  *   },
-*   revision_metadata_keys = {
-*     "revision_user" = "revision_uid",
-*     "revision_created" = "revision_timestamp",
-*     "revision_log_message" = "revision_log"
-*   },
+ *   revision_metadata_keys = {
+ *     "revision_user" = "revision_uid",
+ *     "revision_created" = "revision_timestamp",
+ *     "revision_log_message" = "revision_log"
+ *   },
  *   links = {
  *     "canonical" = "/admin/structure/booking_reservation/{booking_reservation}",
  *     "add-form" = "/admin/structure/booking_reservation/add",
@@ -79,16 +79,18 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   use EntityPublishedTrait;
 
   /**
+   *
    * {@inheritdoc}
    */
   public static function preCreate(EntityStorageInterface $storage_controller, array &$values) {
     parent::preCreate($storage_controller, $values);
     $values += [
-      'user_id' => \Drupal::currentUser()->id(),
+      'user_id' => \Drupal::currentUser()->id()
     ];
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   protected function urlRouteParameters($rel) {
@@ -105,6 +107,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
@@ -127,6 +130,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function getName() {
@@ -134,6 +138,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function setName($name) {
@@ -142,6 +147,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function getCreatedTime() {
@@ -149,6 +155,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function setCreatedTime($timestamp) {
@@ -157,6 +164,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function getOwner() {
@@ -164,6 +172,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function getOwnerId() {
@@ -171,6 +180,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function setOwnerId($uid) {
@@ -179,6 +189,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function setOwner(UserInterface $account) {
@@ -187,6 +198,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
@@ -195,99 +207,50 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
     // Add the published field.
     $fields += static::publishedBaseFieldDefinitions($entity_type);
 
-    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Authored by'))
-      ->setDescription(t('The user ID of author of the Booking reservation entity.'))
-      ->setRevisionable(TRUE)
-      ->setSetting('target_type', 'user')
-      ->setSetting('handler', 'default')
-      ->setTranslatable(TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'author',
-        'weight' => 0,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 5,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'autocomplete_type' => 'tags',
-          'placeholder' => '',
-        ],
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')->setLabel(t('Authored by'))->setDescription(t('The user ID of author of the Booking reservation entity.'))->setRevisionable(TRUE)->setSetting('target_type', 'user')->setSetting('handler', 'default')->setTranslatable(TRUE)->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'author',
+      'weight' => 0
+    ])->setDisplayOptions('form', [
+      'type' => 'entity_reference_autocomplete',
+      'weight' => 5,
+      'settings' => [
+        'match_operator' => 'CONTAINS',
+        'size' => '60',
+        'autocomplete_type' => 'tags',
+        'placeholder' => ''
+      ]
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE);
 
-    $fields['name'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Name'))
-      ->setDescription(t('The name of the Booking reservation entity.'))
-      ->setRevisionable(TRUE)
-      ->setSettings([
-        'max_length' => 50,
-        'text_processing' => 0,
-      ])
-      ->setDefaultValue('')
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => -4,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
-        'weight' => -4,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
-      ->setRequired(TRUE);
+    $fields['name'] = BaseFieldDefinition::create('string')->setLabel(t('Name'))->setDescription(t('The name of the Booking reservation entity.'))->setRevisionable(TRUE)->setSettings([
+      'max_length' => 50,
+      'text_processing' => 0
+    ])->setDefaultValue('')->setDisplayOptions('view', [
+      'label' => 'above',
+      'type' => 'string',
+      'weight' => -4
+    ])->setDisplayOptions('form', [
+      'type' => 'string_textfield',
+      'weight' => -4
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setRequired(TRUE);
 
-    $fields['status']->setDescription(t('A boolean indicating whether the Booking reservation is published.'))
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'weight' => -3,
-      ]);
+    $fields['status']->setDescription(t('A boolean indicating whether the Booking reservation is published.'))->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'weight' => -3
+    ]);
 
-    $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Created'))
-      ->setDescription(t('The time that the entity was created.'));
+    $fields['created'] = BaseFieldDefinition::create('created')->setLabel(t('Created'))->setDescription(t('The time that the entity was created.'));
 
-    $fields['changed'] = BaseFieldDefinition::create('changed')
-      ->setLabel(t('Changed'))
-      ->setDescription(t('The time that the entity was last edited.'));
+    $fields['changed'] = BaseFieldDefinition::create('changed')->setLabel(t('Changed'))->setDescription(t('The time that the entity was last edited.'));
 
-    $fields['revision_translation_affected'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Revision translation affected'))
-      ->setDescription(t('Indicates if the last edit of a translation belongs to current revision.'))
-      ->setReadOnly(TRUE)
-      ->setRevisionable(TRUE)
-      ->setTranslatable(TRUE);
-      $fields['number_of_places'] = BaseFieldDefinition::create('integer')
-        ->setLabel(t('Number of places '))
-        ->setDescription(t('Indicates the number of places for the reservation'))
-        ->setReadOnly(TRUE)
-        ->setTranslatable(TRUE);
-      $fields['time_of_reservation'] = BaseFieldDefinition::create('datetime')
-        ->setLabel(t('Reservation Hour '))
-        ->setDescription(t('Indicates the reservation hour'))
-        ->setReadOnly(TRUE)
-        ->setTranslatable(TRUE);
-      $fields['periode_name'] = BaseFieldDefinition::create('string')
-        ->setLabel(t('Periode Name'))
-        ->setDescription(t('Indicates the reservation Periode'))
-        ->setReadOnly(TRUE)
-        ->setTranslatable(TRUE);
-      $fields['reservation_date'] = BaseFieldDefinition::create('datetime')
-        ->setLabel(t('Reservation Date'))
-        ->setSettings(['datetime_type' => 'date',])
-        ->setDescription(t('Indicates the reservation date'))
-        ->setReadOnly(TRUE)
-        ->setTranslatable(TRUE);
-      $fields['reservation_reduction'] = BaseFieldDefinition::create('integer')
-        ->setLabel(t('Reservation Reduction'))
-        ->setDescription(t('Indicates the reservation reduction'))
-        ->setReadOnly(TRUE)
-        ->setTranslatable(TRUE);
+    $fields['revision_translation_affected'] = BaseFieldDefinition::create('boolean')->setLabel(t('Revision translation affected'))->setDescription(t('Indicates if the last edit of a translation belongs to current revision.'))->setReadOnly(TRUE)->setRevisionable(TRUE)->setTranslatable(TRUE);
+    $fields['number_of_places'] = BaseFieldDefinition::create('integer')->setLabel(t('Number of places '))->setDescription(t('Indicates the number of places for the reservation'))->setReadOnly(TRUE)->setTranslatable(TRUE);
+    $fields['time_of_reservation'] = BaseFieldDefinition::create('datetime')->setLabel(t('Reservation Hour '))->setDescription(t('Indicates the reservation hour'))->setReadOnly(TRUE)->setTranslatable(TRUE);
+    $fields['periode_name'] = BaseFieldDefinition::create('string')->setLabel(t('Periode Name'))->setDescription(t('Indicates the reservation Periode'))->setReadOnly(TRUE)->setTranslatable(TRUE);
+    $fields['reservation_date'] = BaseFieldDefinition::create('datetime')->setLabel(t('Reservation Date'))->setSettings([
+      'datetime_type' => 'date'
+    ])->setDescription(t('Indicates the reservation date'))->setReadOnly(TRUE)->setTranslatable(TRUE);
+    $fields['reservation_reduction'] = BaseFieldDefinition::create('integer')->setLabel(t('Reservation Reduction'))->setDescription(t('Indicates the reservation reduction'))->setReadOnly(TRUE)->setTranslatable(TRUE);
 
     return $fields;
   }
