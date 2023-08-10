@@ -46,3 +46,20 @@ booking_reservation.admin.structure.settings:
   description: 'Configure Booking reservation entities'
   route_name: booking_reservation.settings
   parent: system.admin_structure
+
+# Booking config menu items definition
+entity.booking_config.collection:
+  title: 'Booking config list'
+  route_name: entity.booking_config.collection
+  description: 'List Booking config entities'
+  parent: system.admin_structure
+  weight: 100
+
+
+# Booking config type menu items definition
+entity.booking_config_type.collection:
+  title: 'Booking config type'
+  route_name: entity.booking_config_type.collection
+  description: 'List Booking config type (bundles)'
+  parent: system.admin_structure
+  weight: 99
