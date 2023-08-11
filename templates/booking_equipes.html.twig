@@ -1,0 +1,22 @@
+{#
+/**
+ * @file booking_equipes.html.twig
+ * Default theme implementation to present Booking equipes data.
+ *
+ * This template is used when viewing Booking equipes pages.
+ *
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_booking_equipes()
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes.addClass('booking_equipes') }}>
+  {% if content %}
+    {{- content -}}
+  {% endif %}
+</div>

@@ -68,7 +68,6 @@ class BookingSystemConfigResumeController extends ControllerBase {
           ]
         ]
       ];
-
       $query = $this->entityTypeManager()->getStorage('booking_config')->getQuery();
       $query->accessCheck(TRUE);
       $query->sort($BookingConfigType->getEntityType()->getKey('id'));
@@ -82,6 +81,13 @@ class BookingSystemConfigResumeController extends ControllerBase {
       // dump($ListBuilder);
       $ListBuilder->setCustomIds($ids);
       $build['booking_configs'][] = $ListBuilder->render();
+
+      //
+      $build['booking_equipes'] = [
+        '#type' => 'details',
+        '#title' => 'Equipes',
+        '#open' => TRUE
+      ];
     }
     else
       $this->messenger()->addWarning('This config not exist');

@@ -63,3 +63,17 @@ entity.booking_config_type.collection:
   description: 'List Booking config type (bundles)'
   parent: system.admin_structure
   weight: 99
+
+# Booking equipes menu items definition
+entity.booking_equipes.collection:
+  title: 'Booking equipes list'
+  route_name: entity.booking_equipes.collection
+  description: 'List Booking equipes entities'
+  parent: system.admin_structure
+  weight: 100
+
+booking_equipes.admin.structure.settings:
+  title: 'Booking equipes settings'
+  description: 'Configure Booking equipes entities'
+  route_name: booking_equipes.settings
+  parent: system.admin_structure

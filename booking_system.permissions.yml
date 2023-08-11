@@ -160,3 +160,34 @@ delete all booking config revisions:
 
 permission_callbacks:
   - \Drupal\booking_system\BookingConfigPermissions::generatePermissions
+add booking equipes entities:
+  title: 'Create new Booking equipes entities'
+
+administer booking equipes entities:
+  title: 'Administer Booking equipes entities'
+  description: 'Allow to access the administration form to configure Booking equipes entities.'
+  restrict access: true
+
+delete booking equipes entities:
+  title: 'Delete Booking equipes entities'
+
+edit booking equipes entities:
+  title: 'Edit Booking equipes entities'
+
+view published booking equipes entities:
+  title: 'View published Booking equipes entities'
+
+view unpublished booking equipes entities:
+  title: 'View unpublished Booking equipes entities'
+
+view all booking equipes revisions:
+  title: 'View all Booking equipes revisions'
+
+revert all booking equipes revisions:
+  title: 'Revert all Booking equipes revisions'
+  description: 'Role requires permission <em>view Booking equipes revisions</em> and <em>edit rights</em> for booking equipes entities in question or <em>administer booking equipes entities</em>.'
+
+delete all booking equipes revisions:
+  title: 'Delete all revisions'
+  description: 'Role requires permission to <em>view Booking equipes revisions</em> and <em>delete rights</em> for booking equipes entities in question or <em>administer booking equipes entities</em>.'
+

@@ -23,3 +23,8 @@ entity.booking_config_type.add_form:
   title: 'Add Booking config type'
   appears_on:
     - entity.booking_config_type.collection
+entity.booking_equipes.add_form:
+  route_name: entity.booking_equipes.add_form
+  title: 'Add Booking equipes'
+  appears_on:
+    - entity.booking_equipes.collection
