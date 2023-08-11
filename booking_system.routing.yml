@@ -7,6 +7,22 @@ booking_system.config_resume:
   requirements:
     _permission: 'administer booking_system configuration'
     
+booking_system.views_app:
+  path: '/booking-system/views-app/{booking_config_type_id}'
+  defaults:
+    _title: 'Views app'
+    _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::Views'
+  requirements:
+    _permission: 'souscription booking_system'
+    
+booking_system.load_default_views_app:
+  path: '/booking-system/views-app-default'
+  defaults:
+    _title: 'Views app default'
+    _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::loadDefaultViews'
+  requirements:
+    _permission: 'souscription booking_system'
+    
 ##1x
 # get user reservation : 
 booking_system.reservation:

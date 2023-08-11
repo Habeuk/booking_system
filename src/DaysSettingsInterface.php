@@ -10,26 +10,7 @@ namespace Drupal\booking_system;
 interface DaysSettingsInterface /* extends PluginInspectionInterface */
 {
   const DAYS = [
-    [
-      'label' => 'Dimanche',
-      'status' => false, // status pour le jour
-      'periodes' => [
-        [
-          'label' => 'Plage horaire',
-          'status' => true, // status pour période
-          'h_d' => 07,
-          'm_d' => 00,
-          'h_f' => 17,
-          'm_f' => 00,
-          'meta_tags' => [], // peut contenir des informations utile pour
-                               // d'autre application.
-          'decallage' => 5, // remove
-          'intervalle' => 15, // remove
-          'reduction' => 20, // remove
-          'creneaux' => [] // remove
-        ]
-      ]
-    ],
+
     [
       'label' => 'Lundi',
       'status' => true, // status pour le jour
@@ -135,6 +116,26 @@ interface DaysSettingsInterface /* extends PluginInspectionInterface */
           'intervalle' => 15,
           'reduction' => 20,
           'creneaux' => []
+        ]
+      ]
+    ],
+    [
+      'label' => 'Dimanche',
+      'status' => false, // status pour le jour
+      'periodes' => [
+        [
+          'label' => 'Plage horaire',
+          'status' => true, // status pour période
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'meta_tags' => [], // peut contenir des informations utile pour
+                               // d'autre application.
+          'decallage' => 5, // remove
+          'intervalle' => 15, // remove
+          'reduction' => 20, // remove
+          'creneaux' => [] // remove
         ]
       ]
     ]

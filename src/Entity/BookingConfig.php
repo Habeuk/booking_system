@@ -155,6 +155,32 @@ class BookingConfig extends EditorialContentEntityBase implements BookingConfigI
   }
 
   /**
+   * Permet de recuperer l'enssemble des dates desactivées.
+   */
+  public function getDisabledDates() {
+    $values = $this->get('disabled_dates')->getValue();
+    $dates = [];
+    if ($values) {
+      foreach ($values as $value) {
+        $dates[] = $value['value'];
+      }
+    }
+    return $dates;
+  }
+
+  /**
+   * Permet de recuperer les plages de dates à desactivées.
+   */
+  public function getDisabledDatesPeriode() {
+    $values = $this->get('disabled_dates_periode')->getValue();
+    $dates = [];
+    foreach ($values as $value) {
+      $dates[] = $value;
+    }
+    return $dates;
+  }
+
+  /**
    *
    * {@inheritdoc}
    */

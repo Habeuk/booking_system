@@ -2,6 +2,11 @@ administer booking_system configuration:
   title: 'Administer booking_system configuration'
   description: 'Optional description.'
   restrict access: true
+  
+souscription booking_system:
+  title: 'Souscription booking_system'
+  description: 'Optional description.'
+  restrict access: true
 
 add booking system date entities:
   title: 'Create new Booking system date entities'

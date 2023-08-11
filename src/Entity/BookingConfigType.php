@@ -103,7 +103,7 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
    *
    * @var integer
    */
-  protected $number_month = 1;
+  protected $number_month = 2;
 
   /**
    * The days of the week.
