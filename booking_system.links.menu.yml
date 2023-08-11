@@ -72,8 +72,4 @@ entity.booking_equipes.collection:
   parent: system.admin_structure
   weight: 100
 
-booking_equipes.admin.structure.settings:
-  title: 'Booking equipes settings'
-  description: 'Configure Booking equipes entities'
-  route_name: booking_equipes.settings
-  parent: system.admin_structure
+

@@ -31,10 +31,14 @@ class BookingSystemConfigResumeController extends ControllerBase {
         '#title' => 'Edit config',
         '#url' => Url::fromRoute("entity.booking_config_type.edit_form", [
           'booking_config_type' => $BookingConfigType->id()
+        ], [
+          'query' => [
+            'destination' => $Request->getPathInfo()
+          ]
         ]),
         '#options' => [
           'attributes' => [
-            'target' => '_blank',
+            // 'target' => '_blank',
             'class' => [
               'button',
               'button--primary'
@@ -60,7 +64,7 @@ class BookingSystemConfigResumeController extends ControllerBase {
         ]),
         '#options' => [
           'attributes' => [
-            'target' => '_blank',
+            // 'target' => '_blank',
             'class' => [
               'button',
               'button--primary'
@@ -70,7 +74,9 @@ class BookingSystemConfigResumeController extends ControllerBase {
       ];
       $query = $this->entityTypeManager()->getStorage('booking_config')->getQuery();
       $query->accessCheck(TRUE);
-      $query->sort($BookingConfigType->getEntityType()->getKey('id'));
+      $query->condition('type', $BookingConfigType->id());
+      // l'entite adapte est $BookingConfig.
+      $query->sort($BookingConfigType->getEntityType()->getKey('id'), 'DESC');
       $query->pager(100);
       $ids = $query->execute();
       /**
@@ -88,6 +94,40 @@ class BookingSystemConfigResumeController extends ControllerBase {
         '#title' => 'Equipes',
         '#open' => TRUE
       ];
+      $build['booking_equipes'][] = [
+        '#type' => 'link',
+        '#title' => $this->t('Add Booking equipes'),
+        '#url' => Url::fromRoute("entity.booking_equipes.add_form", [
+          'booking_config_type' => $BookingConfigType->id()
+        ], [
+          'query' => [
+            'destination' => $Request->getPathInfo()
+          ]
+        ]),
+        '#options' => [
+          'attributes' => [
+            // 'target' => '_blank',
+            'class' => [
+              'button',
+              'button--primary'
+            ]
+          ]
+        ]
+      ];
+      $query = $this->entityTypeManager()->getStorage('booking_equipes')->getQuery();
+      $query->accessCheck(TRUE);
+      $query->condition('booking_config_type', $BookingConfigType->id());
+      $query->sort($BookingConfigType->getEntityType()->getKey('id'), 'DESC');
+      $query->pager(100);
+      $ids = $query->execute();
+      /**
+       *
+       * @var \Drupal\booking_system\BookingEquipesListBuilder $ListBuilder
+       */
+      $ListBuilder = $this->entityTypeManager()->getListBuilder('booking_equipes');
+      // dump($ListBuilder);
+      $ListBuilder->setCustomIds($ids);
+      $build['booking_equipes'][] = $ListBuilder->render();
     }
     else
       $this->messenger()->addWarning('This config not exist');

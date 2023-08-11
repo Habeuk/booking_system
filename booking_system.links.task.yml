@@ -103,12 +103,8 @@ entity.booking_config.delete_form:
   base_route:  entity.booking_config.canonical
   title: Delete
   weight: 10
+  
 # Booking equipes routing definition
-booking_equipes.settings_tab:
-  route_name: booking_equipes.settings
-  title: 'Settings'
-  base_route: booking_equipes.settings
-
 entity.booking_equipes.canonical:
   route_name: entity.booking_equipes.canonical
   base_route: entity.booking_equipes.canonical
