@@ -10,3 +10,31 @@ booking_system.booking_config_type.*:
       label: 'Label'
     uuid:
       type: string
+    limit_reservation:
+      type: string
+      label: "Limitation of the number of reservations per team or per person."
+    uid:
+      type: integer
+      label: " user uid "
+    date_display_mode:
+      type: string
+      label: "Display mode"
+    number_week:
+      type: integer
+      label: "Number of weeks to display"
+    number_month:
+      type: integer
+      label: "Number of months to display"
+    days:
+      type: mapping
+      label: 'The days of the week'
+    maintenance:
+      type: boolean
+      label: "maintenance mode"
+    maintenance_message:
+      type: mapping
+      label: "Text of maintenance mode"
+    creneau:
+      type: mapping
+      label: 'config for creneau'
+    

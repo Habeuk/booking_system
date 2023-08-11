@@ -16,9 +16,9 @@ use Drupal\user\UserInterface;
  * Defines the Booking system date entity.
  *
  * Cette entité est utiliser pour stocker les informations suivantes:
- *  + heure_de_debut
- *  + heure_de_fin
- *  + intervalle de temps qui sépare les différentes pages
+ * + heure_de_debut
+ * + heure_de_fin
+ * + intervalle de temps qui sépare les différentes pages
  *
  * @ingroup booking_system
  *
@@ -59,11 +59,11 @@ use Drupal\user\UserInterface;
  *     "langcode" = "langcode",
  *     "published" = "status",
  *   },
-*   revision_metadata_keys = {
-*     "revision_user" = "revision_uid",
-*     "revision_created" = "revision_timestamp",
-*     "revision_log_message" = "revision_log"
-*   },
+ *   revision_metadata_keys = {
+ *     "revision_user" = "revision_uid",
+ *     "revision_created" = "revision_timestamp",
+ *     "revision_log_message" = "revision_log"
+ *   },
  *   links = {
  *     "canonical" = "/admin/structure/booking_system_date/{booking_system_date}",
  *     "add-form" = "/admin/structure/booking_system_date/add",
@@ -85,16 +85,18 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
   use EntityPublishedTrait;
 
   /**
+   *
    * {@inheritdoc}
    */
   public static function preCreate(EntityStorageInterface $storage_controller, array &$values) {
     parent::preCreate($storage_controller, $values);
     $values += [
-      'user_id' => \Drupal::currentUser()->id(),
+      'user_id' => \Drupal::currentUser()->id()
     ];
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   protected function urlRouteParameters($rel) {
@@ -111,6 +113,7 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
@@ -133,6 +136,7 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function getName() {
@@ -140,6 +144,7 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function setName($name) {
@@ -148,6 +153,7 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function getCreatedTime() {
@@ -155,6 +161,7 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function setCreatedTime($timestamp) {
@@ -163,6 +170,7 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function getOwner() {
@@ -170,6 +178,7 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function getOwnerId() {
@@ -177,6 +186,7 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function setOwnerId($uid) {
@@ -185,6 +195,7 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function setOwner(UserInterface $account) {
@@ -193,6 +204,7 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
@@ -201,123 +213,71 @@ class BookingSystemDate extends EditorialContentEntityBase implements BookingSys
     // Add the published field.
     $fields += static::publishedBaseFieldDefinitions($entity_type);
 
-    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Authored by'))
-      ->setDescription(t('The user ID of author of the Booking system date entity.'))
-      ->setRevisionable(TRUE)
-      ->setSetting('target_type', 'user')
-      ->setSetting('handler', 'default')
-      ->setTranslatable(TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'author',
-        'weight' => 0,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 5,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'autocomplete_type' => 'tags',
-          'placeholder' => '',
-        ],
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')->setLabel(t('Authored by'))->setDescription(t('The user ID of author of the Booking system date entity.'))->setRevisionable(TRUE)->setSetting('target_type', 'user')->setSetting('handler', 'default')->setTranslatable(TRUE)->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'author',
+      'weight' => 0
+    ])->setDisplayOptions('form', [
+      'type' => 'entity_reference_autocomplete',
+      'weight' => 5,
+      'settings' => [
+        'match_operator' => 'CONTAINS',
+        'size' => '60',
+        'autocomplete_type' => 'tags',
+        'placeholder' => ''
+      ]
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE);
 
-    $fields['name'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Name'))
-      ->setDescription(t('The name of the Booking system date entity.'))
-      ->setRevisionable(TRUE)
-      ->setSettings([
-        'max_length' => 50,
-        'text_processing' => 0,
-      ])
-      ->setDefaultValue('')
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => -4,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
-        'weight' => -4,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
-      ->setRequired(TRUE);
+    $fields['name'] = BaseFieldDefinition::create('string')->setLabel(t('Name'))->setDescription(t('The name of the Booking system date entity.'))->setRevisionable(TRUE)->setSettings([
+      'max_length' => 50,
+      'text_processing' => 0
+    ])->setDefaultValue('')->setDisplayOptions('view', [
+      'label' => 'above',
+      'type' => 'string',
+      'weight' => -4
+    ])->setDisplayOptions('form', [
+      'type' => 'string_textfield',
+      'weight' => -4
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setRequired(TRUE);
     # date de debut
-    $fields['start_date'] = BaseFieldDefinition::create('daterange')
-      ->setLabel(t('Date'))
-      ->setDescription(t('Définir la plage de date'))
-      ->setSettings(['datetime_type' => 'date',])
-      ->setRevisionable(FALSE)
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => 0,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'dis_hours_date_time_widget',
-        'weight' => 0,
-      ]);
-    # defining the period : 
-    $fields['period'] = BaseFieldDefinition::create('period_type')
-      ->setLabel(t('Modifier la Période '))
-      ->setDisplayOptions('form', [
-        'type' => 'entity_inline_form_complex',
-        'weight' => 0
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
-      ->setSetting('handler', 'default')
-      ->setTranslatable(false)
-      ->setSetting('allow_duplicate', true);
+    $fields['start_date'] = BaseFieldDefinition::create('daterange')->setLabel(t('Date'))->setDescription(t('Définir la plage de date'))->setSettings([
+      'datetime_type' => 'date'
+    ])->setRevisionable(FALSE)->setDisplayOptions('view', [
+      'label' => 'above',
+      'type' => 'string',
+      'weight' => 0
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setDisplayOptions('form', [
+      'type' => 'dis_hours_date_time_widget',
+      'weight' => 0
+    ]);
+    # defining the period :
+    $fields['period'] = BaseFieldDefinition::create('period_type')->setLabel(t('Modifier la Période '))->setDisplayOptions('form', [
+      'type' => 'entity_inline_form_complex',
+      'weight' => 0
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setSetting('handler', 'default')->setTranslatable(false)->setSetting('allow_duplicate', true);
     # discount
-    $fields['discount'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('Discount'))
-      ->setDescription(t('Modifier la reduction pour la date '))
-      ->setSettings([
-          'min' => 1,
-          'max' => 100
-      ])
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'number_unformatted',
-        'weight' => 0,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'number_unformatted',
-        'weight' => 0,
-      ])
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE);
+    $fields['discount'] = BaseFieldDefinition::create('integer')->setLabel(t('Discount'))->setDescription(t('Modifier la reduction pour la date '))->setSettings([
+      'min' => 1,
+      'max' => 100
+    ])->setDisplayOptions('view', [
+      'label' => 'above',
+      'type' => 'number_unformatted',
+      'weight' => 0
+    ])->setDisplayOptions('form', [
+      'type' => 'number_unformatted',
+      'weight' => 0
+    ])->setDisplayConfigurable('view', TRUE)->setDisplayConfigurable('form', TRUE);
     # status
-    $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel('Désactiver cette date')
-      ->setDescription(t('Cochez pour désactiver la date'))
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'weight' => -3,
-      ]);
+    $fields['status'] = BaseFieldDefinition::create('boolean')->setLabel('Désactiver cette date')->setDescription(t('Cochez pour désactiver la date'))->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'weight' => -3
+    ]);
 
-    $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Created'))
-      ->setDescription(t('The time that the entity was created.'));
+    $fields['created'] = BaseFieldDefinition::create('created')->setLabel(t('Created'))->setDescription(t('The time that the entity was created.'));
 
-    $fields['changed'] = BaseFieldDefinition::create('changed')
-      ->setLabel(t('Changed'))
-      ->setDescription(t('The time that the entity was last edited.'));
+    $fields['changed'] = BaseFieldDefinition::create('changed')->setLabel(t('Changed'))->setDescription(t('The time that the entity was last edited.'));
 
-    $fields['revision_translation_affected'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Revision translation affected'))
-      ->setDescription(t('Indicates if the last edit of a translation belongs to current revision.'))
-      ->setReadOnly(TRUE)
-      ->setRevisionable(TRUE)
-      ->setTranslatable(TRUE);
+    $fields['revision_translation_affected'] = BaseFieldDefinition::create('boolean')->setLabel(t('Revision translation affected'))->setDescription(t('Indicates if the last edit of a translation belongs to current revision.'))->setReadOnly(TRUE)->setRevisionable(TRUE)->setTranslatable(TRUE);
 
     return $fields;
   }

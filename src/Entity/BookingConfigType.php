@@ -3,6 +3,7 @@
 namespace Drupal\booking_system\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Entity\EntityStorageInterface;
 
 /**
  * Defines the Booking config type entity.
@@ -25,7 +26,16 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *   },
  *   config_export = {
  *     "id",
- *     "label"
+ *     "label",
+ *     "limit_reservation",
+ *     "uid",
+ *     "date_display_mode",
+ *     "number_week",
+ *     "number_month",
+ *     "days",
+ *     "maintenance",
+ *     "maintenance_message",
+ *     "creneau"
  *   },
  *   config_prefix = "booking_config_type",
  *   admin_permission = "administer site configuration",
@@ -59,5 +69,106 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
    * @var string
    */
   protected $label;
+
+  /**
+   * Limitation of the number of reservations per team or per person.
+   *
+   * @var integer
+   */
+  protected $limit_reservation = 1;
+
+  /**
+   * user uid
+   *
+   * @var integer
+   */
+  protected $uid = 0;
+
+  /**
+   * Display mode
+   *
+   * @var string
+   */
+  protected $date_display_mode = 'month'; // 'month','week'
+
+  /**
+   * Number of weeks to display
+   *
+   * @var integer
+   */
+  protected $number_week = 3;
+
+  /**
+   * Number of months to display
+   *
+   * @var integer
+   */
+  protected $number_month = 1;
+
+  /**
+   * The days of the week.
+   *
+   * @var array
+   */
+  protected $days = [];
+
+  /**
+   * End date.
+   * Est une valeur dynamique qui est envoyé.
+   *
+   * @var string
+   */
+  // protected $date_end = '';
+
+  /**
+   * maintenance mode
+   *
+   * @var boolean
+   */
+  protected $maintenance = false;
+
+  /**
+   * Text of maintenance mode.
+   *
+   * @var string
+   */
+  protected $maintenance_message = [
+    'value' => 'Application disabled for maintenance',
+    'format' => 'full_html'
+  ];
+
+  /**
+   * config for creneau
+   *
+   * @var array
+   */
+  protected $creneau = [];
+
+  /**
+   *
+   * {@inheritdoc}
+   * @see \Drupal\Core\Config\Entity\ConfigEntityBase::preSave()
+   */
+  public function preSave(EntityStorageInterface $storage) {
+    // $uid. ( L'uid de celui qui a cree le formulaire ).
+    if (!$this->uid) {
+      $this->uid = \Drupal::currentUser()->id();
+    }
+    parent::preSave($storage);
+  }
+
+  /**
+   * Permet de resume les informations
+   */
+  public function getConfigResume() {
+    return [
+      '#theme' => 'booking_config_type_resume',
+      '#title' => $this->label,
+      '#days' => $this->days,
+      '#creneau' => $this->creneau,
+      '#maintenance' => $this->maintenance,
+      '#date_display_mode' => $this->date_display_mode
+    ];
+  }
 
 }

@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\user\UserInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
  * Defines the Booking config entity.
@@ -229,7 +230,7 @@ class BookingConfig extends EditorialContentEntityBase implements BookingConfigI
       ]
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE);
 
-    $fields['name'] = BaseFieldDefinition::create('string')->setLabel(t('Name'))->setDescription(t('The name of the Booking config entity.'))->setRevisionable(TRUE)->setSettings([
+    $fields['name'] = BaseFieldDefinition::create('string')->setLabel(t('Title'))->setDescription(t('The name of the Booking config entity.'))->setRevisionable(TRUE)->setSettings([
       'max_length' => 50,
       'text_processing' => 0
     ])->setDefaultValue('')->setDisplayOptions('view', [
@@ -240,6 +241,33 @@ class BookingConfig extends EditorialContentEntityBase implements BookingConfigI
       'type' => 'string_textfield',
       'weight' => -4
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setRequired(TRUE);
+
+    # desactive les dates
+    $fields['disabled_dates'] = BaseFieldDefinition::create('datetime')->setLabel(t('Disabled dates'))->setSettings([
+      'datetime_type' => 'date'
+    ])->setRevisionable(TRUE)->setDisplayOptions('view', [
+      'label' => 'above',
+      'type' => 'string',
+      'weight' => 0
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setDisplayOptions('form', [
+      'type' => 'dis_hours_date_time_widget',
+      'weight' => 0
+    ])->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED);
+
+    # Desactive les dates
+    $fields['disabled_dates_periode'] = BaseFieldDefinition::create('daterange')->setLabel(t('Disable a date period'))->setSettings([
+      'datetime_type' => 'date'
+    ])->setRevisionable(TRUE)->setDisplayOptions('view', [
+      'label' => 'above',
+      'type' => 'string',
+      'weight' => 0
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setDisplayOptions('form', [
+      'type' => 'dis_hours_date_time_widget',
+      'weight' => 0
+    ])->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED);
+
+    # desactive les periodes d'heures.
+    $fields['disabled_hours_periode'] = BaseFieldDefinition::create('schedule')->setLabel(t('Disabled range of hours'))->setDescription(t('The range time for the offer'))->setRevisionable(TRUE)->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)->setRequired(FALSE);
 
     $fields['status']->setDescription(t('A boolean indicating whether the Booking config is published.'))->setDisplayOptions('form', [
       'type' => 'boolean_checkbox',

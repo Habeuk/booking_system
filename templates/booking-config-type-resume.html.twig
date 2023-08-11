@@ -1,0 +1,25 @@
+<h6> {{ title }} </h6>
+
+<div> Status : {% if maintenance %} en maintenance {% else %} actif {% endif %} </div>
+<div> Jours</div>
+<ul>
+{% for day in days %}
+        <li>{{ day.label }}
+        	{% if day.status %}
+        		{% for periode in day.periodes %}
+        			<div >
+        				<small> {{ periode.label }} </small> | 
+        				<small> {{ periode.h_d__m_d }} </small> |
+        				<small> {{ periode.h_f__m_f }} </small>
+        			</div>
+        		{% endfor %}
+        	{% endif %}
+        </li>
+{% endfor %}
+</ul>
+<div> Creneaux </div>
+<ul>
+	<li> Durée d'un creneau {{ creneau.duration }} </li>
+	<li> Interval entre creneaux {{ creneau.interval }} </li>
+	<li> Decallage avant le debut d'un creneau {{ creneau.gap }} </li>
+</ul>

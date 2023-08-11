@@ -1,11 +1,45 @@
 <?php
+use Drupal\Core\Form\FormStateInterface;
 
 /**
+ *
  * @file
  * Primary module hooks for booking_system module.
  */
 
 /**
+ * booking-config-type-edit-form
+ * impleme,nt hook_form_BASE_FORM_ID_alter
+ *
+ * @see hook_form_BASE_FORM_ID_alter()
+ * @param array $form
+ * @param FormStateInterface $form_state
+ * @param string $form_id
+ */
+function booking_system_form_booking_config_type_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // \Drupal::messenger()->addStatus('booking_system_form_booking_config_type_edit_form_alter');
+  // dump($form);
+}
+
+/**
+ * implement hook_form_alter
+ *
+ * @see hook_form_alter()
+ * @param array $form
+ * @param FormStateInterface $form_state
+ * @param string $form_id
+ */
+function hook_pro(&$form, FormStateInterface $form_state, $form_id) {
+  //
+  // dump(\Drupal::routeMatch()->getParameters());
+}
+
+function booking_system_preprocess_page($variables) {
+  // dump(\Drupal::routeMatch()->getRouteName());
+}
+
+/**
+ * --
  * Implements hook_theme().
  */
 function booking_system_theme() {
@@ -13,12 +47,23 @@ function booking_system_theme() {
   $theme['booking_config'] = [
     'render element' => 'elements',
     'file' => 'booking_config.page.inc',
-    'template' => 'booking_config',
+    'template' => 'booking_config'
   ];
   $theme['booking_config_content_add_list'] = [
     'render element' => 'content',
-    'variables' => ['content' => NULL],
-    'file' => 'booking_config.page.inc',
+    'variables' => [
+      'content' => NULL
+    ],
+    'file' => 'booking_config.page.inc'
+  ];
+  $theme['booking_config_type_resume'] = [
+    'variables' => [
+      'title' => NULL,
+      'days' => [],
+      'creneau' => [],
+      'maintenance' => NULL,
+      'date_display_mode' => NULL
+    ]
   ];
   return $theme;
 }

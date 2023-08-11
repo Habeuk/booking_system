@@ -74,33 +74,33 @@ use Drupal\user\UserInterface;
  *   field_ui_base_route = "booking_system_schedule.settings"
  * )
  */
-class BookingSystemSchedule extends EditorialContentEntityBase implements BookingSystemScheduleInterface
-{
+class BookingSystemSchedule extends EditorialContentEntityBase implements BookingSystemScheduleInterface {
 
   use EntityChangedTrait;
   use EntityPublishedTrait;
 
   /**
+   *
    * {@inheritdoc}
    */
-  public static function preCreate(EntityStorageInterface $storage_controller, array &$values)
-  {
+  public static function preCreate(EntityStorageInterface $storage_controller, array &$values) {
     parent::preCreate($storage_controller, $values);
     $values += [
-      'user_id' => \Drupal::currentUser()->id(),
+      'user_id' => \Drupal::currentUser()->id()
     ];
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  protected function urlRouteParameters($rel)
-  {
+  protected function urlRouteParameters($rel) {
     $uri_route_parameters = parent::urlRouteParameters($rel);
 
     if ($rel === 'revision_revert' && $this instanceof RevisionableInterface) {
       $uri_route_parameters[$this->getEntityTypeId() . '_revision'] = $this->getRevisionId();
-    } elseif ($rel === 'revision_delete' && $this instanceof RevisionableInterface) {
+    }
+    elseif ($rel === 'revision_delete' && $this instanceof RevisionableInterface) {
       $uri_route_parameters[$this->getEntityTypeId() . '_revision'] = $this->getRevisionId();
     }
 
@@ -108,10 +108,10 @@ class BookingSystemSchedule extends EditorialContentEntityBase implements Bookin
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function preSave(EntityStorageInterface $storage)
-  {
+  public function preSave(EntityStorageInterface $storage) {
     parent::preSave($storage);
 
     foreach (array_keys($this->getTranslationLanguages()) as $langcode) {
@@ -131,215 +131,175 @@ class BookingSystemSchedule extends EditorialContentEntityBase implements Bookin
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function getDiscount()
-  {
+  public function getDiscount() {
     return $this->get('discount')->value;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function setDiscount($discount)
-  {
+  public function setDiscount($discount) {
     $this->set('discount', $discount);
     return $this;
   }
 
-
   /**
+   *
    * {@inheritdoc}
    */
-  public function getDateRange()
-  {
+  public function getDateRange() {
     return $this->get('dateRange')->value;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function setDateRange($dateRange)
-  {
+  public function setDateRange($dateRange) {
     $this->set('dateRange', $dateRange);
     return $this;
   }
 
-
   /**
+   *
    * {@inheritdoc}
    */
-  public function getTime()
-  {
+  public function getTime() {
     return $this->get('time')->value;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function setTime($time)
-  {
+  public function setTime($time) {
     $this->set('time', $time);
     return $this;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function getName()
-  {
+  public function getName() {
     return $this->get('name')->value;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function setName($name)
-  {
+  public function setName($name) {
     $this->set('name', $name);
     return $this;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function getCreatedTime()
-  {
+  public function getCreatedTime() {
     return $this->get('created')->value;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function setCreatedTime($timestamp)
-  {
+  public function setCreatedTime($timestamp) {
     $this->set('created', $timestamp);
     return $this;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function getOwner()
-  {
+  public function getOwner() {
     return $this->get('user_id')->entity;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function getOwnerId()
-  {
+  public function getOwnerId() {
     return $this->get('user_id')->target_id;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function setOwnerId($uid)
-  {
+  public function setOwnerId($uid) {
     $this->set('user_id', $uid);
     return $this;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public function setOwner(UserInterface $account)
-  {
+  public function setOwner(UserInterface $account) {
     $this->set('user_id', $account->id());
     return $this;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
-  public static function baseFieldDefinitions(EntityTypeInterface $entity_type)
-  {
+  public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
     // Add the published field.
     $fields += static::publishedBaseFieldDefinitions($entity_type);
 
-    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Authored by'))
-      ->setDescription(t('The user ID of author of the Booking system schedule entity.'))
-      ->setRevisionable(TRUE)
-      ->setSetting('target_type', 'user')
-      ->setSetting('handler', 'default')
-      ->setTranslatable(TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'author',
-        'weight' => 0,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 5,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'autocomplete_type' => 'tags',
-          'placeholder' => '',
-        ],
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+    $fields['user_id'] = BaseFieldDefinition::create('entity_reference')->setLabel(t('Authored by'))->setDescription(t('The user ID of author of the Booking system schedule entity.'))->setRevisionable(TRUE)->setSetting('target_type', 'user')->setSetting('handler', 'default')->setTranslatable(TRUE)->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'author',
+      'weight' => 0
+    ])->setDisplayOptions('form', [
+      'type' => 'entity_reference_autocomplete',
+      'weight' => 5,
+      'settings' => [
+        'match_operator' => 'CONTAINS',
+        'size' => '60',
+        'autocomplete_type' => 'tags',
+        'placeholder' => ''
+      ]
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE);
 
-    $fields['name'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Name'))
-      ->setDescription(t('The name of the Booking system schedule entity.'))
-      ->setRevisionable(TRUE)
-      ->setSettings([
-        'max_length' => 50,
-        'text_processing' => 0,
-      ])
-      ->setDefaultValue('')
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'string',
-        'weight' => -4,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'string_textfield',
-        'weight' => -4,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
-      ->setRequired(TRUE);
+    $fields['name'] = BaseFieldDefinition::create('string')->setLabel(t('Name'))->setDescription(t('The name of the Booking system schedule entity.'))->setRevisionable(TRUE)->setSettings([
+      'max_length' => 50,
+      'text_processing' => 0
+    ])->setDefaultValue('')->setDisplayOptions('view', [
+      'label' => 'above',
+      'type' => 'string',
+      'weight' => -4
+    ])->setDisplayOptions('form', [
+      'type' => 'string_textfield',
+      'weight' => -4
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setRequired(TRUE);
 
-    $fields['schedule'] = BaseFieldDefinition::create('schedule')
-      ->setLabel(t('Schedules'))
-      ->setDescription(t('The range time for the offer'))
-      ->setRevisionable(TRUE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE)
-      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-      ->setRequired(FALSE);
+    $fields['schedule'] = BaseFieldDefinition::create('schedule')->setLabel(t('Schedules'))->setDescription(t('The range time for the offer'))->setRevisionable(TRUE)->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)->setRequired(FALSE);
 
-    $fields['status']->setDescription(t('A boolean indicating whether the Booking system schedule is published.'))
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'weight' => -3,
-      ]);
+    $fields['status']->setDescription(t('A boolean indicating whether the Booking system schedule is published.'))->setDisplayOptions('form', [
+      'type' => 'boolean_checkbox',
+      'weight' => -3
+    ]);
 
-    $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Created'))
-      ->setDescription(t('The time that the entity was created.'));
+    $fields['created'] = BaseFieldDefinition::create('created')->setLabel(t('Created'))->setDescription(t('The time that the entity was created.'));
 
-    $fields['changed'] = BaseFieldDefinition::create('changed')
-      ->setLabel(t('Changed'))
-      ->setDescription(t('The time that the entity was last edited.'));
+    $fields['changed'] = BaseFieldDefinition::create('changed')->setLabel(t('Changed'))->setDescription(t('The time that the entity was last edited.'));
 
-    $fields['revision_translation_affected'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Revision translation affected'))
-      ->setDescription(t('Indicates if the last edit of a translation belongs to current revision.'))
-      ->setReadOnly(TRUE)
-      ->setRevisionable(TRUE)
-      ->setTranslatable(TRUE);
+    $fields['revision_translation_affected'] = BaseFieldDefinition::create('boolean')->setLabel(t('Revision translation affected'))->setDescription(t('Indicates if the last edit of a translation belongs to current revision.'))->setReadOnly(TRUE)->setRevisionable(TRUE)->setTranslatable(TRUE);
 
     return $fields;
   }
+
 }

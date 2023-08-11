@@ -1,11 +1,13 @@
-# just for testing purposes
-booking_system.example:
-  path: '/booking-system/example'
+##2x
+booking_system.config_resume:
+  path: '/admin/booking-system/config-resume/{booking_config_type_id}'
   defaults:
-    _title: 'Example'
-    _controller: '\Drupal\booking_system\Controller\BookingSystemController::build'
+    _title: 'Config resume'
+    _controller: '\Drupal\booking_system\Controller\BookingSystemConfigResumeController::ConfigResume'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer booking_system configuration'
+    
+##1x
 # get user reservation : 
 booking_system.reservation:
   path: '/booking-system/set-reservation'
