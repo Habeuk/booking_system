@@ -11,22 +11,7 @@ use Drupal\Core\Datetime\DrupalDateTime;
 /**
  * Manage the booking system
  */
-class ManagerDate {
-  /**
-   *
-   * @var AccountInterface
-   */
-  protected $currentUser;
-  /**
-   *
-   * @var EntityTypeManager
-   */
-  protected $entityTypeManager;
-  /**
-   *
-   * @var BookingConfigType
-   */
-  protected $BookingConfigType;
+class ManagerDate extends ManagerBase {
 
   /**
    *
@@ -41,10 +26,17 @@ class ManagerDate {
    */
   protected $selecteddate;
 
-  public function __construct(AccountInterface $currentUser, EntityTypeManager $entityTypeManager, DatesHoursDisabled $DatesHoursDisabled) {
+  /**
+   *
+   * @var ManagerCreneaux
+   */
+  protected $ManagerCreneaux;
+
+  public function __construct(AccountInterface $currentUser, EntityTypeManager $entityTypeManager, DatesHoursDisabled $DatesHoursDisabled, ManagerCreneaux $ManagerCreneaux) {
     $this->currentUser = $currentUser;
     $this->entityTypeManager = $entityTypeManager;
     $this->DatesHoursDisabled = $DatesHoursDisabled;
+    $this->ManagerCreneaux = $ManagerCreneaux;
   }
 
   /**
@@ -67,6 +59,7 @@ class ManagerDate {
     $results['booking_config_type_id'] = $booking_config_type_id;
     $results['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $results['date_display_mode'] = $values['date_display_mode'];
+    $results['show_end_hour'] = $values['creneau']['show_end_hour'];
     $results['maintenance'] = $values['maintenance'];
     if (!empty($values['maintenance']))
       $results['maintenance_message'] = $values['maintenance_message'];
@@ -82,7 +75,6 @@ class ManagerDate {
      * ( est sur l'etape suivante ).
      */
     // $results['limit_reservation'] = $values['limit_reservation'];
-
     return $results;
   }
 
@@ -107,9 +99,16 @@ class ManagerDate {
     $currentDate->modify($number_month . ' month');
     $results['date_end'] = $currentDate->format('Y-m-d');
     /**
-     * Ajout des dates et periode de date à desactivées
+     * Ajout des dates et periode de date à desactivées.
      */
     $this->DatesHoursDisabled->getDisabledDatesAndPeriode($booking_config_type_id, $results);
+    /**
+     * Ajout des jours desactivées en function des indices de la semaine.
+     */
+    $results['disabled_days'] = $this->ManagerCreneaux->getDisableDayByIndice($booking_config_type_id);
+  /**
+   * Ajout des jours desactivées en function de la disponibilite des creneaux.
+   */
   }
 
   /**
@@ -117,15 +116,6 @@ class ManagerDate {
    */
   protected function completeBaseConfigForWeek(array $values, array &$results) {
     $results['number_week'] = $values['number_week'];
-  }
-
-  protected function loadBookingConfigType($booking_config_type_id) {
-    if (!$this->BookingConfigType) {
-      $this->BookingConfigType = BookingConfigType::load($booking_config_type_id);
-      if (!$this->BookingConfigType)
-        BookingSystemException::exception("The entity no longer exists or you do not have access", $booking_config_type_id);
-    }
-    return $this->BookingConfigType;
   }
 
 }

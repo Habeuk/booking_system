@@ -4,6 +4,7 @@ namespace Drupal\booking_system\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Component\Utility\NestedArray;
 
 /**
  * Defines the Booking config type entity.
@@ -139,10 +140,19 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
 
   /**
    * config for creneau
+   * creneau.duration //Durée d'un creneau [heure debut et heure de fin].
+   * creneau.interval //Durée entre deux creneaux.
+   * creneau.gap //Durée avant le premier creneau valide.
+   * creneau.show_end_hour //Affiche l'heure d fin.
    *
    * @var array
    */
-  protected $creneau = [];
+  protected $creneau = [
+    'duration' => 60,
+    'interval' => 60,
+    'gap' => 0,
+    'show_end_hour' => true
+  ];
 
   /**
    *
@@ -155,6 +165,31 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
       $this->uid = \Drupal::currentUser()->id();
     }
     parent::preSave($storage);
+    // merge data with the default value;
+    $jours = \Drupal\booking_system\DaysSettingsInterface::DAYS;
+    $days = $this->get('days');
+    $final = [];
+    foreach ($days as $k => $day) {
+      $final[$k] = $day;
+      if ($jours[$k])
+        $final[$k] += $jours[$k];
+      foreach ($day['periodes'] as $p => $periode) {
+        if (!empty($jours[$k]['periodes'][$p]))
+          $final[$k]['periodes'][$p] = $jours[$k]['periodes'][$p];
+        if (!empty($periode['h_d__m_d'])) {
+          $h_d__m_d = explode(":", $periode['h_d__m_d']);
+          $final[$k]['periodes'][$p]['h_d'] = (int) $h_d__m_d[0];
+          $final[$k]['periodes'][$p]['m_d'] = (int) $h_d__m_d[1];
+        }
+        if (!empty($periode['h_f__m_f'])) {
+          $h_f__m_f = explode(":", $periode['h_f__m_f']);
+          $final[$k]['periodes'][$p]['h_f'] = (int) $h_f__m_f[0];
+          $final[$k]['periodes'][$p]['m_f'] = (int) $h_f__m_f[1];
+        }
+      }
+    }
+    $this->set("days", $final);
+    dd($jours, $days, $final);
   }
 
   /**

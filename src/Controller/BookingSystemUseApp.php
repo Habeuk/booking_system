@@ -8,6 +8,7 @@ use Stephane888\DrupalUtility\HttpResponse;
 use Stephane888\Debug\ExceptionExtractMessage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\booking_system\Service\BookingManager\ManagerDate;
+use Drupal\booking_system\Service\BookingManager\ManagerCreneaux;
 
 /**
  * Returns responses for booking_system routes.
@@ -20,8 +21,15 @@ class BookingSystemUseApp extends ControllerBase {
    */
   protected $BookingMangerDate;
 
-  public function __construct(ManagerDate $ManagerDate) {
+  /**
+   *
+   * @var ManagerCreneaux
+   */
+  protected $ManagerCreneaux;
+
+  public function __construct(ManagerDate $ManagerDate, ManagerCreneaux $ManagerCreneaux) {
     $this->BookingMangerDate = $ManagerDate;
+    $this->ManagerCreneaux = $ManagerCreneaux;
   }
 
   /**
@@ -29,7 +37,7 @@ class BookingSystemUseApp extends ControllerBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static($container->get('booking_system.app_manager'));
+    return new static($container->get('booking_system.app_manager_date'), $container->get('booking_system.app_manager_creneaux'));
   }
 
   /**

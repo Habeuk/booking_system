@@ -174,6 +174,11 @@ class BookingConfigTypeForm extends EntityForm {
       '#title' => "Decallage. ",
       '#default_value' => isset($creneau['gap']) ? $creneau['gap'] : 0
     ];
+    $form['creneau']['show_end_hour'] = [
+      "#type" => 'boolean',
+      '#title' => "Affiche l'heure de fin du creneau ",
+      '#default_value' => isset($creneau['show_end_hour']) ? $creneau['show_end_hour'] : true
+    ];
     return $form;
   }
 
