@@ -15,9 +15,10 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Plugin implementation of the 'schedule_default' widget.
  *
+ * @deprecated remove in 2x, ( champs plus utiliser ).
  * @FieldWidget(
  *   id = "schedule_default",
- *   label = @Translation("schedule default"),
+ *   label = @Translation("schedule default @deprecated"),
  *   field_types = {
  *     "schedule"
  *   }

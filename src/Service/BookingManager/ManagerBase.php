@@ -58,7 +58,13 @@ class ManagerBase {
    */
   protected $daysSortIndex = NULL;
 
-  protected function loadBookingConfigType($booking_config_type_id) {
+  /**
+   *
+   * @var array
+   */
+  protected $equipes = [];
+
+  protected function loadBookingConfigType(string $booking_config_type_id) {
     if (!$this->BookingConfigType) {
       $this->BookingConfigType = BookingConfigType::load($booking_config_type_id);
       if (!$this->BookingConfigType)
@@ -68,12 +74,47 @@ class ManagerBase {
   }
 
   /**
+   * Permet de recuperer les equipes disponible pour un creneau.
+   *
+   * @param DrupalDateTime $hourBegin
+   * @param array $hour
+   * @return array
+   */
+  protected function getEquipesAvailableByCreneau(DrupalDateTime $hourBegin, array $hour) {
+    return [];
+  }
+
+  protected function getEquipes(string $booking_config_type_id) {
+    if (!$this->equipes)
+      $this->equipes = $this->entityTypeManager->getStorage('booking_equipes')->loadByProperties([
+        'booking_config_type' => $booking_config_type_id
+      ]);
+    return $this->equipes;
+  }
+
+  /**
+   * Retourne la liste des equipes en function du creneau.
+   * (un creneau peu etre disponible pour une equipe et pas pour une autre).
+   *
+   * @param string $booking_config_type_id
+   * @return string[]|\Drupal\Core\StringTranslation\TranslatableMarkup[]|NULL[]
+   */
+  protected function getEquipesOptions(string $booking_config_type_id) {
+    $this->getEquipes($booking_config_type_id);
+    $options = [];
+    foreach ($this->equipes as $equipe) {
+      $options[$equipe->id()] = $equipe->label();
+    }
+    return $options;
+  }
+
+  /**
    * La date selectionner par l'utilisateur sur le front.
    *
    * @param string $dateString
    * @return \Drupal\Core\Datetime\DrupalDateTime
    */
-  protected function setDateSelected($date_string) {
+  protected function setDateSelected(string $date_string) {
     if (!$this->selecteddate) {
       $this->selecteddate = new DrupalDateTime($date_string);
     }

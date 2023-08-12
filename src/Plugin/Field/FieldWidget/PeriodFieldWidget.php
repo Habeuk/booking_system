@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * A widget period.
  *
+ * @deprecated remove in 2x, ( champs plus utiliser ).
  * @FieldWidget(
  *   id = "period_widget",
  *   label = @Translation("Periode Field widget"),
@@ -17,138 +18,138 @@ use Drupal\Core\Form\FormStateInterface;
  *   }
  * )
  */
+class PeriodFieldWidget extends WidgetBase {
 
- class PeriodFieldWidget extends WidgetBase
-{
+  /**
+   *
+   * {@inheritdoc}
+   */
+  public static function defaultSettings() {
+    return [
+      'size' => 60,
+      'intervalle_size' => 30,
+      'decallage_size' => 15,
+      'placeholder_titre' => '',
+      'label_start_hour' => 'Heure de Debut',
+      'label_end_hour' => 'Heure de fin',
+      'label_intervalle' => 'Intervalle de temps entre les heures',
+      'label_decallage' => 'Décallage entre les plages',
+      'label_status' => 'Activé/Désactivé la période'
+    ] + parent::defaultSettings();
+  }
 
-    /**
-    *
-    * {@inheritdoc}
-    */
-    public static function defaultSettings() {
-        return [
-            'size' => 60,
-            'intervalle_size' => 30,
-            'decallage_size' => 15,
-            'placeholder_titre' => '',
-            'label_start_hour' => 'Heure de Debut',
-            'label_end_hour' => 'Heure de fin',
-            'label_intervalle' => 'Intervalle de temps entre les heures',
-            'label_decallage' => 'Décallage entre les plages',
-            'label_status' => 'Activé/Désactivé la période',
-        ] + parent::defaultSettings();
-    }
-  
+  /**
+   *
+   * {@inheritdoc} Settings the form for each field
+   */
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+    // dump($element);
+    $element['#type'] = 'details';
+    $elts = $element;
+    // $date_type = 'none';
+    // $time_type = 'time';
+    if (!empty($element['#title_display']))
+      unset($element['#title_display']);
+    # period start time
+    $elts['start_hour'] = [
+      '#title' => t($this->getSetting('label_start_hour')),
+      '#type' => 'textfield',
+      '#default_value' => isset($items[$delta]->start_hour) ? $items[$delta]->start_hour : ''
+    ];
+    # period end hour
+    $elts['end_hour'] = [
+      '#title' => t($this->getSetting('label_end_hour')),
+      '#type' => 'textfield',
+      '#default_value' => isset($items[$delta]->end_hour) ? $items[$delta]->end_hour : ''
+    ];
+    # period status
+    $elts['status'] = [
+      '#title' => t($this->getSetting('label_status')),
+      '#type' => 'checkbox',
+      '#description' => 'Cochez la case pour désactiver la période',
+      '#default_value' => isset($items[$delta]->status) ? $items[$delta]->status : false
+    ];
+    # period interval
+    $elts['intervalle'] = [
+      '#title' => t($this->getSetting('label_intervalle')),
+      '#type' => 'number',
+      '#default_value' => isset($items[$delta]->intervalle) ? $items[$delta]->intervalle : $this->getSetting('intervalle_size'),
+      '#required' => TRUE,
+      '#min' => 1,
+      '#max' => 59
+    ];
+    # period decallage
+    $elts['decallage'] = [
+      '#title' => t($this->getSetting('label_decallage')),
+      '#type' => 'number',
+      '#default_value' => isset($items[$delta]->decallage) ? $items[$delta]->decallage : $this->getSetting('decallage_size'),
+      '#required' => TRUE,
+      '#min' => 1,
+      '#max' => 59
+    ];
+    // dump($elts);
+    return $elts;
+  }
 
-    /**
-    * {@inheritdoc}
-    * Settings the form for each field
-    */
-    public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
-        //dump($element);
-        $element['#type'] = 'details';
-        $elts = $element;       
-        //$date_type = 'none';
-        //$time_type = 'time';
-        if (!empty($element['#title_display']))
-            unset($element['#title_display']);
-        # period start time
-        $elts['start_hour'] = [
-            '#title' => t($this->getSetting('label_start_hour')),
-            '#type' => 'textfield',
-            '#default_value' => isset($items[$delta]->start_hour) ? $items[$delta]->start_hour : '',
-        ];
-        # period end hour
-        $elts['end_hour'] = [
-            '#title' => t($this->getSetting('label_end_hour')),
-            '#type' => 'textfield',
-            '#default_value' => isset($items[$delta]->end_hour) ? $items[$delta]->end_hour : '',
-        ];
-        # period status
-        $elts['status'] = [
-            '#title' => t($this->getSetting('label_status')),
-            '#type' => 'checkbox',
-            '#description' => 'Cochez la case pour désactiver la période',
-            '#default_value' => isset($items[$delta]->status) ? $items[$delta]->status : false,
-          ];
-        # period interval
-        $elts['intervalle'] = [
-            '#title' => t($this->getSetting('label_intervalle')),
-            '#type' => 'number',
-            '#default_value' => isset($items[$delta]->intervalle) ? $items[$delta]->intervalle : $this->getSetting('intervalle_size'),
-            '#required' => TRUE,
-            '#min' => 1,
-            '#max' => 59
-        ];
-        # period decallage
-        $elts['decallage'] = [
-            '#title' => t($this->getSetting('label_decallage')),
-            '#type' => 'number',
-            '#default_value' => isset($items[$delta]->decallage) ? $items[$delta]->decallage : $this->getSetting('decallage_size'),
-            '#required' => TRUE,
-            '#min' => 1,
-            '#max' => 59
-        ];
-        //dump($elts);
-        return $elts;
-    }
-    /**
-    * {@inheritdoc}
-    * Allow user to override the form configuration
-    */
-    public function settingsForm(array $form, FormStateInterface $form_state) {
-        $element['decallage'] = [
-        '#type' => 'number',
-        '#title' => $this->getSetting('label_decallage'),
-        '#default_value' => $this->getSetting('size'),
-        '#required' => TRUE,
-        '#min' => 1,
-        ];
-        $element['intervalle'] = [
-            '#type' => 'number',
-            '#title' => $this->getSetting('label_intervalle'),
-            '#default_value' => $this->getSetting('size'),
-            '#required' => TRUE,
-            '#min' => 1,
-        ];
-        $element['status'] = [
-            '#type' => 'boolean',
-            '#title' => $this->getSetting('label_status'),
-            '#default_value' => true,
-        ];
-        $element['start_hour'] = [
-            '#type' => 'textfield',
-            '#title' => $this->getSetting('label_start_hour'),
-            '#default_value' => $this->getSetting('size'),
-        ];
-        $element['end_hour'] = [
-            '#type' => 'textfield',
-            '#title' => $this->getSetting('label_end_four'),
-            '#default_value' => $this->getSetting('size'),
-        ];
-        return $element;
-    }
+  /**
+   *
+   * {@inheritdoc} Allow user to override the form configuration
+   */
+  public function settingsForm(array $form, FormStateInterface $form_state) {
+    $element['decallage'] = [
+      '#type' => 'number',
+      '#title' => $this->getSetting('label_decallage'),
+      '#default_value' => $this->getSetting('size'),
+      '#required' => TRUE,
+      '#min' => 1
+    ];
+    $element['intervalle'] = [
+      '#type' => 'number',
+      '#title' => $this->getSetting('label_intervalle'),
+      '#default_value' => $this->getSetting('size'),
+      '#required' => TRUE,
+      '#min' => 1
+    ];
+    $element['status'] = [
+      '#type' => 'boolean',
+      '#title' => $this->getSetting('label_status'),
+      '#default_value' => true
+    ];
+    $element['start_hour'] = [
+      '#type' => 'textfield',
+      '#title' => $this->getSetting('label_start_hour'),
+      '#default_value' => $this->getSetting('size')
+    ];
+    $element['end_hour'] = [
+      '#type' => 'textfield',
+      '#title' => $this->getSetting('label_end_four'),
+      '#default_value' => $this->getSetting('size')
+    ];
+    return $element;
+  }
 
-    /**
-     * {@inheritdoc}
+  /**
+   *
+   * {@inheritdoc}
+   */
+  function massageFormValues($values, $form, $form_state) {
+    $vals = parent::massageFormValues($values, $form, $form_state);
+    dump($val['start_hour']);
+    // format the hours
+    /*
+     * foreach ($vals as &$val) {
+     * if(!empty($val['start_hour'])) {
+     * $date = $val['start_hour'];
+     * $val['start_hour'] = date('H:i', $date->getTimestamp());
+     * //dump($val);
+     * }
+     * if(!empty($val['end_hour'])) {
+     * $date = $val['end_hour'];
+     * $val['end_hour'] = date('H:i', $date->getTimestamp());
+     * }
+     * }
      */
-    function massageFormValues($values, $form, $form_state) {
-        $vals = parent::massageFormValues($values, $form, $form_state);
-        dump($val['start_hour']);
-        // format the hours
-        /*foreach ($vals as &$val) {
-            if(!empty($val['start_hour'])) {
-                $date = $val['start_hour'];
+    return $vals;
+  }
 
-                $val['start_hour'] = date('H:i', $date->getTimestamp());
-                //dump($val);
-            }
-            if(!empty($val['end_hour'])) {
-                $date = $val['end_hour'];
-
-                $val['end_hour'] = date('H:i', $date->getTimestamp());
-            }
-        }*/
-        return $vals;
-    }
 }

@@ -23,8 +23,8 @@ interface DaysSettingsInterface /* extends PluginInspectionInterface */
           'm_d' => 00,
           'h_f' => 17,
           'm_f' => 00,
-          'meta_tags' => [], // peut contenir des informations utile pour
-                               // d'autre application.
+          'metadata' => [], // peut contenir des informations utile pour
+                              // d'autre application.
           'decallage' => 5, // remove
           'intervalle' => 15, // remove
           'reduction' => 20, // remove

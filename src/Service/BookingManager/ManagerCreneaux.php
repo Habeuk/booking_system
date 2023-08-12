@@ -106,16 +106,20 @@ class ManagerCreneaux extends ManagerBase {
     $maxCreneauxIds = 100;
     $i = 0;
     while ($i < $maxCreneauxIds || $hourBegin > $maxCreneauxIds) {
-      $times[$i] = [
-        'monitors' => []
-      ];
       $hourAddduration = $hourBegin;
       $hourAddduration->modify("+ " . $duration . " minutes");
+      $times[$i]['status'] = false;
       $times[$i]['hour'] = [
         'start' => $hourBegin->format("h:m"),
         'end' => $hourAddduration->format("h:m")
       ];
-      $times[$i]['status'] = $this->checkIfCreneauIsActif($hourBegin, $times[$i]['hour'], $gap);
+      $monitors = $this->getEquipesAvailableByCreneau($hourBegin, $times[$i]['hour']);
+      $times[$i]['monitors'] = $monitors;
+      // S'il nya pas d'equipe disponible pour ce creneau, on le garde
+      // desactivé.
+      if ($monitors) {
+        $times[$i]['status'] = $this->checkIfCreneauIsActif($hourBegin, $times[$i]['hour'], $gap);
+      }
       // Pass to next creneau
       $hourBegin->modify("+ " . $interval . " minutes");
       // i++

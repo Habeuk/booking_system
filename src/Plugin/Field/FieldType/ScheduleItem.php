@@ -14,9 +14,10 @@ use Drupal\Core\TypedData\DataDefinition;
 /**
  * Plugin implementation of the 'snippets' field type.
  *
+ * @deprecated remove in 2x, ( champs plus utiliser ).
  * @FieldType(
  *   id = "schedule",
- *   label = @Translation("Schedule field"),
+ *   label = @Translation("Schedule field @deprecated "),
  *   description = @Translation("This field stores schedule modifications in the database."),
  *   default_widget = "schedule_default",
  *   default_formatter = "schedule_default"
