@@ -143,7 +143,7 @@ class ManagerBase {
     if ($this->daysSortIndex === NULL) {
       $this->loadBookingConfigType($this->booking_config_type_id);
       $values = $this->BookingConfigType->toArray();
-      foreach ($values as $value) {
+      foreach ($values['days'] as $value) {
         $this->daysSortIndex[$value['indice']] = $value;
       }
     }
