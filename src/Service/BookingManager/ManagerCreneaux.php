@@ -66,7 +66,9 @@ class ManagerCreneaux extends ManagerBase {
     $indexDay = $this->getDateSelected()->format("w");
     $dayconf = $this->getDayconfig($indexDay);
     $values = $this->BookingConfigType->toArray();
+    // dump($values);
     $datas['creneau_config'] = $values['creneau'];
+    $datas['creneau_config']['limit_reservation'] = $values['limit_reservation'];
     $datas['monitor_list'] = $this->getEquipesOptions($this->booking_config_type_id);
     $creneaux = [];
     foreach ($dayconf['periodes'] as $p => $periode) {
