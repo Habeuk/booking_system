@@ -189,7 +189,6 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
       }
     }
     $this->set("days", $final);
-    dd($jours, $days, $final);
   }
 
   /**
