@@ -69,9 +69,31 @@ class BookingSystemUseApp extends ControllerBase {
   /**
    * Permet de charger la configuration par defaut.
    */
-  public function loadDefaultViews(Request $Request) {
+  public function loadConfisCalandar(Request $Request) {
     $booking_config_type_id = "test";
+    // return HttpResponse::response($configs);
     return $this->Views($Request, $booking_config_type_id);
+  }
+
+  /**
+   * Permet de recuperer les données de configurations pour la constrction des
+   * creneaux.
+   *
+   * @param string $booking_config_type_id
+   * @param string $date
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   */
+  public function loadConfisCreneaux($booking_config_type_id, $date) {
+    try {
+      $configs = $this->ManagerCreneaux->loadCreneaux($booking_config_type_id, $date);
+      return HttpResponse::response($configs);
+    }
+    catch (\Exception $e) {
+      return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
+    }
+    catch (\Error $e) {
+      return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
+    }
   }
 
 }

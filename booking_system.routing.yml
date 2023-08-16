@@ -14,14 +14,42 @@ booking_system.views_app:
     _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::Views'
   requirements:
     _permission: "souscription booking_system"
+  methods: [GET]
+  options:
+      _auth: ['basic_auth', 'cookie']  
 
-booking_system.load_default_views_app:
-  path: "/booking-system/views-app-default"
+booking_system.app_load_config_calendar:
+  path: "/booking-system/views-app-calendar"
   defaults:
-    _title: "Views app default"
-    _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::loadDefaultViews'
+    _title: "Load config calendar"
+    _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::loadConfisCalandar'
   requirements:
     _permission: "souscription booking_system"
+  methods: [GET]
+  options:
+      _auth: ['basic_auth', 'cookie']
+      
+booking_system.app_load_config_creneaux:
+  path: "/booking-system/views-app-creneaux"
+  defaults:
+    _title: "Views app default"
+    _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::loadConfisCreneaux'
+  requirements:
+    _permission: "souscription booking_system"
+  methods: [GET]
+  options:
+      _auth: ['basic_auth', 'cookie']
+      
+booking_system.app_load_creneaux:
+  path: "/booking-system/views-app-creneaux/{booking_config_type_id}/{date}"
+  defaults:
+    _title: "Load configs creneaux"
+    _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::loadConfisCreneaux'
+  requirements:
+    _permission: "souscription booking_system"
+  methods: [GET]
+  options:
+      _auth: ['basic_auth', 'cookie']
 
 ##1x
 # get user reservation :

@@ -11,10 +11,10 @@ booking_system_app:
 
 booking_system_app2:
   js:
-    files/bookingSystem.umd.js: {}
+    files2/bookingSystem.umd.js: {}
   css:
     component:
-      files/bookingSystem.css: {}
+      files2/bookingSystem.css: {}
 # Custom module library for general purposes.
 booking_system:
   js:
