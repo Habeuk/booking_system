@@ -177,7 +177,7 @@ class BookingConfigTypeForm extends EntityForm {
       '#default_value' => isset($creneau['gap']) ? $creneau['gap'] : 0
     ];
     $form['creneau']['show_end_hour'] = [
-      "#type" => 'boolean',
+      "#type" => 'checkbox',
       '#title' => "Affiche l'heure de fin du creneau ",
       '#default_value' => isset($creneau['show_end_hour']) ? $creneau['show_end_hour'] : true
     ];
