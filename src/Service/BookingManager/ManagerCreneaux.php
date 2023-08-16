@@ -63,7 +63,7 @@ class ManagerCreneaux extends ManagerBase {
   protected function buildCreneaux($date_string) {
     $this->setDateSelected($date_string);
     // On determine l'indice du jours.
-    $indexDay = $this->selecteddate->format("w");
+    $indexDay = $this->getDateSelected()->format("w");
     $dayconf = $this->getDayconfig($indexDay);
     $values = $this->BookingConfigType->toArray();
     $creneaux = [];
@@ -71,10 +71,17 @@ class ManagerCreneaux extends ManagerBase {
       $creneaux[$p] = [
         'name' => $periode['label'],
         'status' => $periode['status'],
+        'gap' => 0,
+        'horaires' => [
+          'begin' => $periode['h_d'] . ':' . $periode['m_d'],
+          'end' => $periode['h_f'] . ':' . $periode['m_f']
+        ],
         'times' => []
       ];
       if ($periode['status']) {
+        // Merge default config with override config.
         $periode += $values['creneau'];
+        $creneaux[$p]['gap'] = $periode['gap'];
         $this->genereateCreneauForPeriode($creneaux[$p]['times'], $periode);
       }
     }
@@ -92,26 +99,34 @@ class ManagerCreneaux extends ManagerBase {
     $duration = $creneauConfig['duration'];
     $interval = $creneauConfig['interval'];
     $gap = $creneauConfig['gap'];
+    // dump($this->getDateSelected());
     /**
      * Use "gap" to determiner de the next creneaux.
      *
      * @var \Drupal\Core\Datetime\DrupalDateTime $hourBegin
      */
-    $hourBegin = $this->selecteddate;
-    $hourBegin->setTime($creneauConfig['h_d'], $creneauConfig['m_d']);
+    $hourBegin = $this->getDateSelected();
+    $hourBegin->setTime($creneauConfig['h_d'], $creneauConfig['m_d'], 0);
+    // dump($hourBegin->format("Y-m-d H:i"));
+    // dump($this->getDateSelected());
+    //
+    $hourEnd = $this->getDateSelected();
+    $hourEnd->setTime($creneauConfig['h_f'], $creneauConfig['m_f'], 0);
+    // dump($hourEnd->format("Y-m-d H:i"), ' /// ');
+    // dd($this->getDateSelected());
 
-    $hourEnd = $this->selecteddate;
-    $hourEnd->setTime($creneauConfig['h_f'], $creneauConfig['m_f']);
     // 100 creneaux par periode.
-    $maxCreneauxIds = 100;
+    $maxCreneauxIds = 20;
     $i = 0;
-    while ($i < $maxCreneauxIds || $hourBegin > $maxCreneauxIds) {
-      $hourAddduration = $hourBegin;
+    while ($i < $maxCreneauxIds && $hourBegin < $hourEnd) {
+      $hourAddduration = $this->getNewInstanceDate($hourBegin);
+
       $hourAddduration->modify("+ " . $duration . " minutes");
+      $times[$i]['gap'] = $gap;
       $times[$i]['status'] = false;
       $times[$i]['hour'] = [
-        'start' => $hourBegin->format("h:m"),
-        'end' => $hourAddduration->format("h:m")
+        'start' => $hourBegin->format("H:i"),
+        'end' => $hourAddduration->format("H:i")
       ];
       $monitors = $this->getEquipesAvailableByCreneau($hourBegin, $times[$i]['hour']);
       $times[$i]['monitors'] = $monitors;

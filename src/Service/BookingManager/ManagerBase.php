@@ -39,10 +39,12 @@ class ManagerBase {
 
   /**
    * Date selectionner par l'utilisateur.
+   * Elle est privée afin qu'elle ne soit pas modifiable par d'autre fonction.
+   * ( car date est un Object statique ).
    *
    * @var DrupalDateTime
    */
-  protected $selecteddate;
+  private $selecteddate;
 
   /**
    * Date encours, (date sur serveur).
@@ -110,26 +112,51 @@ class ManagerBase {
 
   /**
    * La date selectionner par l'utilisateur sur le front.
+   * ( il faut faire attention pour ne pas modifier cette date ).
    *
    * @param string $dateString
    * @return \Drupal\Core\Datetime\DrupalDateTime
    */
   protected function setDateSelected(string $date_string) {
     if (!$this->selecteddate) {
-      $this->selecteddate = new DrupalDateTime($date_string);
+      $selecteddate = new DrupalDateTime($date_string);
+      $this->selecteddate = $selecteddate->__toString();
     }
     return $this->selecteddate;
   }
 
   /**
+   * Recupere la date selectionné par l'utilisateur.
+   *
+   * @return \Drupal\Core\Datetime\DrupalDateTime
+   */
+  protected function getDateSelected() {
+    if (!$this->selecteddate)
+      throw BookingSystemException::exception("La date selectionner par l'utilisateur n'est pas definit");
+    // return new DrupalDateTime($this->selecteddate->format("Y-m-d H:i:s"));
+    return new DrupalDateTime($this->selecteddate);
+  }
+
+  /**
+   * Les dates sont des objects statiques, donc pour modifier un object sans
+   * impacter son origin il faut faire un nouveau new.
+   *
+   * @param DrupalDateTime $date_string
+   */
+  protected function getNewInstanceDate(DrupalDateTime $date_string) {
+    return new DrupalDateTime($date_string->__toString());
+  }
+
+  /**
    * La date encours ( date du jour).
+   * Attention On ne peut
    *
    * @param string $dateString
    * @return \Drupal\Core\Datetime\DrupalDateTime
    */
   protected function getCurrentDate() {
     if (!$this->currentDate) {
-      $this->selecteddate = new DrupalDateTime();
+      $this->currentDate = new DrupalDateTime();
     }
     return $this->currentDate;
   }
