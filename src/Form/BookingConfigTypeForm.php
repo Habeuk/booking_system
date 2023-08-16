@@ -43,6 +43,8 @@ class BookingConfigTypeForm extends EntityForm {
     /* You will need additional form elements for your custom properties. */
     $config = $booking_config_type->get('days');
     $jours = \Drupal\booking_system\DaysSettingsInterface::DAYS;
+    if ($config)
+      $jours = $config;
     $form['days'] = [
       '#type' => 'fieldset',
       '#title' => 'Configuration des dates',
@@ -210,9 +212,17 @@ class BookingConfigTypeForm extends EntityForm {
       default:
         $this->messenger()->addMessage($this->t('Update configuration for making appointments'));
     }
-    $url = Url::fromRoute('entity.booking_config.add_form', [
-      'booking_config_type' => $booking_config_type->id()
-    ], []);
+
+    \Drupal::request()->query->remove('destination');
+    if ($booking_config_type->isNew())
+      $url = Url::fromRoute('entity.booking_config.add_form', [
+        'booking_config_type' => $booking_config_type->id()
+      ], []);
+    else
+      $url = Url::fromRoute('booking_system.config_resume', [
+        'booking_config_type_id' => $booking_config_type->id()
+      ], []);
+    // dd($url->toString());
     $form_state->setRedirectUrl($url);
   }
 
