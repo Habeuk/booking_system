@@ -112,7 +112,10 @@ class ManagerBase {
     $this->getEquipes($booking_config_type_id);
     $options = [];
     foreach ($this->equipes as $equipe) {
-      $options[$equipe->id()] = $equipe->label();
+      $options[] = [
+        'name' => $equipe->label(),
+        'value' => $equipe->id()
+      ];
     }
     return $options;
   }

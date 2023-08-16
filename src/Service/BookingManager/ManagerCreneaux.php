@@ -66,6 +66,8 @@ class ManagerCreneaux extends ManagerBase {
     $indexDay = $this->getDateSelected()->format("w");
     $dayconf = $this->getDayconfig($indexDay);
     $values = $this->BookingConfigType->toArray();
+    $datas['creneau_config'] = $values['creneau'];
+    $datas['monitor_list'] = $this->getEquipesOptions($this->booking_config_type_id);
     $creneaux = [];
     foreach ($dayconf['periodes'] as $p => $periode) {
       $creneaux[$p] = [
@@ -85,7 +87,8 @@ class ManagerCreneaux extends ManagerBase {
         $this->genereateCreneauForPeriode($creneaux[$p]['times'], $periode);
       }
     }
-    return $creneaux;
+    $datas['schedules_list'] = $creneaux;
+    return $datas;
   }
 
   /**
