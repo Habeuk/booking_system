@@ -235,7 +235,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
       'weight' => -4
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setRequired(TRUE);
     //
-    $fields['creneau'] = BaseFieldDefinition::create('creneau')->setLabel(t(' Creneau '))->setDisplayOptions('form', [
+    $fields['creneaux'] = BaseFieldDefinition::create('creneau')->setLabel(t(' Creneau '))->setDisplayOptions('form', [
       'type' => 'creneau_widget',
       'weight' => 0
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setSetting('handler', 'default')->setTranslatable(false)->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED);

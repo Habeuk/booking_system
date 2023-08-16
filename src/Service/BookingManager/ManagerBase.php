@@ -83,7 +83,14 @@ class ManagerBase {
    * @return array
    */
   protected function getEquipesAvailableByCreneau(DrupalDateTime $hourBegin, array $hour) {
-    return [];
+    $options = [];
+    if (!$this->equipes) {
+      $this->getEquipes($this->booking_config_type_id);
+    }
+    foreach ($this->equipes as $equipe) {
+      $options[] = $equipe->id();
+    }
+    return $options;
   }
 
   protected function getEquipes(string $booking_config_type_id) {
@@ -95,7 +102,7 @@ class ManagerBase {
   }
 
   /**
-   * Retourne la liste des equipes en function du creneau.
+   * Retourne la liste des equipes en function de l'id de configuration.
    * (un creneau peu etre disponible pour une equipe et pas pour une autre).
    *
    * @param string $booking_config_type_id

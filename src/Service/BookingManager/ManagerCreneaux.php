@@ -123,17 +123,17 @@ class ManagerCreneaux extends ManagerBase {
 
       $hourAddduration->modify("+ " . $duration . " minutes");
       $times[$i]['gap'] = $gap;
-      $times[$i]['status'] = false;
+      $times[$i]['active'] = false;
       $times[$i]['hour'] = [
         'start' => $hourBegin->format("H:i"),
         'end' => $hourAddduration->format("H:i")
       ];
       $monitors = $this->getEquipesAvailableByCreneau($hourBegin, $times[$i]['hour']);
       $times[$i]['monitors'] = $monitors;
-      // S'il nya pas d'equipe disponible pour ce creneau, on le garde
+      // S'il ny'a pas d'equipe disponible pour ce creneau, on le garde
       // desactivé.
       if ($monitors) {
-        $times[$i]['status'] = $this->checkIfCreneauIsActif($hourBegin, $times[$i]['hour'], $gap);
+        $times[$i]['active'] = $this->checkIfCreneauIsActif($hourBegin, $times[$i]['hour'], $gap);
       }
       // Pass to next creneau
       $hourBegin->modify("+ " . $interval . " minutes");
