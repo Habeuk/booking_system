@@ -239,7 +239,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
       'type' => 'creneau_widget',
       'weight' => 0
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setSetting('handler', 'default')->setTranslatable(false)->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED);
-    //
+    $fields['changed'] = BaseFieldDefinition::create('changed')->setLabel(t('Changed'))->setDescription(t('The time that the entity was last edited.'));
     $fields['status']->setDescription(t('A boolean indicating whether the Booking reservation is published.'))->setDisplayOptions('form', [
       'type' => 'boolean_checkbox',
       'weight' => -3

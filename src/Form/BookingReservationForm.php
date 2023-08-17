@@ -21,6 +21,7 @@ class BookingReservationForm extends ContentEntityForm {
   protected $account;
 
   /**
+   *
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -31,16 +32,21 @@ class BookingReservationForm extends ContentEntityForm {
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    /* @var \Drupal\booking_system\Entity\BookingReservation $entity */
-    $form = parent::buildForm($form, $form_state);
 
+    /* @var \Drupal\booking_system\Entity\BookingReservation $entity */
+    // $entity = $this->entity;
+    // dd($entity->toArray());
+    $form = parent::buildForm($form, $form_state);
+    // dd($entity);
     return $form;
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
@@ -51,16 +57,18 @@ class BookingReservationForm extends ContentEntityForm {
     switch ($status) {
       case SAVED_NEW:
         $this->messenger()->addMessage($this->t('Created the %label Booking reservation.', [
-          '%label' => $entity->label(),
+          '%label' => $entity->label()
         ]));
         break;
 
       default:
         $this->messenger()->addMessage($this->t('Saved the %label Booking reservation.', [
-          '%label' => $entity->label(),
+          '%label' => $entity->label()
         ]));
     }
-    $form_state->setRedirect('entity.booking_reservation.canonical', ['booking_reservation' => $entity->id()]);
+    $form_state->setRedirect('entity.booking_reservation.canonical', [
+      'booking_reservation' => $entity->id()
+    ]);
   }
 
 }

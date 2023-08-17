@@ -26,7 +26,8 @@ class CreneauWidgetType extends WidgetBase {
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
-    $date_start = isset($items[$delta]->date_start) ? DrupalDateTime::createFromTimestamp($items[$delta]->date_start) : '';
+    $date_start = isset($items[$delta]->date_start) ? new DrupalDateTime($items[$delta]->date_start) : '';
+
     $element['hour_start'] = [
       '#title' => $this->t('Start Hour'),
       '#type' => 'datetime',
@@ -43,7 +44,7 @@ class CreneauWidgetType extends WidgetBase {
       '#date_time_element' => 'none',
       '#date_increment' => 0
     ];
-    $date_end = isset($items[$delta]->date_end) ? DrupalDateTime::createFromTimestamp($items[$delta]->date_end) : '';
+    $date_end = isset($items[$delta]->date_end) ? new DrupalDateTime($items[$delta]->date_end) : '';
     $element['hour_end'] = [
       '#title' => $this->t('End Hour'),
       '#type' => 'datetime',
