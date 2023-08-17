@@ -159,10 +159,8 @@ class ManagerCreneaux extends ManagerBase {
     $currentDate = $this->getCurrentDate();
     // Verification en function du temps.
     if ($gap > 0) {
-      // on ne modifie pas directement l'object $hourBegin, car cela va impacter
-      // la suite du processus.
-      $temp = $hourBegin;
-      $temp->modify("+ " . $gap . " minutes");
+      $temp = $this->getNewInstanceDate($hourBegin);
+      $temp->modify("- " . $gap . " minutes");
       if ($currentDate > $temp) {
         return false;
       }

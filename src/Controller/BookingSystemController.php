@@ -74,7 +74,6 @@ class BookingSystemController extends ControllerBase {
    */
   public function dates() {
     try {
-
       $data = $this->manager->generateDates();
       $data['disabledDates'] = $this->manager->generateDisabledDates();
       return HttpResponse::response($data);

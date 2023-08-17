@@ -151,10 +151,10 @@ class ManagerBase {
    * Les dates sont des objects statiques, donc pour modifier un object sans
    * impacter son origin il faut faire un nouveau new.
    *
-   * @param DrupalDateTime $date_string
+   * @param DrupalDateTime $date
    */
-  protected function getNewInstanceDate(DrupalDateTime $date_string) {
-    return new DrupalDateTime($date_string->__toString());
+  protected function getNewInstanceDate(DrupalDateTime $date) {
+    return new DrupalDateTime($date->__toString());
   }
 
   /**

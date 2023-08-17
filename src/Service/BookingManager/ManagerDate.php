@@ -85,7 +85,8 @@ class ManagerDate extends ManagerBase {
     $currentDate = new DrupalDateTime();
     $results['number_month'] = $values['number_month'];
     /**
-     * Recupere l'indice du moins encours.
+     * On verifie que il ya des creneaux pour la date encours, si non, on
+     * determine la prochaine date valide.
      */
     $results['current_month'] = $currentDate->format('m');
     $results['date_begin'] = $currentDate->format('Y-m-d');
