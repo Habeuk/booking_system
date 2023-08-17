@@ -189,6 +189,16 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
       }
     }
     $this->set("days", $final);
+    // On effectue des validations de logique en function.
+    /**
+     *
+     * @var \Drupal\booking_system\Service\BookingManager\ManagerCreneaux $app_manager_creneau
+     */
+    $app_manager_creneau = \Drupal::service('booking_system.app_manager_creneaux');
+    /**
+     * Permet de s'assurer qu'il ya au moins un journée active.
+     */
+    $app_manager_creneau->getDisableDayByIndice($this->id);
   }
 
   /**

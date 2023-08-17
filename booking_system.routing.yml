@@ -48,6 +48,17 @@ booking_system.app_deux:
     _controller: '\Drupal\booking_system\Controller\BookingSystemController::buildV2'
   requirements:
     _permission: "access content"
+    
+booking_system.save_reservation:
+  path: "/booking-system/save-reservation/{booking_config_type_id}"
+  defaults:
+    _title: "Reservation"
+    _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::SaveReservation'
+  requirements:
+    _user_is_logged_in: "TRUE"
+  options:
+    _auth: ["basic_auth", "cookie"]    
+
 
 ##1x
 # get user reservation :

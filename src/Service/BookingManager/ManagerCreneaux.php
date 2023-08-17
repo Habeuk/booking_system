@@ -54,6 +54,9 @@ class ManagerCreneaux extends ManagerBase {
       if (!$day['status'])
         $disabledDays[] = $day['indice'];
     }
+    // si on a desactivé tous les jours de la semaine, error
+    if (count($disabledDays) >= 7)
+      throw BookingSystemException::exception("Tous les jours de la semaine sont desactivées");
     return $disabledDays;
   }
 
@@ -69,7 +72,7 @@ class ManagerCreneaux extends ManagerBase {
     // dump($values);
     $datas['creneau_config'] = $values['creneau'];
     /**
-     * Doit etre caluler en function d'autres paramettres.
+     * Doit être caluler en function d'autres paramettres.
      */
     $datas['creneau_config']['limit_reservation'] = $values['limit_reservation'];
     $datas['monitor_list'] = $this->getEquipesOptions($this->booking_config_type_id);
@@ -148,6 +151,16 @@ class ManagerCreneaux extends ManagerBase {
       // i++
       $i++;
     }
+  }
+
+  /**
+   * Permet de terminer si la date a au moins un creneau actif.
+   *
+   * @param DrupalDateTime $Date
+   * @return boolean
+   */
+  protected function checkIfDateHasCreneaux(DrupalDateTime $Date) {
+    //
   }
 
   /**

@@ -75,6 +75,11 @@ class ManagerBase {
     return $this->BookingConfigType;
   }
 
+  public function saveCreneaux(string $booking_config_type_id, array $values) {
+    $BookingReservation = \Drupal\booking_system\Entity\BookingReservation::create($values);
+    return $BookingReservation->save();
+  }
+
   /**
    * Permet de recuperer les equipes disponible pour un creneau.
    *
@@ -111,11 +116,14 @@ class ManagerBase {
   protected function getEquipesOptions(string $booking_config_type_id) {
     $this->getEquipes($booking_config_type_id);
     $options = [];
+    $indice = 1;
     foreach ($this->equipes as $equipe) {
       $options[] = [
         'name' => $equipe->label(),
-        'value' => $equipe->id()
+        'value' => $indice,
+        'id' => $equipe->id()
       ];
+      $indice++;
     }
     return $options;
   }

@@ -9,6 +9,7 @@ use Stephane888\Debug\ExceptionExtractMessage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\booking_system\Service\BookingManager\ManagerDate;
 use Drupal\booking_system\Service\BookingManager\ManagerCreneaux;
+use Drupal\Component\Serialization\Json;
 
 /**
  * Returns responses for booking_system routes.
@@ -41,12 +42,6 @@ class BookingSystemUseApp extends ControllerBase {
   }
 
   /**
-   * Recupere les crenaux en function de la date du jour et de l'id de config.
-   */
-  public function GetCreneaux(Request $Request, $booking_config_type_id, $date_string) {
-  }
-
-  /**
    * Permet de charger une configuration à partir de son id.
    *
    * @param Request $Request
@@ -76,7 +71,26 @@ class BookingSystemUseApp extends ControllerBase {
   }
 
   /**
-   * Permet de recuperer les données de configurations pour la constrction des
+   * Enregistrer un creneau.
+   *
+   * @param string $booking_config_type_id
+   */
+  public function SaveReservation(Request $Request, string $booking_config_type_id) {
+    try {
+      $values = Json::decode($Request->getContent());
+      $configs = $this->BookingMangerDate->saveCreneaux($booking_config_type_id, $values);
+      return HttpResponse::response($configs);
+    }
+    catch (\Exception $e) {
+      return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
+    }
+    catch (\Error $e) {
+      return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
+    }
+  }
+
+  /**
+   * Permet de recuperer les données de configurations pour la construction des
    * creneaux.
    *
    * @param string $booking_config_type_id
