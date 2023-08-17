@@ -11,11 +11,13 @@ booking_system_app:
 
 booking_system_app2:
   js:
-    files2/bookingSystem.umd.js: {}
+    https://unpkg.com/vue@3/dist/vue.global.js:
+      { type: external, minified: true }
+    filesV2/bookingSystem.umd.js: {}
   css:
     component:
-      files2/bookingSystem.css: {}
-      
+      filesV2/style.css: {}
+
 # Custom module library for general purposes.
 booking_system:
   js:
@@ -65,6 +67,3 @@ vuejs_dev:
   js:
     https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js:
       { type: external, minified: true, weight: -10 }
-      
-      
-      
