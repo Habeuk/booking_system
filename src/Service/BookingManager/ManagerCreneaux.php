@@ -68,6 +68,9 @@ class ManagerCreneaux extends ManagerBase {
     $values = $this->BookingConfigType->toArray();
     // dump($values);
     $datas['creneau_config'] = $values['creneau'];
+    /**
+     * Doit etre caluler en function d'autres paramettres.
+     */
     $datas['creneau_config']['limit_reservation'] = $values['limit_reservation'];
     $datas['monitor_list'] = $this->getEquipesOptions($this->booking_config_type_id);
     $creneaux = [];

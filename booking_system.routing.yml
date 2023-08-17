@@ -28,18 +28,7 @@ booking_system.app_load_config_calendar:
   methods: [GET]
   options:
       _auth: ['basic_auth', 'cookie']
-      
-#booking_system.app_load_config_creneaux:
-#  path: "/booking-system/views-app-creneaux"
-#  defaults:
-#    _title: "Views app default"
-#    _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::loadConfisCreneaux'
-#  requirements:
-#    _permission: "souscription booking_system"
-#  methods: [GET]
-#  options:
-#      _auth: ['basic_auth', 'cookie']
-      
+
 booking_system.app_load_creneaux:
   path: "/booking-system/views-app-creneaux/{booking_config_type_id}/{date}"
   defaults:
@@ -50,6 +39,15 @@ booking_system.app_load_creneaux:
   methods: [GET]
   options:
       _auth: ['basic_auth', 'cookie']
+      
+# start the vues-js app :
+booking_system.app_deux:
+  path: "/booking-system/page-app"
+  defaults:
+    _title: "Application de reservation"
+    _controller: '\Drupal\booking_system\Controller\BookingSystemController::buildV2'
+  requirements:
+    _permission: "access content"
 
 ##1x
 # get user reservation :
@@ -69,15 +67,6 @@ booking_system.app:
   defaults:
     _title: "Application de reservation"
     _controller: '\Drupal\booking_system\Controller\BookingSystemController::build'
-  requirements:
-    _permission: "access content"
-
-# start the vues-js app :
-booking_system.app_deux:
-  path: "/booking-system/page-app"
-  defaults:
-    _title: "Application de reservation"
-    _controller: '\Drupal\booking_system\Controller\BookingSystemController::buildV2'
   requirements:
     _permission: "access content"
 
