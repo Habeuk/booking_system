@@ -34,6 +34,7 @@ booking_system.app_load_creneaux:
   defaults:
     _title: "Load configs creneaux"
     _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::loadConfisCreneaux'
+    date: null
   requirements:
     _permission: "souscription booking_system"
   methods: [GET]
@@ -45,7 +46,7 @@ booking_system.app_deux:
   path: "/booking-system/page-app"
   defaults:
     _title: "Application de reservation"
-    _controller: '\Drupal\booking_system\Controller\BookingSystemController::buildV2'
+    _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::build'
   requirements:
     _permission: "access content"
     
@@ -57,7 +58,17 @@ booking_system.save_reservation:
   requirements:
     _user_is_logged_in: "TRUE"
   options:
-    _auth: ["basic_auth", "cookie"]    
+    _auth: ["basic_auth", "cookie"]   
+    
+booking_system.settings_booking_system:
+  path: '/admin/config/booking_system/settingsbookingsystem'
+  defaults:
+    _form: '\Drupal\booking_system\Form\SettingsBookingSystem'
+    _title: 'SettingsBookingSystem'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE 
 
 
 ##1x
@@ -125,3 +136,4 @@ booking_system.settings_form:
     _form: 'Drupal\booking_system\Form\SettingsForm'
   requirements:
     _permission: "administer booking_system configuration"
+

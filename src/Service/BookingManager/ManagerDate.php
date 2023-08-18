@@ -9,7 +9,7 @@ use Drupal\booking_system\Exception\BookingSystemException;
 use Drupal\Core\Datetime\DrupalDateTime;
 
 /**
- * Manage the booking system
+ * Permet de gerer l'affichage du calendrier ou des jours à afficher.
  */
 class ManagerDate extends ManagerBase {
 
@@ -61,11 +61,13 @@ class ManagerDate extends ManagerBase {
     $this->loadBookingConfigType($booking_config_type_id);
     $values = $this->BookingConfigType->toArray();
     $results = [];
+
     $results['booking_config_type_id'] = $booking_config_type_id;
     $results['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $results['date_display_mode'] = $values['date_display_mode'];
     $results['show_end_hour'] = $values['creneau']['show_end_hour'];
     $results['maintenance'] = $values['maintenance'];
+
     if (!empty($values['maintenance']))
       $results['maintenance_message'] = $values['maintenance_message'];
     if ($values['date_display_mode'] == 'month') {

@@ -51,25 +51,6 @@ class BookingSystemController extends ControllerBase {
   }
 
   /**
-   * Builds the response to showing the Vue-js app
-   */
-  public function buildV2() {
-    $build['content'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'section',
-      "#attributes" => [
-        'id' => 'app',
-        'class' => [
-          'm-5',
-          'p-5'
-        ]
-      ]
-    ];
-    $build['content']['#attached']['library'][] = 'booking_system/booking_system_app2';
-    return $build;
-  }
-
-  /**
    * Give the days to disable
    */
   public function dates() {

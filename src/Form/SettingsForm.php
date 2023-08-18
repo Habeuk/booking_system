@@ -12,6 +12,7 @@ use Drupal\booking_system\DaysSettingsInterface;
 class SettingsForm extends ConfigFormBase implements DaysSettingsInterface {
 
   /**
+   *
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -19,24 +20,30 @@ class SettingsForm extends ConfigFormBase implements DaysSettingsInterface {
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return ['booking_system.settings'];
+    return [
+      'booking_system.settings'
+    ];
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('booking_system.settings')->getRawData();
-    //dump($config);
+    // dump($config);
     /* You will need additional form elements for your custom properties. */
     $jours = \Drupal\booking_system\DaysSettingsInterface::DAYS;
-    //dump($jours);
-    /*if (!empty($this->config('booking_system.settings')->get('jours'))) {
-      $jours = $this->config('booking_system.settings')->get('jours');
-    }*/
+    // dump($jours);
+    /*
+     * if (!empty($this->config('booking_system.settings')->get('jours'))) {
+     * $jours = $this->config('booking_system.settings')->get('jours');
+     * }
+     */
     $form['jours'] = [
       '#type' => 'fieldset',
       '#title' => 'Configuration des dates',
@@ -44,7 +51,7 @@ class SettingsForm extends ConfigFormBase implements DaysSettingsInterface {
     ];
     // boucles pour l'affichage des élemntes des jours
     foreach ($jours as $i => $val) {
-      //dump($jours);
+      // dump($jours);
       // display the dropdown
       $form['jours'][$i] = [
         "#type" => 'details',
@@ -71,7 +78,7 @@ class SettingsForm extends ConfigFormBase implements DaysSettingsInterface {
       ];
       // boucles pour les periodes
       $periods = $jours[$i]['periodes'];
-      //dump($periods);
+      // dump($periods);
       foreach ($periods as $j => $period) {
         // dropdown activation
         $form['jours'][$i]['periodes'][$j] = [
@@ -104,39 +111,40 @@ class SettingsForm extends ConfigFormBase implements DaysSettingsInterface {
           '#default_value' => $period['h_f'] . ':' . $period['m_f']
         ];
         // decallage :
-        $form['jours'][$i]['periodes'][$j]['decallage']  = [
+        $form['jours'][$i]['periodes'][$j]['decallage'] = [
           '#type' => 'number',
           '#title' => "Decallage entre les creneaux",
           '#default_value' => isset($config['jours'][$i]['periodes'][$j]['decallage']) ? $config['jours'][$i]['periodes'][$j]['decallage'] : $period['decallage']
         ];
         // intervalle :
-        $form['jours'][$i]['periodes'][$j]['intervalle']  = [
+        $form['jours'][$i]['periodes'][$j]['intervalle'] = [
           '#type' => 'number',
           '#title' => "Intervalle de temps des creneaux",
           '#default_value' => isset($config['jours'][$i]['periodes'][$j]['intervalle']) ? $config['jours'][$i]['periodes'][$j]['intervalle'] : $period['intervalle']
         ];
         // reduction de la périodes :
-        $form['jours'][$i]['periodes'][$j]['reduction']  = [
+        $form['jours'][$i]['periodes'][$j]['reduction'] = [
           '#type' => 'number',
           '#title' => "Reduction pour la période",
           '#default_value' => isset($config['jours'][$i]['periodes'][$j]['reduction']) ? $config['jours'][$i]['periodes'][$j]['reduction'] : $period['reduction']
         ];
       }
     }
-    // isset($config['jours'][$i]['status']) ? $config['jours'][$i]['status'] : $val['status']
+    // isset($config['jours'][$i]['status']) ? $config['jours'][$i]['status'] :
+    // $val['status']
     // define the reduction
     $form['reduction'] = [
       '#type' => 'number',
       '#title' => t("Valeur de la reduction"),
       '#default_value' => isset($config['reduction']) ? $config['reduction'] : 10
     ];
-    // define number of days
+    // Define number of days
     $form['number_of_days'] = [
       '#type' => 'number',
       '#title' => t("Nombre de jours à afficher"),
       '#default_value' => isset($config['number_of_days']) ? $config['number_of_days'] : 60
     ];
-    // define number of max persons
+    // Define number of max persons
     $form['number_of_persons'] = [
       '#type' => 'number',
       '#title' => t("Nombre de personnes maximal par table"),
@@ -146,25 +154,30 @@ class SettingsForm extends ConfigFormBase implements DaysSettingsInterface {
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    /*if ($form_state->getValue('example') != 'example') {
-      $form_state->setErrorByName('example', $this->t('The value is not correct.'));
-    }*/
+    /*
+     * if ($form_state->getValue('example') != 'example') {
+     * $form_state->setErrorByName('example', $this->t('The value is not
+     * correct.'));
+     * }
+     */
     parent::validateForm($form, $form_state);
   }
 
   /**
+   *
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->config('booking_system.settings')
-      ->set('jours', $form_state->getValue('jours'))
-      ->set('reduction', $form_state->getValue('reduction'))
-      ->set('number_of_days', $form_state->getValue('number_of_days'))
-      ->set('number_of_persons', $form_state->getValue('number_of_persons'))
-      ->save();
+    $this->config('booking_system.settings');
+    $this->config->set('jours', $form_state->getValue('jours'));
+    $this->config->set('reduction', $form_state->getValue('reduction'));
+    $this->config->set('number_of_days', $form_state->getValue('number_of_days'));
+    $this->config->set('number_of_persons', $form_state->getValue('number_of_persons'));
+    $this->config->save();
     parent::submitForm($form, $form_state);
   }
 

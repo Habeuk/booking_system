@@ -81,6 +81,18 @@ class ManagerBase {
   }
 
   /**
+   * Ce champs est remplie si l'utilisateur n'a pas acces au creneaux.
+   * (example il n'a peut plus reserver de nouveau creneaux).
+   *
+   * @param array $results
+   * @param boolean $status
+   */
+  public function checkAccess(array &$results, $status = true) {
+    $results['access'] = true;
+    $results['ban_reason'] = '';
+  }
+
+  /**
    * Permet de recuperer les equipes disponible pour un creneau.
    *
    * @param DrupalDateTime $hourBegin

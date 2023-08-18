@@ -1,0 +1,11 @@
+calandar:
+  name: 'Calendar'
+  title: 'Please select the day of booking'
+  resumed_label: 'Date Selected'
+schedule:
+  name: 'Schedule'
+  title: 'Please select the different time slots'
+  resumed_label: 'Selected slots'
+summary:
+  parameters:
+    call_to_action: 'Book now'

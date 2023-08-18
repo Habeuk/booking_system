@@ -73,3 +73,9 @@ entity.booking_equipes.collection:
   weight: 100
 
 
+booking_system.settings_booking_system:
+  title: 'SettingsBookingSystem'
+  route_name: booking_system.settings_booking_system
+  description: 'A description for the menu entry'
+  parent: system.admin_config_system
+  weight: 99

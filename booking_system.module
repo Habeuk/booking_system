@@ -30,7 +30,6 @@ function booking_system_form_booking_config_type_edit_form_alter(&$form, FormSta
  * @param string $form_id
  */
 function hook_pro(&$form, FormStateInterface $form_state, $form_id) {
-  //
   // dump(\Drupal::routeMatch()->getParameters());
 }
 
