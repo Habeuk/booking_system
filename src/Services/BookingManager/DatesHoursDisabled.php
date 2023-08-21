@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\booking_system\Service\BookingManager;
+namespace Drupal\booking_system\Services\BookingManager;
 
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Session\AccountInterface;
@@ -29,12 +29,12 @@ class DatesHoursDisabled {
    * @var BookingConfigType
    */
   protected $BookingConfigType;
-
+  
   public function __construct(AccountInterface $currentUser, EntityTypeManager $entityTypeManager) {
     $this->currentUser = $currentUser;
     $this->entityTypeManager = $entityTypeManager;
   }
-
+  
   /**
    * Recupere les dates desactivées.
    */
@@ -61,5 +61,5 @@ class DatesHoursDisabled {
       ]);
     }
   }
-
+  
 }

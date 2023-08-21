@@ -3,7 +3,7 @@
 namespace Drupal\booking_system\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\booking_system\Service\BookingManagerService;
+use Drupal\booking_system\Services\BookingManagerService;
 use Stephane888\DrupalUtility\HttpResponse;
 use Stephane888\Debug\ExceptionExtractMessage;
 use Drupal\Core\Controller\ControllerBase;
@@ -17,11 +17,11 @@ use Drupal\Component\Serialization\Json;
  */
 class BookingSystemController extends ControllerBase {
   protected $manager;
-
+  
   public function __construct(BookingManagerService $manager) {
     $this->manager = $manager;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -29,7 +29,7 @@ class BookingSystemController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static($container->get('booking_system.manager'));
   }
-
+  
   /**
    * Builds the response to showing the Vue-js app
    */
@@ -49,7 +49,7 @@ class BookingSystemController extends ControllerBase {
     // dump($build);
     return $build;
   }
-
+  
   /**
    * Give the days to disable
    */
@@ -65,7 +65,7 @@ class BookingSystemController extends ControllerBase {
       return HttpResponse::response($errors, 400, $e->getMessage());
     }
   }
-
+  
   /**
    * Permet de recupérer la reservation d'un utilisateur.
    *
@@ -92,21 +92,21 @@ class BookingSystemController extends ControllerBase {
       return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 400, $e->getMessage());
     }
   }
-
+  
   /**
    * Give the differents schedule of a day
    */
   public function schedule($day) {
     $day = (int) $day;
-
+    
     $data = $this->manager->generateSchdules($day);
     if (isset($data["error"])) {
       return new JsonResponse($data, Response::HTTP_BAD_REQUEST);
     }
-
+    
     return new JsonResponse($data, Response::HTTP_OK);
   }
-
+  
   /**
    *
    * {@inheritdoc} return the the number of seat left
@@ -119,7 +119,7 @@ class BookingSystemController extends ControllerBase {
     }
     return HttpResponse::response($data);
   }
-
+  
   /**
    *
    * @inheritdoc
@@ -131,5 +131,5 @@ class BookingSystemController extends ControllerBase {
     ];
     return $build;
   }
-
+  
 }

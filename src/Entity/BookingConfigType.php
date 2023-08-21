@@ -56,63 +56,63 @@ use Drupal\Component\Utility\NestedArray;
  * )
  */
 class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigTypeInterface {
-
+  
   /**
    * The Booking config type ID.
    *
    * @var string
    */
   protected $id;
-
+  
   /**
    * The Booking config type label.
    *
    * @var string
    */
   protected $label;
-
+  
   /**
    * Limitation of the number of reservations per team or per person.
    *
    * @var integer
    */
   protected $limit_reservation = 1;
-
+  
   /**
    * user uid
    *
    * @var integer
    */
   protected $uid = 0;
-
+  
   /**
    * Display mode
    *
    * @var string
    */
   protected $date_display_mode = 'month'; // 'month','week'
-
+  
   /**
    * Number of weeks to display
    *
    * @var integer
    */
   protected $number_week = 3;
-
+  
   /**
    * Number of months to display
    *
    * @var integer
    */
   protected $number_month = 2;
-
+  
   /**
    * The days of the week.
    *
    * @var array
    */
   protected $days = [];
-
+  
   /**
    * End date.
    * Est une valeur dynamique qui est envoyé.
@@ -120,14 +120,14 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
    * @var string
    */
   // protected $date_end = '';
-
+  
   /**
    * maintenance mode
    *
    * @var boolean
    */
   protected $maintenance = false;
-
+  
   /**
    * Text of maintenance mode.
    *
@@ -137,7 +137,7 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
     'value' => 'Application disabled for maintenance',
     'format' => 'full_html'
   ];
-
+  
   /**
    * config for creneau
    * creneau.duration //Durée d'un creneau [heure debut et heure de fin].
@@ -153,7 +153,7 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
     'gap' => 0,
     'show_end_hour' => true
   ];
-
+  
   /**
    *
    * {@inheritdoc}
@@ -169,27 +169,41 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
     $jours = \Drupal\booking_system\DaysSettingsInterface::DAYS;
     $days = $this->get('days');
     $final = [];
-    foreach ($days as $k => $day) {
-      $final[$k] = $day;
-      if ($jours[$k])
-        $final[$k] += $jours[$k];
-      foreach ($day['periodes'] as $p => $periode) {
-        if (!empty($jours[$k]['periodes'][$p]))
-          $final[$k]['periodes'][$p] = $jours[$k]['periodes'][$p];
-        if (!empty($periode['h_d__m_d'])) {
-          $h_d__m_d = explode(":", $periode['h_d__m_d']);
-          $final[$k]['periodes'][$p]['h_d'] = (int) $h_d__m_d[0];
-          $final[$k]['periodes'][$p]['m_d'] = (int) $h_d__m_d[1];
-        }
-        if (!empty($periode['h_f__m_f'])) {
-          $h_f__m_f = explode(":", $periode['h_f__m_f']);
-          $final[$k]['periodes'][$p]['h_f'] = (int) $h_f__m_f[0];
-          $final[$k]['periodes'][$p]['m_f'] = (int) $h_f__m_f[1];
+    if ($days)
+      foreach ($days as $k => $day) {
+        $final[$k] = $day;
+        if ($jours[$k])
+          $final[$k] += $jours[$k];
+        foreach ($day['periodes'] as $p => $periode) {
+          if (!empty($jours[$k]['periodes'][$p]))
+            $final[$k]['periodes'][$p] = $jours[$k]['periodes'][$p];
+          if (!empty($periode['h_d__m_d'])) {
+            $h_d__m_d = explode(":", $periode['h_d__m_d']);
+            $final[$k]['periodes'][$p]['h_d'] = (int) $h_d__m_d[0];
+            $final[$k]['periodes'][$p]['m_d'] = (int) $h_d__m_d[1];
+          }
+          if (!empty($periode['h_f__m_f'])) {
+            $h_f__m_f = explode(":", $periode['h_f__m_f']);
+            $final[$k]['periodes'][$p]['h_f'] = (int) $h_f__m_f[0];
+            $final[$k]['periodes'][$p]['m_f'] = (int) $h_f__m_f[1];
+          }
         }
       }
+    else {
+      $final = $jours;
     }
     $this->set("days", $final);
-    // On effectue des validations de logique en function.
+  }
+  
+  /**
+   *
+   * {@inheritdoc}
+   * @see \Drupal\Core\Config\Entity\ConfigEntityBundleBase::postSave()
+   */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+    parent::postSave($storage, $update);
+    // On effectue des validations de logique en function. Cela doit se faire au
+    // niveau de la validation de l'entité.
     /**
      *
      * @var \Drupal\booking_system\Service\BookingManager\ManagerCreneaux $app_manager_creneau
@@ -200,7 +214,7 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
      */
     $app_manager_creneau->getDisableDayByIndice($this->id);
   }
-
+  
   /**
    * Permet de resume les informations
    */
@@ -214,5 +228,5 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
       '#date_display_mode' => $this->date_display_mode
     ];
   }
-
+  
 }

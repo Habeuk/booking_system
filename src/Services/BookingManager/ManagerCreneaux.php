@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\booking_system\Service\BookingManager;
+namespace Drupal\booking_system\Services\BookingManager;
 
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Session\AccountInterface;
@@ -11,25 +11,25 @@ use Drupal\Core\Datetime\DrupalDateTime;
 /**
  * Manage the booking system
  */
-class ManagerCreneaux extends ManagerBase {
+class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
   /**
    *
    * @var BookingConfigType
    */
   protected $BookingConfigType;
-
+  
   /**
    *
    * @var DatesHoursDisabled
    */
   protected $DatesHoursDisabled;
-
+  
   public function __construct(AccountInterface $currentUser, EntityTypeManager $entityTypeManager, DatesHoursDisabled $DatesHoursDisabled) {
     $this->currentUser = $currentUser;
     $this->entityTypeManager = $entityTypeManager;
     $this->DatesHoursDisabled = $DatesHoursDisabled;
   }
-
+  
   /**
    *
    * @param string $booking_config_type_id
@@ -40,7 +40,7 @@ class ManagerCreneaux extends ManagerBase {
     $this->loadBookingConfigType($booking_config_type_id);
     return $this->buildCreneaux($date_string);
   }
-
+  
   /**
    * Permet de retourner les jours desactivées en function de l'indice.
    * ( par example Samedi et Dimanche sont generalement desactive ).
@@ -59,7 +59,7 @@ class ManagerCreneaux extends ManagerBase {
       throw BookingSystemException::exception("Tous les jours de la semaine sont desactivées");
     return $disabledDays;
   }
-
+  
   /**
    * On construit les creneaux de la journée independament de l'heure.
    */
@@ -74,7 +74,7 @@ class ManagerCreneaux extends ManagerBase {
     /**
      * Doit être caluler en function d'autres paramettres.
      */
-    $datas['creneau_config']['limit_reservation'] = $values['limit_reservation'];
+    $datas['creneau_config']['limit_reservation'] = $this->getLimitReservation($values);
     $datas['monitor_list'] = $this->getEquipesOptions($this->booking_config_type_id);
     $creneaux = [];
     foreach ($dayconf['periodes'] as $p => $periode) {
@@ -98,7 +98,16 @@ class ManagerCreneaux extends ManagerBase {
     $datas['schedules_list'] = $creneaux;
     return $datas;
   }
-
+  
+  /**
+   *
+   * {@inheritdoc}
+   * @see \Drupal\booking_system\Services\BookingManager\ManagerCreneauxInterface::getLimitReservation()
+   */
+  public function getLimitReservation($values) {
+    return $values['limit_reservation'];
+  }
+  
   /**
    * Genere les creneaux pour une periode.
    *
@@ -125,13 +134,13 @@ class ManagerCreneaux extends ManagerBase {
     $hourEnd->setTime($creneauConfig['h_f'], $creneauConfig['m_f'], 0);
     // dump($hourEnd->format("Y-m-d H:i"), ' /// ');
     // dd($this->getDateSelected());
-
+    
     // 100 creneaux par periode.
     $maxCreneauxIds = 20;
     $i = 0;
     while ($i < $maxCreneauxIds && $hourBegin < $hourEnd) {
       $hourAddduration = $this->getNewInstanceDate($hourBegin);
-
+      
       $hourAddduration->modify("+ " . $duration . " minutes");
       $times[$i]['gap'] = $gap;
       $times[$i]['active'] = false;
@@ -152,7 +161,7 @@ class ManagerCreneaux extends ManagerBase {
       $i++;
     }
   }
-
+  
   /**
    * Permet de terminer si la date a au moins un creneau actif.
    *
@@ -162,7 +171,7 @@ class ManagerCreneaux extends ManagerBase {
   protected function checkIfDateHasCreneaux(DrupalDateTime $Date) {
     //
   }
-
+  
   /**
    * - Verification des sauvagardes.
    * - Verification en fonction de l'heure encours.
@@ -185,5 +194,5 @@ class ManagerCreneaux extends ManagerBase {
     // //
     return true;
   }
-
+  
 }

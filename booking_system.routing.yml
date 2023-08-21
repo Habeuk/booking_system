@@ -22,7 +22,7 @@ booking_system.app_load_config_calendar:
   path: "/booking-system/views-app-calendar"
   defaults:
     _title: "Load config calendar"
-    _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::loadConfisCalandar'
+    _controller: '\Drupal\booking_system\Controller\BookingSystemUseApp::loadConfigCalandar'
   requirements:
     _permission: "souscription booking_system"
   methods: [GET]

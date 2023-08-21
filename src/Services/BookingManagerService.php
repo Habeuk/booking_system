@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\booking_system\Service;
+namespace Drupal\booking_system\Services;
 
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Session\AccountInterface;
@@ -17,12 +17,12 @@ class BookingManagerService extends ControllerBase {
    * @var EntityTypeManager
    */
   protected $entityTypeManager;
-
+  
   public function __construct(AccountInterface $currentUser, EntityTypeManager $entityTypeManager) {
     $this->currentUser = $currentUser;
     $this->entityTypeManager = $entityTypeManager;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -36,7 +36,7 @@ class BookingManagerService extends ControllerBase {
     $data["maxPeoples"] = $config["number_of_persons"];
     $disabledDaysOfTheWeek = $this->getDisabledDaysOfTheWeek($config["jours"]);
     $data["disabledDays"] = $disabledDaysOfTheWeek;
-
+    
     //
     $disabledDays = $this->entityTypeManager->getStorage('booking_system_date')->loadMultiple();
     /*
@@ -46,7 +46,7 @@ class BookingManagerService extends ControllerBase {
     // dump($disabledDays);
     return $data;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -75,7 +75,7 @@ class BookingManagerService extends ControllerBase {
     }
     return $data;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -83,7 +83,7 @@ class BookingManagerService extends ControllerBase {
    */
   public function generateSchdules($day) {
     $data = [];
-
+    
     $dayNames = [
       'Sunday' => 0,
       'Monday' => 1,
@@ -93,17 +93,17 @@ class BookingManagerService extends ControllerBase {
       'Friday' => 5,
       'Saturday' => 6
     ];
-
+    
     // retrive the global config alues
     $config = $this->config('booking_system.settings')->getRawData();
-
+    
     // very if the date is valid
     $today = strtotime("today");
     if ($day < $today) {
       $data["error"] = "The day sent must be posterior to the current day";
       return $data;
     }
-
+    
     $numberOfDays = (int) $config["number_of_days"];
     $maxDate = strtotime("+$numberOfDays day");
     if ($day > $maxDate) {
@@ -111,7 +111,7 @@ class BookingManagerService extends ControllerBase {
       return $data;
     }
     // check if the date is modified specificaly
-
+    
     // else get the default configuration and render it
     $dayOfTheWeek = date('l', $day);
     $isValidated = $config["jours"][$dayNames[$dayOfTheWeek]]["status"];
@@ -120,15 +120,15 @@ class BookingManagerService extends ControllerBase {
       return $data;
     }
     $selectedDay = $config["jours"][$dayNames[$dayOfTheWeek]];
-
+    
     $periods = [];
-
+    
     foreach ($selectedDay["periodes"] as $period) {
       $dayPeriod = [];
       $dayPeriod["name"] = $period["label"];
       $dayPeriod['discount'] = -$period['reduction'];
       $temp = $this->getPeriodes($period["h_d__m_d"], $period["h_f__m_f"], (int) $period["intervalle"], $day, $period["decallage"]);
-
+      
       foreach ($temp as $hour) {
         $time_hour = strtotime($hour) - strtotime("today");
         $state = $this->periodIsValid($day, $time_hour, $time_hour + $period['intervalle'] * 60, $period['decallage'], $period['intervalle']);
@@ -138,7 +138,7 @@ class BookingManagerService extends ControllerBase {
           'status' => $state
         ];
       }
-
+      
       $periods[] = $dayPeriod;
     }
     // $datas = [];
@@ -160,14 +160,14 @@ class BookingManagerService extends ControllerBase {
     // $datas[] = $schedule;
     // }
     // }
-
+    
     return $periods;
   }
-
+  
   /**
    *
    * {@inheritdoc} get the disabled days
-   *
+   *              
    */
   public function getDisabledDaysOfTheWeek(array $days) {
     $disabledDays = [];
@@ -180,7 +180,7 @@ class BookingManagerService extends ControllerBase {
     // dump($disabledDays);
     return $disabledDays;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -194,36 +194,36 @@ class BookingManagerService extends ControllerBase {
       }
     }
     $disabledDates = array_values($disabledDates);
-
+    
     return $disabledDates;
   }
-
+  
   /**
    *
    * {@inheritdoc} get the periods
    */
   public function getPeriodes($start, $end, $gap, $day, $intervalle) {
     $intervalle = (int) $intervalle;
-
+    
     $times = [];
     $date = date("y-m-d", $day) . " " . $start;
     $time = strtotime($date);
     $startHour = (int) explode(":", $start)[0];
     $endHour = (int) explode(":", $end)[0];
-
+    
     $newGap = $gap * 60;
     $maxTimestamp = ($endHour - $startHour) * 3600 + $time;
     $timestamp = $time;
-
+    
     while ($timestamp <= $maxTimestamp) {
       $times[] = date("H:i", $timestamp);
       $timestamp += $newGap;
       $timestamp += $intervalle;
     }
-
+    
     return $times;
   }
-
+  
   /**
    *
    * {@inheritdoc} check the validity of a period
@@ -236,12 +236,12 @@ class BookingManagerService extends ControllerBase {
     ];
     // get the current time + 6hours (to match timezone)
     $currentTime = strtotime("now");
-
+    
     // checking if the hour isn't passed yet
     if ($current_schedule['start'] <= ($currentTime + $gap * 60)) {
       return false;
     }
-
+    
     // range of hours to disabled
     $entities = $this->entityTypeManager->getStorage('booking_system_schedule')->loadMultiple();
     /**
@@ -268,7 +268,7 @@ class BookingManagerService extends ControllerBase {
     }
     return $isValid;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -291,7 +291,7 @@ class BookingManagerService extends ControllerBase {
     }
     throw new \Exception("You must be logged in to be able to");
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -308,17 +308,17 @@ class BookingManagerService extends ControllerBase {
     ];
     // will get True if the hour exist
     $hour_exist = false;
-
+    
     // will get 'true' if the period_name received is valid
     $period_exist = false;
-
+    
     $period_name = $reservation['periode_name'];
-
+    
     // start verifications
     if ('integer' != gettype($reservation['reservation_reduction'])) {
       throw new \Exception($text_to_throw . ". Discout value not valid");
     }
-
+    
     if ('integer' != gettype($reservation['number_of_places'])) {
       throw new \Exception($text_to_throw . ". Seats number not valid");
     }
@@ -332,18 +332,18 @@ class BookingManagerService extends ControllerBase {
         break;
       }
     }
-
+    
     if (!$period_exist) {
       throw new \Exception($text_to_throw . " Period name not valid");
     }
-
+    
     foreach ($schedules as $period) {
       if (in_array($expected_hour, $period['times'])) {
         $hour_exist = true;
         break;
       }
     }
-
+    
     if (!$hour_exist) {
       throw new \Exception($text_to_throw . ". Given hour not valid");
     }
@@ -352,7 +352,7 @@ class BookingManagerService extends ControllerBase {
     }
     return true;
   }
-
+  
   /**
    *
    * {@inheritdoc} check if the date contain at least one valid schedule
@@ -373,7 +373,7 @@ class BookingManagerService extends ControllerBase {
     }
     return $status;
   }
-
+  
   /**
    *
    * {@inheritdoc} get how many seats left to be reserved in an hour of a day
@@ -400,5 +400,5 @@ class BookingManagerService extends ControllerBase {
     }
     return $data;
   }
-
+  
 }

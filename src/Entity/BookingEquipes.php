@@ -76,10 +76,10 @@ use Drupal\user\UserInterface;
  * )
  */
 class BookingEquipes extends EditorialContentEntityBase implements BookingEquipesInterface {
-
+  
   use EntityChangedTrait;
   use EntityPublishedTrait;
-
+  
   /**
    *
    * {@inheritdoc}
@@ -90,24 +90,24 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
       'user_id' => \Drupal::currentUser()->id()
     ];
   }
-
+  
   /**
    *
    * {@inheritdoc}
    */
   protected function urlRouteParameters($rel) {
     $uri_route_parameters = parent::urlRouteParameters($rel);
-
+    
     if ($rel === 'revision_revert' && $this instanceof RevisionableInterface) {
       $uri_route_parameters[$this->getEntityTypeId() . '_revision'] = $this->getRevisionId();
     }
     elseif ($rel === 'revision_delete' && $this instanceof RevisionableInterface) {
       $uri_route_parameters[$this->getEntityTypeId() . '_revision'] = $this->getRevisionId();
     }
-
+    
     return $uri_route_parameters;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -117,23 +117,23 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
     // check if booking_config_type is define.
     if (!$this->get('booking_config_type')->target_id)
       throw "La valeur doit etre reatacher une une configuration";
-
+    
     foreach (array_keys($this->getTranslationLanguages()) as $langcode) {
       $translation = $this->getTranslation($langcode);
-
+      
       // If no owner has been set explicitly, make the anonymous user the owner.
       if (!$translation->getOwner()) {
         $translation->setOwnerId(0);
       }
     }
-
+    
     // If no revision author has been set explicitly,
     // make the booking_equipes owner the revision author.
     if (!$this->getRevisionUser()) {
       $this->setRevisionUserId($this->getOwnerId());
     }
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -141,7 +141,7 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
   public function getName() {
     return $this->get('name')->value;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -150,7 +150,7 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
     $this->set('name', $name);
     return $this;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -158,7 +158,7 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
   public function getCreatedTime() {
     return $this->get('created')->value;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -167,7 +167,7 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
     $this->set('created', $timestamp);
     return $this;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -175,7 +175,7 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
   public function getOwner() {
     return $this->get('user_id')->entity;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -183,7 +183,7 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
   public function getOwnerId() {
     return $this->get('user_id')->target_id;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -192,7 +192,7 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
     $this->set('user_id', $uid);
     return $this;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -201,17 +201,17 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
     $this->set('user_id', $account->id());
     return $this;
   }
-
+  
   /**
    *
    * {@inheritdoc}
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
-
+    
     // Add the published field.
     $fields += static::publishedBaseFieldDefinitions($entity_type);
-
+    
     $fields['user_id'] = BaseFieldDefinition::create('entity_reference')->setLabel(t('Authored by'))->setDescription(t('The user ID of author of the Booking equipes entity.'))->setRevisionable(TRUE)->setSetting('target_type', 'user')->setSetting('handler', 'default')->setTranslatable(TRUE)->setDisplayOptions('view', [
       'label' => 'hidden',
       'type' => 'author',
@@ -226,7 +226,7 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
         'placeholder' => ''
       ]
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE);
-
+    
     $fields['name'] = BaseFieldDefinition::create('string')->setLabel(t('Name'))->setDescription(t('The name of the Booking equipes entity.'))->setRevisionable(TRUE)->setSettings([
       'max_length' => 50,
       'text_processing' => 0
@@ -238,7 +238,7 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
       'type' => 'string_textfield',
       'weight' => -4
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setRequired(TRUE);
-
+    
     $fields['users'] = BaseFieldDefinition::create('entity_reference')->setLabel(t('Users'))->setRevisionable(TRUE)->setSetting('target_type', 'user')->setSetting('handler', 'default')->setDisplayOptions('view', [
       'label' => 'hidden',
       'type' => 'author',
@@ -253,8 +253,8 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
         'placeholder' => ''
       ]
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE);
-
-    $fields['booking_config_type'] = BaseFieldDefinition::create('entity_reference')->setLabel(t('booking_config_type'))->setSetting('target_type', 'booking_config_type')->setDisplayOptions('view', [])->setDisplayOptions('form', [
+    
+    $fields['booking_config_type'] = BaseFieldDefinition::create('entity_reference')->setLabel('booking config type')->setSetting('target_type', 'booking_config_type')->setDisplayOptions('view', [])->setDisplayOptions('form', [
       'type' => 'entity_reference_autocomplete',
       'weight' => 5,
       'settings' => [
@@ -263,19 +263,19 @@ class BookingEquipes extends EditorialContentEntityBase implements BookingEquipe
         'placeholder' => ''
       ]
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setSetting('handler', 'default');
-
+    
     $fields['status']->setDescription(t('A boolean indicating whether the Booking equipes is published.'))->setDisplayOptions('form', [
       'type' => 'boolean_checkbox',
       'weight' => -3
     ]);
-
+    
     $fields['created'] = BaseFieldDefinition::create('created')->setLabel(t('Created'))->setDescription(t('The time that the entity was created.'));
-
+    
     $fields['changed'] = BaseFieldDefinition::create('changed')->setLabel(t('Changed'))->setDescription(t('The time that the entity was last edited.'));
-
+    
     $fields['revision_translation_affected'] = BaseFieldDefinition::create('boolean')->setLabel(t('Revision translation affected'))->setDescription(t('Indicates if the last edit of a translation belongs to current revision.'))->setReadOnly(TRUE)->setRevisionable(TRUE)->setTranslatable(TRUE);
-
+    
     return $fields;
   }
-
+  
 }

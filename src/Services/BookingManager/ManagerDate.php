@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\booking_system\Service\BookingManager;
+namespace Drupal\booking_system\Services\BookingManager;
 
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Session\AccountInterface;
@@ -11,21 +11,21 @@ use Drupal\Core\Datetime\DrupalDateTime;
 /**
  * Permet de gerer l'affichage du calendrier ou des jours à afficher.
  */
-class ManagerDate extends ManagerBase {
-
+class ManagerDate extends ManagerBase implements ManagerDateInterface {
+  
   /**
    *
    * @var DatesHoursDisabled
    */
   protected $DatesHoursDisabled;
-
+  
   /**
    * Date selectionner par l'utilisateur.
    *
    * @var DrupalDateTime
    */
   protected $selecteddate;
-
+  
   /**
    *
    * @var ManagerCreneaux
@@ -36,47 +36,50 @@ class ManagerDate extends ManagerBase {
    * @var integer
    */
   private $protectRecusive = 0;
-
+  
   public function __construct(AccountInterface $currentUser, EntityTypeManager $entityTypeManager, DatesHoursDisabled $DatesHoursDisabled, ManagerCreneaux $ManagerCreneaux) {
     $this->currentUser = $currentUser;
     $this->entityTypeManager = $entityTypeManager;
     $this->DatesHoursDisabled = $DatesHoursDisabled;
     $this->ManagerCreneaux = $ManagerCreneaux;
   }
-
+  
   /**
-   * Permet de recuperer la configuration de base afin d'afficher la premiere
-   * etape de la reservation.
+   *
+   *   @inheritdoc
    */
   public function loadBookingConfig($booking_config_type_id) {
     return $this->mappingBookingConfigType($booking_config_type_id);
   }
-
+  
   /**
-   * Permet de renvoyer à l'app front les champs donc il a besoin.
    *
-   * @param string $booking_config_type_id
+   * @inheritdoc
    */
-  protected function mappingBookingConfigType($booking_config_type_id) {
+  public function mappingBookingConfigType($booking_config_type_id) {
     $this->loadBookingConfigType($booking_config_type_id);
     $values = $this->BookingConfigType->toArray();
     $results = [];
-
     $results['booking_config_type_id'] = $booking_config_type_id;
     $results['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();
     $results['date_display_mode'] = $values['date_display_mode'];
     $results['show_end_hour'] = $values['creneau']['show_end_hour'];
     $results['maintenance'] = $values['maintenance'];
-
-    if (!empty($values['maintenance']))
+    if (!empty($values['maintenance'])) {
       $results['maintenance_message'] = $values['maintenance_message'];
+      return $results;
+    }
+    $this->checkAccess($results);
+    if (!$results['access'])
+      return $results;
+    
     if ($values['date_display_mode'] == 'month') {
       $this->completeBaseConfigForMonth($booking_config_type_id, $values, $results);
     }
     elseif ($values['date_display_mode'] == 'week') {
       $this->completeBaseConfigForWeek($values, $results);
     }
-
+    
     /**
      * limit_reservation peut varie en fonction d'autre paramettre.
      * ( est sur l'etape suivante ).
@@ -84,14 +87,14 @@ class ManagerDate extends ManagerBase {
     // $results['limit_reservation'] = $values['limit_reservation'];
     return $results;
   }
-
+  
   /**
    * Complete les informations de base relative à l'affichage par mois.
    */
   protected function completeBaseConfigForMonth(string $booking_config_type_id, array $values, array &$results) {
     $currentDate = new DrupalDateTime();
     $results['number_month'] = $values['number_month'];
-
+    
     /**
      * Ajout des dates et periode de date à desactivées.
      */
@@ -136,7 +139,7 @@ class ManagerDate extends ManagerBase {
     $this->getValidDate($dateEnd, $results);
     $results['date_end'] = $dateEnd->format('Y-m-d');
   }
-
+  
   /**
    * Retourne la date valid.- i.e une date qui n'est pas deja desactivé, cela
    * permet à l'application front de mieux demarer, par example on ne demarre
@@ -151,7 +154,7 @@ class ManagerDate extends ManagerBase {
     if ($this->protectRecusive > 30) {
       throw BookingSystemException::exception("Erreur d'execution recusive fonction : getValidDate");
     }
-
+    
     // Verification des jours "disabled_days".
     if ($results['disabled_days']) {
       $day_indice = $date->format("w");
@@ -198,12 +201,12 @@ class ManagerDate extends ManagerBase {
       }
     }
   }
-
+  
   /**
    * Complete les informations de base relative à l'affichage par semaine.
    */
   protected function completeBaseConfigForWeek(array $values, array &$results) {
     $results['number_week'] = $values['number_week'];
   }
-
+  
 }

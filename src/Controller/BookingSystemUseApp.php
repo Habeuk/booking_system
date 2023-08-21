@@ -7,8 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Stephane888\DrupalUtility\HttpResponse;
 use Stephane888\Debug\ExceptionExtractMessage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\booking_system\Service\BookingManager\ManagerDate;
-use Drupal\booking_system\Service\BookingManager\ManagerCreneaux;
+use Drupal\booking_system\Services\BookingManager\ManagerDate;
+use Drupal\booking_system\Services\BookingManager\ManagerCreneaux;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Url;
 
@@ -16,24 +16,24 @@ use Drupal\Core\Url;
  * Returns responses for booking_system routes.
  */
 class BookingSystemUseApp extends ControllerBase {
-
+  
   /**
    *
    * @var ManagerDate
    */
   protected $BookingMangerDate;
-
+  
   /**
    *
    * @var ManagerCreneaux
    */
   protected $ManagerCreneaux;
-
+  
   public function __construct(ManagerDate $ManagerDate, ManagerCreneaux $ManagerCreneaux) {
     $this->BookingMangerDate = $ManagerDate;
     $this->ManagerCreneaux = $ManagerCreneaux;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -41,7 +41,7 @@ class BookingSystemUseApp extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static($container->get('booking_system.app_manager_date'), $container->get('booking_system.app_manager_creneaux'));
   }
-
+  
   /**
    * Builds the response to showing the Vue-js app.
    * On definit les urls pour l'initialisation de l'application.
@@ -73,7 +73,7 @@ class BookingSystemUseApp extends ControllerBase {
     $build['content']['#attached']['library'][] = 'booking_system/booking_system_app2';
     return $build;
   }
-
+  
   /**
    * Permet de charger une configuration à partir de son id.
    *
@@ -93,17 +93,17 @@ class BookingSystemUseApp extends ControllerBase {
       return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
     }
   }
-
+  
   /**
    * Permet de charger la configuration par defaut.
    * ( Actuelment pour les tests ).
    */
-  public function loadConfisCalandar(Request $Request) {
+  public function loadConfigCalandar(Request $Request) {
     $booking_config_type_id = "test";
     // return HttpResponse::response($configs);
     return $this->Views($Request, $booking_config_type_id);
   }
-
+  
   /**
    * Enregistrer un creneau.
    *
@@ -122,7 +122,7 @@ class BookingSystemUseApp extends ControllerBase {
       return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
     }
   }
-
+  
   /**
    * Permet de recuperer les données de configurations pour la construction des
    * creneaux.
@@ -143,5 +143,5 @@ class BookingSystemUseApp extends ControllerBase {
       return HttpResponse::response(ExceptionExtractMessage::errorAll($e), 435);
     }
   }
-
+  
 }

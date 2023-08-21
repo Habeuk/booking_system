@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\booking_system\Service\BookingManager;
+namespace Drupal\booking_system\Services\BookingManager;
 
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Session\AccountInterface;
@@ -24,19 +24,19 @@ class ManagerBase {
    * @var EntityTypeManager
    */
   protected $entityTypeManager;
-
+  
   /**
    *
    * @var BookingConfigType
    */
   protected $BookingConfigType;
-
+  
   /**
    *
    * @var string
    */
   protected $booking_config_type_id;
-
+  
   /**
    * Date selectionner par l'utilisateur.
    * Elle est privée afin qu'elle ne soit pas modifiable par d'autre fonction.
@@ -45,27 +45,27 @@ class ManagerBase {
    * @var DrupalDateTime
    */
   private $selecteddate;
-
+  
   /**
    * Date encours, (date sur serveur).
    *
    * @var DrupalDateTime
    */
   protected $currentDate;
-
+  
   /**
    * Days sort by index
    *
    * @var array
    */
   protected $daysSortIndex = NULL;
-
+  
   /**
    *
    * @var array
    */
   protected $equipes = [];
-
+  
   protected function loadBookingConfigType(string $booking_config_type_id) {
     if (!$this->BookingConfigType) {
       $this->BookingConfigType = BookingConfigType::load($booking_config_type_id);
@@ -74,12 +74,12 @@ class ManagerBase {
     }
     return $this->BookingConfigType;
   }
-
+  
   public function saveCreneaux(string $booking_config_type_id, array $values) {
     $BookingReservation = \Drupal\booking_system\Entity\BookingReservation::create($values);
     return $BookingReservation->save();
   }
-
+  
   /**
    * Ce champs est remplie si l'utilisateur n'a pas acces au creneaux.
    * (example il n'a peut plus reserver de nouveau creneaux).
@@ -87,11 +87,11 @@ class ManagerBase {
    * @param array $results
    * @param boolean $status
    */
-  public function checkAccess(array &$results, $status = true) {
+  public function checkAccess(array &$results, bool $status = true) {
     $results['access'] = true;
     $results['ban_reason'] = '';
   }
-
+  
   /**
    * Permet de recuperer les equipes disponible pour un creneau.
    *
@@ -109,7 +109,7 @@ class ManagerBase {
     }
     return $options;
   }
-
+  
   protected function getEquipes(string $booking_config_type_id) {
     if (!$this->equipes)
       $this->equipes = $this->entityTypeManager->getStorage('booking_equipes')->loadByProperties([
@@ -117,7 +117,7 @@ class ManagerBase {
       ]);
     return $this->equipes;
   }
-
+  
   /**
    * Retourne la liste des equipes en function de l'id de configuration.
    * (un creneau peu etre disponible pour une equipe et pas pour une autre).
@@ -139,7 +139,7 @@ class ManagerBase {
     }
     return $options;
   }
-
+  
   /**
    * La date selectionner par l'utilisateur sur le front.
    * ( il faut faire attention pour ne pas modifier cette date ).
@@ -154,7 +154,7 @@ class ManagerBase {
     }
     return $this->selecteddate;
   }
-
+  
   /**
    * Recupere la date selectionné par l'utilisateur.
    *
@@ -166,7 +166,7 @@ class ManagerBase {
     // return new DrupalDateTime($this->selecteddate->format("Y-m-d H:i:s"));
     return new DrupalDateTime($this->selecteddate);
   }
-
+  
   /**
    * Les dates sont des objects statiques, donc pour modifier un object sans
    * impacter son origin il faut faire un nouveau new.
@@ -176,7 +176,7 @@ class ManagerBase {
   protected function getNewInstanceDate(DrupalDateTime $date) {
     return new DrupalDateTime($date->__toString());
   }
-
+  
   /**
    * La date encours ( date du jour).
    * Attention On ne peut
@@ -190,7 +190,7 @@ class ManagerBase {
     }
     return $this->currentDate;
   }
-
+  
   /**
    * Recupere la configuration en fonction de l'indice de la journée.
    *
@@ -206,5 +206,7 @@ class ManagerBase {
     }
     return $this->daysSortIndex[$indexDay];
   }
-
+  
 }
+
+

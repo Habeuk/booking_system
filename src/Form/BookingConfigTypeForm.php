@@ -10,7 +10,7 @@ use Drupal\Core\Url;
  * Class BookingConfigTypeForm.
  */
 class BookingConfigTypeForm extends EntityForm {
-
+  
   /**
    *
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class BookingConfigTypeForm extends EntityForm {
       '#description' => $this->t("Label for the Booking config type."),
       '#required' => TRUE
     ];
-
+    
     $form['id'] = [
       '#type' => 'machine_name',
       '#default_value' => $booking_config_type->id(),
@@ -183,7 +183,7 @@ class BookingConfigTypeForm extends EntityForm {
     ];
     return $form;
   }
-
+  
   /**
    * Returns the action form element for the current entity form.
    */
@@ -195,7 +195,7 @@ class BookingConfigTypeForm extends EntityForm {
     $element['next_config']['#submit'][] = '::saveAndRedirectNextConfig';
     return $element;
   }
-
+  
   /**
    *
    * @param array $form
@@ -208,13 +208,19 @@ class BookingConfigTypeForm extends EntityForm {
       case SAVED_NEW:
         $this->messenger()->addMessage($this->t('Creation of a new configuration for making appointments'));
         break;
-
+      
       default:
         $this->messenger()->addMessage($this->t('Update configuration for making appointments'));
     }
-
+    
     \Drupal::request()->query->remove('destination');
-    if ($booking_config_type->isNew())
+    if (!empty($form_state->get('redirect_route'))) {
+      $url = Url::fromRoute($form_state->get('redirect_route'), [
+        'booking_config_type_id' => $form_state->get('booking_config_type_id')
+      ], []);
+      $form_state->setRedirectUrl($url);
+    }
+    elseif ($booking_config_type->isNew())
       $url = Url::fromRoute('entity.booking_config.add_form', [
         'booking_config_type' => $booking_config_type->id()
       ], []);
@@ -225,7 +231,7 @@ class BookingConfigTypeForm extends EntityForm {
     // dd($url->toString());
     $form_state->setRedirectUrl($url);
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -233,16 +239,25 @@ class BookingConfigTypeForm extends EntityForm {
   public function save(array $form, FormStateInterface $form_state) {
     $booking_config_type = $this->entity;
     $status = $booking_config_type->save();
-
+    
     switch ($status) {
       case SAVED_NEW:
         $this->messenger()->addMessage($this->t('Creation of a new configuration for making appointments'));
         break;
-
+      
       default:
         $this->messenger()->addMessage($this->t('Update configuration for making appointments'));
     }
-    $form_state->setRedirectUrl($booking_config_type->toUrl('collection'));
+    \Drupal::request()->query->remove('destination');
+    //
+    if (!empty($form_state->get('redirect_route'))) {
+      $url = Url::fromRoute($form_state->get('redirect_route'), [
+        'booking_config_type_id' => $form_state->get('booking_config_type_id')
+      ], []);
+      $form_state->setRedirectUrl($url);
+    }
+    else
+      $form_state->setRedirectUrl($booking_config_type->toUrl('collection'));
   }
-
+  
 }
