@@ -200,6 +200,15 @@ class ManagerDate extends ManagerBase implements ManagerDateInterface {
         $this->getValidDate($date, $results);
       }
     }
+    /**
+     * Verification via les creneaux.
+     * Cette verification est consommatrice consommatrice.
+     */
+    $status = $this->ManagerCreneaux->checkDayHasCreneauxValide($date);
+    if (!$status) {
+      $date->modify("+1 day");
+      $this->getValidDate($date, $results);
+    }
   }
   
   /**

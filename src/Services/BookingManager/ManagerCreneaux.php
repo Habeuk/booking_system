@@ -36,7 +36,6 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
    * @param string $date_string
    */
   public function loadCreneaux($booking_config_type_id, $date_string) {
-    $this->booking_config_type_id = $booking_config_type_id;
     $this->loadBookingConfigType($booking_config_type_id);
     return $this->buildCreneaux($date_string);
   }
@@ -98,6 +97,28 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
     }
     $datas['schedules_list'] = $creneaux;
     return $datas;
+  }
+  
+  /**
+   * Cette fonction permet de determiner si la journée encours à encore un
+   * creneau valide.
+   *
+   * @param true $date_string
+   */
+  public function checkDayHasCreneauxValide($date_string) {
+    $creneaux = $this->buildCreneaux($date_string);
+    $status = false;
+    if ($creneaux['schedules_list'])
+      foreach ($creneaux['schedules_list'] as $periode) {
+        foreach ($periode['times'] as $time) {
+          if ($time['active']) {
+            
+            $status = true;
+            break;
+          }
+        }
+      }
+    return $status;
   }
   
   /**

@@ -68,6 +68,7 @@ class ManagerBase {
   
   protected function loadBookingConfigType(string $booking_config_type_id) {
     if (!$this->BookingConfigType) {
+      $this->booking_config_type_id = $booking_config_type_id;
       $this->BookingConfigType = BookingConfigType::load($booking_config_type_id);
       if (!$this->BookingConfigType)
         BookingSystemException::exception("The entity no longer exists or you do not have access", $booking_config_type_id);
@@ -148,10 +149,11 @@ class ManagerBase {
    * @return \Drupal\Core\Datetime\DrupalDateTime
    */
   protected function setDateSelected(string $date_string) {
-    if (!$this->selecteddate) {
-      $selecteddate = new DrupalDateTime($date_string);
-      $this->selecteddate = $selecteddate->__toString();
-    }
+    // if (!$this->selecteddate) { on masque pour l'instant car la construction
+    // des dates, l'utilise et peut passer une suite de jour.
+    $selecteddate = new DrupalDateTime($date_string);
+    $this->selecteddate = $selecteddate->__toString();
+    // }
     return $this->selecteddate;
   }
   
@@ -197,13 +199,13 @@ class ManagerBase {
    * @param int $indexDay
    */
   protected function getDayconfig(int $indexDay) {
-    if ($this->daysSortIndex === NULL) {
-      $this->loadBookingConfigType($this->booking_config_type_id);
-      $values = $this->BookingConfigType->toArray();
-      foreach ($values['days'] as $value) {
-        $this->daysSortIndex[$value['indice']] = $value;
-      }
+    // if ($this->daysSortIndex === NULL) { // on masque car pas utile.
+    $this->loadBookingConfigType($this->booking_config_type_id);
+    $values = $this->BookingConfigType->toArray();
+    foreach ($values['days'] as $value) {
+      $this->daysSortIndex[$value['indice']] = $value;
     }
+    // }
     return $this->daysSortIndex[$indexDay];
   }
   
