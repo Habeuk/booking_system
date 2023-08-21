@@ -71,6 +71,7 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
     $values = $this->BookingConfigType->toArray();
     // dump($values);
     $datas['creneau_config'] = $values['creneau'];
+    $this->checkAccess($datas);
     /**
      * Doit être caluler en function d'autres paramettres.
      */
