@@ -58,7 +58,11 @@ class CreneauFormatterType extends FormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = [];
-    
+    /**
+     *
+     * @var \Drupal\booking_system\Entity\BookingReservation $reservation
+     */
+    $reservation = $items->getEntity();
     foreach ($items as $delta => $item) {
       $dateStart = new DrupalDateTime($item->date_start);
       $bg = explode(":", $item->hour_start);

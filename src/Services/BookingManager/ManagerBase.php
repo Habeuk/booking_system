@@ -94,7 +94,7 @@ class ManagerBase {
     $BookingReservation = BookingReservation::create($values);
     $reservation = $BookingReservation->save();
     //
-    $this->prepareMailToUser($reservation);
+    $this->prepareMailToUser($BookingReservation);
     return $reservation;
   }
   
@@ -107,10 +107,10 @@ class ManagerBase {
     $email = \Drupal::currentUser()->getEmail();
     $creneaux = $reservation->getCreneauxReatable();
     if ($email && $creneaux) {
-      $subject = t("Reservation of a slot");
+      $subject = "Reservation of a slot";
       $messages = "<h2> You have booked a slot </h2>";
       if (count($creneaux) > 1) {
-        $subject = t("Reservation of slots");
+        $subject = "Reservation of slots";
         $messages = "<h2> You have booked slots </h2>";
       }
       // $creneaux_string = implode("<br>", $creneaux);

@@ -217,11 +217,18 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
         $h = (int) $ed[0];
         $i = (int) $ed[1];
         $date_end->setTime($h, $i);
-        $equipe = BookingEquipes::load($value['equipe']);
+        $labelEquipe = '';
+        if (is_array($value['equipe'])) {
+          $labelEquipe = $value['equipe']['name'];
+        }
+        else {
+          $equipe = BookingEquipes::load($value['equipe']);
+          $labelEquipe = $equipe->$equipe->label();
+        }
         $creneauxRead[] = [
           '#date_start' => $dateStart->format("H:i d-m-Y"),
           '#date_end' => $date_end->format("H:i d-m-Y"),
-          '#equipe' => $equipe ? $equipe->label() : '',
+          '#equipe' => $labelEquipe,
           '#theme' => 'booking_system_creneau'
         ];
       }
