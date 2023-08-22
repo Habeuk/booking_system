@@ -75,10 +75,10 @@ use Drupal\user\UserInterface;
  * )
  */
 class BookingReservation extends EditorialContentEntityBase implements BookingReservationInterface {
-
+  
   use EntityChangedTrait;
   use EntityPublishedTrait;
-
+  
   /**
    *
    * {@inheritdoc}
@@ -89,47 +89,47 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
       'user_id' => \Drupal::currentUser()->id()
     ];
   }
-
+  
   /**
    *
    * {@inheritdoc}
    */
   protected function urlRouteParameters($rel) {
     $uri_route_parameters = parent::urlRouteParameters($rel);
-
+    
     if ($rel === 'revision_revert' && $this instanceof RevisionableInterface) {
       $uri_route_parameters[$this->getEntityTypeId() . '_revision'] = $this->getRevisionId();
     }
     elseif ($rel === 'revision_delete' && $this instanceof RevisionableInterface) {
       $uri_route_parameters[$this->getEntityTypeId() . '_revision'] = $this->getRevisionId();
     }
-
+    
     return $uri_route_parameters;
   }
-
+  
   /**
    *
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
     parent::preSave($storage);
-
+    
     foreach (array_keys($this->getTranslationLanguages()) as $langcode) {
       $translation = $this->getTranslation($langcode);
-
+      
       // If no owner has been set explicitly, make the anonymous user the owner.
       if (!$translation->getOwner()) {
         $translation->setOwnerId(0);
       }
     }
-
+    
     // If no revision author has been set explicitly,
     // make the booking_reservation owner the revision author.
     if (!$this->getRevisionUser()) {
       $this->setRevisionUserId($this->getOwnerId());
     }
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -137,7 +137,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   public function getName() {
     return $this->get('name')->value;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -146,7 +146,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
     $this->set('name', $name);
     return $this;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -154,7 +154,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   public function getCreatedTime() {
     return $this->get('created')->value;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -163,7 +163,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
     $this->set('created', $timestamp);
     return $this;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -171,7 +171,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   public function getOwner() {
     return $this->get('user_id')->entity;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -179,7 +179,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   public function getOwnerId() {
     return $this->get('user_id')->target_id;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -188,7 +188,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
     $this->set('user_id', $uid);
     return $this;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -197,17 +197,28 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
     $this->set('user_id', $account->id());
     return $this;
   }
-
+  
+  /**
+   * Retourne les creneaux dans un format comprehensive par l'homme.
+   */
+  public function getCreneauxReatable() {
+    $creneaux = $this->get('creneaux')->getValue();
+    if ($creneaux) {
+      //
+    }
+    return $creneaux;
+  }
+  
   /**
    *
    * {@inheritdoc}
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
-
+    
     // Add the published field.
     $fields += static::publishedBaseFieldDefinitions($entity_type);
-
+    
     $fields['user_id'] = BaseFieldDefinition::create('entity_reference')->setLabel(t('Authored by'))->setDescription(t('The user ID of author of the Booking reservation entity.'))->setRevisionable(TRUE)->setSetting('target_type', 'user')->setSetting('handler', 'default')->setTranslatable(TRUE)->setDisplayOptions('view', [
       'label' => 'hidden',
       'type' => 'author',
@@ -222,7 +233,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
         'placeholder' => ''
       ]
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE);
-
+    
     $fields['name'] = BaseFieldDefinition::create('string')->setLabel(t('Name'))->setDescription(t('The name of the Booking reservation entity.'))->setRevisionable(TRUE)->setSettings([
       'max_length' => 50,
       'text_processing' => 0
@@ -244,8 +255,8 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
       'type' => 'boolean_checkbox',
       'weight' => -3
     ]);
-
+    
     return $fields;
   }
-
+  
 }

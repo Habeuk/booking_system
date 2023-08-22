@@ -8,6 +8,10 @@ use Drupal\booking_system\Entity\BookingConfigType;
 use Drupal\booking_system\Exception\BookingSystemException;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Stephane888\Debug\Repositories\ConfigDrupal;
+use Symfony\Component\Mime\Header\MailboxHeader;
+use Symfony\Component\Mime\Address;
+use Drupal\booking_system\Entity\BookingReservation;
 
 /**
  * Manage the booking system
@@ -76,9 +80,83 @@ class ManagerBase {
     return $this->BookingConfigType;
   }
   
+  /**
+   * Enresgistre les creneaux.
+   *
+   * @param string $booking_config_type_id
+   * @param array $values
+   * @return number
+   */
   public function saveCreneaux(string $booking_config_type_id, array $values) {
-    $BookingReservation = \Drupal\booking_system\Entity\BookingReservation::create($values);
-    return $BookingReservation->save();
+    $BookingReservation = BookingReservation::create($values);
+    $reservation = $BookingReservation->save();
+    //
+    return $reservation;
+  }
+  
+  /**
+   * Prepare le contenu du mail à envoyer à l'utilisateur.
+   *
+   * @param BookingReservation $reservation
+   */
+  protected function prepareMailToUser(BookingReservation $reservation) {
+    $email = \Drupal::currentUser()->getEmail();
+    $creneaux = $reservation->getCreneauxReatable();
+    if ($email && $creneaux) {
+      $subject = t("Reservation of a slot");
+      $messages = "<h2> You have booked a slot </h2>";
+      if (count($creneaux) > 1) {
+        $subject = t("Reservation of slots");
+        $messages = "<h2> You have booked slots </h2>";
+      }
+      $creneaux_string = implode("<br>", $creneaux);
+      $messages .= $creneaux_string;
+      $this->sendMails($email, $subject, $messages);
+    }
+  }
+  
+  protected function sendMails(string $to, string $subject, string $message, $from = null) {
+    $siteInfo = ConfigDrupal::config('system.site');
+    $mailSystem = ConfigDrupal::config('mailsystem.settings');
+    if (!$from) {
+      $from = $siteInfo['mail'];
+    }
+    $key = 'booking_system_mail';
+    $datas = [
+      'id' => $key,
+      'to' => $to,
+      'subject' => $subject,
+      'body' => $message,
+      'headers' => [
+        'From' => $from,
+        'Sender' => $from,
+        'Return-Path' => $from
+      ]
+    ];
+    
+    /**
+     * On initialise le chargeur de plugin de mail.
+     *
+     * @var \Drupal\Core\Mail\MailManager $PluginMailManger
+     */
+    $PluginMailManger = \Drupal::service('plugin.manager.mail');
+    
+    /**
+     * On recupere l'instance à partir de l'id du plugin.
+     *
+     * @var \Drupal\Core\Mail\MailInterface $mailPlugin
+     */
+    $mailPlugin = $PluginMailManger->createInstance($mailSystem['defaults']['sender']);
+    
+    $mailbox = new MailboxHeader('From', new Address($siteInfo['mail'], $siteInfo['name']));
+    $datas['headers']['From'] = $mailbox->getBodyAsString();
+    $result = $mailPlugin->mail($datas);
+    if (!$result) {
+      $message = t(' There was a problem sending your email notification to @email. ', array(
+        '@email' => $to
+      ));
+      $this->getLogger('login_rx_vuejs')->alert($message);
+    }
   }
   
   /**
@@ -121,7 +199,6 @@ class ManagerBase {
   
   /**
    * Retourne la liste des equipes en function de l'id de configuration.
-   * (un creneau peu etre disponible pour une equipe et pas pour une autre).
    *
    * @param string $booking_config_type_id
    * @return string[]|\Drupal\Core\StringTranslation\TranslatableMarkup[]|NULL[]
