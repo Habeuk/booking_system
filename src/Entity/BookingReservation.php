@@ -9,6 +9,7 @@ use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\user\UserInterface;
 
@@ -203,10 +204,29 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
    */
   public function getCreneauxReatable() {
     $creneaux = $this->get('creneaux')->getValue();
+    $creneauxRead = [];
     if ($creneaux) {
-      //
+      foreach ($creneaux as $value) {
+        $dateStart = new DrupalDateTime($value['date_start']);
+        $bg = explode(":", $value['hour_start']);
+        $h = (int) $bg[0];
+        $i = (int) $bg[1];
+        $dateStart->setTime($h, $i);
+        $date_end = new DrupalDateTime($value['date_end']);
+        $ed = explode(":", $value['hour_end']);
+        $h = (int) $ed[0];
+        $i = (int) $ed[1];
+        $date_end->setTime($h, $i);
+        $equipe = BookingEquipes::load($value['equipe']);
+        $creneauxRead[] = [
+          '#date_start' => $dateStart->format("H:i d-m-Y"),
+          '#date_end' => $date_end->format("H:i d-m-Y"),
+          '#equipe' => $equipe ? $equipe->label() : '',
+          '#theme' => 'booking_system_creneau'
+        ];
+      }
     }
-    return $creneaux;
+    return $creneauxRead;
   }
   
   /**
@@ -249,6 +269,8 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
     $fields['creneaux'] = BaseFieldDefinition::create('creneau')->setLabel(t(' Creneau '))->setDisplayOptions('form', [
       'type' => 'creneau_widget',
       'weight' => 0
+    ])->setDisplayOptions('view', [
+      'type' => 'creneau_formatter'
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setSetting('handler', 'default')->setTranslatable(false)->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED);
     $fields['changed'] = BaseFieldDefinition::create('changed')->setLabel(t('Changed'))->setDescription(t('The time that the entity was last edited.'));
     $fields['status']->setDescription(t('A boolean indicating whether the Booking reservation is published.'))->setDisplayOptions('form', [

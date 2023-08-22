@@ -15,19 +15,19 @@ use Drupal\Core\Datetime\DrupalDateTime;
  *   module = "booking_system",
  *   label = @Translation("Creneau widget type"),
  *   field_types = {
- *     "creneau_field_type"
+ *     "creneau"
  *   }
  * )
  */
 class CreneauWidgetType extends WidgetBase {
-
+  
   /**
    *
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
     $date_start = isset($items[$delta]->date_start) ? new DrupalDateTime($items[$delta]->date_start) : '';
-
+    
     $element['hour_start'] = [
       '#title' => $this->t('Start Hour'),
       '#type' => 'datetime',
@@ -69,7 +69,7 @@ class CreneauWidgetType extends WidgetBase {
     ];
     return $element;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -87,5 +87,5 @@ class CreneauWidgetType extends WidgetBase {
     }
     return $values;
   }
-
+  
 }

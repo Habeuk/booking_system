@@ -88,9 +88,13 @@ class ManagerBase {
    * @return number
    */
   public function saveCreneaux(string $booking_config_type_id, array $values) {
+    if (empty($values['name'])) {
+      $values['name'] = 'default';
+    }
     $BookingReservation = BookingReservation::create($values);
     $reservation = $BookingReservation->save();
     //
+    $this->prepareMailToUser($reservation);
     return $reservation;
   }
   
@@ -109,8 +113,8 @@ class ManagerBase {
         $subject = t("Reservation of slots");
         $messages = "<h2> You have booked slots </h2>";
       }
-      $creneaux_string = implode("<br>", $creneaux);
-      $messages .= $creneaux_string;
+      // $creneaux_string = implode("<br>", $creneaux);
+      // $messages .= $creneaux_string;
       $this->sendMails($email, $subject, $messages);
     }
   }
@@ -155,7 +159,7 @@ class ManagerBase {
       $message = t(' There was a problem sending your email notification to @email. ', array(
         '@email' => $to
       ));
-      $this->getLogger('login_rx_vuejs')->alert($message);
+      $this->getLogger('booking_system')->alert($message);
     }
   }
   
