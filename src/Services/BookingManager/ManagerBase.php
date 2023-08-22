@@ -113,8 +113,12 @@ class ManagerBase {
         $subject = "Reservation of slots";
         $messages = "<h2> You have booked slots </h2>";
       }
-      // $creneaux_string = implode("<br>", $creneaux);
-      // $messages .= $creneaux_string;
+      /**
+       *
+       * @var \Drupal\Core\Render\Renderer $renderer
+       */
+      $renderer = \Drupal::service('renderer');
+      $messages .= $renderer->renderPlain($creneaux);
       $this->sendMails($email, $subject, $messages);
     }
   }
@@ -137,7 +141,6 @@ class ManagerBase {
         'Return-Path' => $from
       ]
     ];
-    
     /**
      * On initialise le chargeur de plugin de mail.
      *
