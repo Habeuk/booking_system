@@ -157,7 +157,8 @@ class ManagerBase {
     
     $mailbox = new MailboxHeader('From', new Address($siteInfo['mail'], $siteInfo['name']));
     $datas['headers']['From'] = $mailbox->getBodyAsString();
-    $result = $mailPlugin->mail($datas);
+    $message = $mailPlugin->format($datas);
+    $result = $mailPlugin->mail($message);
     if (!$result) {
       $message = t(' There was a problem sending your email notification to @email. ', array(
         '@email' => $to
