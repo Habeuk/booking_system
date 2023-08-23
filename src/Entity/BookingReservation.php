@@ -225,10 +225,13 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
           $equipe = BookingEquipes::load($value['equipe']);
           $labelEquipe = $equipe->$equipe->label();
         }
+        $date = new DrupalDateTime($value['date_end']);
         $creneauxRead[] = [
           '#date_start' => $dateStart->format("H:i d-m-Y"),
           '#date_end' => $date_end->format("H:i d-m-Y"),
           '#equipe' => $labelEquipe,
+          '#creneau' => $value['hour_start'] . ' - ' . $value['hour_end'],
+          '#date' => $date->format("d/m/Y"),
           '#theme' => 'booking_system_creneau'
         ];
       }
