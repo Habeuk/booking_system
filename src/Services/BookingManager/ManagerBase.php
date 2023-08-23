@@ -123,7 +123,7 @@ class ManagerBase {
     }
   }
   
-  protected function sendMails(string $to, string $subject, string $message, $from = null) {
+  protected function sendMails(string $to, string $subject, $message, $from = null) {
     $siteInfo = ConfigDrupal::config('system.site');
     $mailSystem = ConfigDrupal::config('mailsystem.settings');
     if (!$from) {
