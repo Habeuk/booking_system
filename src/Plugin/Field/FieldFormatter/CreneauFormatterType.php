@@ -75,9 +75,12 @@ class CreneauFormatterType extends FormatterBase {
       $i = (int) $ed[1];
       $date_end->setTime($h, $i);
       $equipe = BookingEquipes::load($item->equipe);
+      $date = new DrupalDateTime($item->date_end);
       $elements[$delta] = [
         '#date_start' => $dateStart->format("H:i d-m-Y"),
         '#date_end' => $date_end->format("H:i d-m-Y"),
+        '#creneau' => $item->hour_start . ' - ' . $item->hour_end,
+        '#date' => $date->format("d/m/Y"),
         '#equipe' => $equipe ? $equipe->label() : '',
         '#theme' => 'booking_system_creneau'
       ];

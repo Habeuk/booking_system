@@ -68,7 +68,9 @@ function booking_system_theme() {
     'variables' => [
       'date_start' => NULL,
       'date_end' => NULL,
-      'equipe' => NULL
+      'equipe' => NULL,
+      'creneau' => NULL,
+      'date' => NULL
     ]
   ];
   return $theme;
