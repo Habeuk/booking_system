@@ -48,6 +48,9 @@ class BookingSystemUseApp extends ControllerBase {
    */
   public function build() {
     $booking_config_type_id = "test"; // on definit cet id juste pour les tests.
+                                      // ( On doit chercher une logique plus
+                                      // tard, on pourrait avoir une liste de
+                                      // configuration ).
     $urlCalendar = Url::fromRoute("booking_system.app_load_config_calendar");
     $urlCreneaux = Url::fromRoute("booking_system.app_load_creneaux", [
       'booking_config_type_id' => $booking_config_type_id,

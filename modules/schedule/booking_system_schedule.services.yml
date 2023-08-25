@@ -1,0 +1,4 @@
+services:
+  booking_system_schedule.manager:
+    class: Drupal\booking_system_schedule\Services\ManageSchedule
+    arguments: ['@current_user', '@entity_type.manager','@booking_system.app_manager_creneaux']

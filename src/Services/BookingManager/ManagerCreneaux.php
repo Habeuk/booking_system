@@ -4,7 +4,6 @@ namespace Drupal\booking_system\Services\BookingManager;
 
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\booking_system\Entity\BookingConfigType;
 use Drupal\booking_system\Exception\BookingSystemException;
 use Drupal\Core\Datetime\DrupalDateTime;
 
@@ -12,11 +11,6 @@ use Drupal\Core\Datetime\DrupalDateTime;
  * Manage the booking system
  */
 class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
-  /**
-   *
-   * @var BookingConfigType
-   */
-  protected $BookingConfigType;
   
   /**
    *
@@ -46,7 +40,7 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
    */
   public function getDisableDayByIndice($booking_config_type_id) {
     $this->loadBookingConfigType($booking_config_type_id);
-    $values = $this->BookingConfigType->toArray();
+    $values = $this->getConfiguration();
     $days = $values['days'];
     $disabledDays = [];
     foreach ($days as $day) {
@@ -67,14 +61,14 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
     // On determine l'indice du jours.
     $indexDay = $this->getDateSelected()->format("w");
     $dayconf = $this->getDayconfig($indexDay);
-    $values = $this->BookingConfigType->toArray();
+    $values = $this->getConfiguration();
     // dump($values);
     $datas['creneau_config'] = $values['creneau'];
     $this->checkAccess($datas);
     /**
      * Doit être caluler en function d'autres paramettres.
      */
-    $datas['creneau_config']['limit_reservation'] = $this->getLimitReservation($values);
+    $datas['creneau_config']['limit_reservation'] = $this->getLimitReservation();
     $datas['monitor_list'] = $this->getEquipesOptions($this->booking_config_type_id);
     $creneaux = [];
     foreach ($dayconf['periodes'] as $p => $periode) {
@@ -126,8 +120,38 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
    * {@inheritdoc}
    * @see \Drupal\booking_system\Services\BookingManager\ManagerCreneauxInterface::getLimitReservation()
    */
-  public function getLimitReservation($values) {
-    return $values['limit_reservation'];
+  public function getLimitReservation() {
+    return $this->configuration['limit_reservation'];
+  }
+  
+  /**
+   * Permet de recuperer les equipes disponible pour un creneau.
+   *
+   * @param DrupalDateTime $hourBegin
+   * @param array $hour
+   * @return array
+   */
+  protected function getEquipesAvailableByCreneau(DrupalDateTime $hourBegin, array $hour) {
+    $options = [];
+    if (!$this->equipes) {
+      $this->getEquipes($this->booking_config_type_id);
+    }
+    $ReservationGroupByKeys = $this->getReservationGroupByKeys($hourBegin);
+    foreach ($this->equipes as $equipe) {
+      $equipeId = $equipe->id();
+      $hd = $hour['start'];
+      $hf = $hour['end'];
+      $key = $equipeId . $hd . $hf;
+      $crex = isset($ReservationGroupByKeys[$key]) ? $ReservationGroupByKeys[$key] : [];
+      if ($crex) {
+        $nbre_reserve = count($crex);
+        if ($this->getDefaultLimitReservation() > $nbre_reserve)
+          $options[] = $equipe->id();
+      }
+      else
+        $options[] = $equipe->id();
+    }
+    return $options;
   }
   
   /**
@@ -195,7 +219,8 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
   }
   
   /**
-   * - Verification des sauvagardes.
+   * - Verification des sauvagardes.(se fait au niveau
+   * getEquipesAvailableByCreneau ).
    * - Verification en fonction de l'heure encours.
    * - Verification en fonction du gap.
    */
@@ -212,8 +237,6 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
     elseif ($currentDate > $hourBegin) {
       return false;
     }
-    // Verification en function des données sauvegardées.
-    // //
     return true;
   }
   

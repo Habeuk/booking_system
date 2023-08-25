@@ -6,6 +6,7 @@ services:
   booking_system.dates_hours_disabled:
     class: Drupal\booking_system\Services\BookingManager\DatesHoursDisabled
     arguments: ['@current_user', '@entity_type.manager']
+    
   booking_system.app_manager_creneaux:
     class: Drupal\booking_system\Services\BookingManager\ManagerCreneaux
     arguments: ['@current_user', '@entity_type.manager','@booking_system.dates_hours_disabled']

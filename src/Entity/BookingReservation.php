@@ -200,6 +200,32 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
   }
   
   /**
+   * Permet de determiner de comparer les creneaux.
+   *
+   * @return true //true si la valeur est existe
+   */
+  public function creneauExit(array $crenauCheck) {
+    $status = false;
+    $creneaux = $this->get('creneaux')->getValue();
+    foreach ($creneaux as $creneau) {
+      $status = true;
+      if ($crenauCheck['hour_start'] !== $creneau['hour_start']) {
+        $status = false;
+        continue;
+      }
+      if ($crenauCheck['hour_end'] !== $creneau['hour_end']) {
+        $status = false;
+        continue;
+      }
+      if ($crenauCheck['equipe'] !== $creneau['equipe']['id']) {
+        $status = false;
+        continue;
+      }
+    }
+    return $status;
+  }
+  
+  /**
    * Retourne les creneaux dans un format comprehensive par l'homme.
    */
   public function getCreneauxReatable() {

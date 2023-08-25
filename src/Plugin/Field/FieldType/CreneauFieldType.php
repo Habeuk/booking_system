@@ -22,7 +22,7 @@ use Drupal\Core\Datetime\DrupalDateTime;
  * )
  */
 class CreneauFieldType extends FieldItemBase {
-
+  
   /**
    *
    * {@inheritdoc}
@@ -30,7 +30,7 @@ class CreneauFieldType extends FieldItemBase {
   public static function defaultStorageSettings() {
     return [] + parent::defaultStorageSettings();
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -44,8 +44,13 @@ class CreneauFieldType extends FieldItemBase {
     $properties['equipe'] = DataDefinition::create('integer')->setLabel(new TranslatableMarkup('Equipe'));
     return $properties;
   }
-
+  
   /**
+   * Les champs date_end et date_start doivent etre remplacer par le champs
+   * date.( car une reservation se fait etre 0 et 23h59 ).
+   * Si l'on a besoin d'un systeme avec une date de reservation et une date de
+   * livraison, dans ce cas au niveau du champs on aurra deux champs ayant pour
+   * type "creneau"
    *
    * {@inheritdoc}
    */
@@ -86,10 +91,10 @@ class CreneauFieldType extends FieldItemBase {
         ]
       ]
     ];
-
+    
     return $schema;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -99,10 +104,10 @@ class CreneauFieldType extends FieldItemBase {
     $hourEnd = empty($this->get('hour_end')->getValue()) ? TRUE : FALSE;
     $dateStart = empty($this->get('date_start')->getValue()) ? TRUE : FALSE;
     $dateEnd = empty($this->get('date_end')->getValue()) ? TRUE : FALSE;
-
+    
     return $hourStart && $hourEnd && $dateStart && $dateEnd;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -120,15 +125,15 @@ class CreneauFieldType extends FieldItemBase {
     $values['equipe'] = 0;
     return $values;
   }
-
+  
   /**
    *
    * {@inheritdoc}
    */
   public function storageSettingsForm(array &$form, FormStateInterface $form_state, $has_data) {
     $elements = [];
-
+    
     return $elements;
   }
-
+  
 }

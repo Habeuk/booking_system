@@ -11,12 +11,14 @@ namespace Drupal\booking_system\Services\BookingManager;
 interface ManagerCreneauxInterface {
   
   /**
-   * Permet de retouner le nombre de reservation.
+   * Permet de retouner le nombre de reservation restant.
+   * Il peut etre surcharger afin d'ajutser cette valeur en function du besoin,
+   * elle ne retourne pas forcement la valeur par defaut.
    *
    * @param array $configs
    * @return int
    */
-  public function getLimitReservation(array $values);
+  public function getLimitReservation();
   
   /**
    * Ce champs est remplie si l'utilisateur n'a pas acces au creneaux.

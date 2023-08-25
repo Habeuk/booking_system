@@ -58,7 +58,7 @@ class ManagerDate extends ManagerBase implements ManagerDateInterface {
    */
   public function mappingBookingConfigType($booking_config_type_id) {
     $this->loadBookingConfigType($booking_config_type_id);
-    $values = $this->BookingConfigType->toArray();
+    $values = $this->getConfiguration();
     $results = [];
     $results['booking_config_type_id'] = $booking_config_type_id;
     $results['language'] = \Drupal::languageManager()->getCurrentLanguage()->getId();

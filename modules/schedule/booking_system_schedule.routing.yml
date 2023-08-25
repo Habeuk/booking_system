@@ -1,0 +1,18 @@
+booking_system_schedule.views:
+  path: "/booking-system-schedule/page-app"
+  defaults:
+    _title: "Application de reservation"
+    _controller: '\Drupal\booking_system_schedule\Controller\BookingSystemScheduleUseApp::build'
+  requirements:
+    _permission: "access content"
+    
+booking_system_schedule.app_load_config_schedule:
+  path: "/booking-system/views-app-calendar/{booking_config_type_id}/"
+  defaults:
+    _title: "Load config calendar"
+    _controller: '\Drupal\booking_system_schedule\Controller\BookingSystemScheduleUseApp::loadConfigSchedule'
+  requirements:
+    _permission: "souscription booking_system"
+  methods: [POST]
+  options:
+      _auth: ['basic_auth', 'cookie']

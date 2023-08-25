@@ -33,7 +33,7 @@ class ManagerBase {
    *
    * @var BookingConfigType
    */
-  protected $BookingConfigType;
+  private $BookingConfigType;
   
   /**
    *
@@ -70,6 +70,40 @@ class ManagerBase {
    */
   protected $equipes = [];
   
+  /**
+   * Contient les reservations en fonction de la date.
+   *
+   * @var array
+   */
+  protected $ReservationBydate = [];
+  
+  /**
+   * Contient les reservations groupées par clées.
+   *
+   * @var array
+   */
+  protected $ReservationGroupByKeys = [];
+  
+  /**
+   * Contient la configuration du RDV.
+   *
+   * @var array
+   */
+  protected $configuration = [];
+  
+  /**
+   * Retourne la valeur par defaut de la limit de reservation.
+   *
+   * @var integer
+   */
+  protected $DefaultLimitReservation = NULL;
+  /**
+   * L'entité charger de la reservation.
+   *
+   * @var string
+   */
+  const ENTITY_RESERVATION = 'booking_reservation';
+  
   protected function loadBookingConfigType(string $booking_config_type_id) {
     if (!$this->BookingConfigType) {
       $this->booking_config_type_id = $booking_config_type_id;
@@ -78,6 +112,37 @@ class ManagerBase {
         BookingSystemException::exception("The entity no longer exists or you do not have access", $booking_config_type_id);
     }
     return $this->BookingConfigType;
+  }
+  
+  /**
+   * Retourne la configuration et verifie qu'elle est bien definit.
+   *
+   * @return array|string|mixed[]
+   */
+  protected function getConfiguration() {
+    if (!$this->configuration) {
+      if (!$this->BookingConfigType)
+        throw BookingSystemException::exception("BookingConfigType not define");
+      $this->configuration = $this->BookingConfigType->toArray();
+    }
+    return $this->configuration;
+  }
+  
+  /**
+   * Permet de surcharger la configuration.
+   */
+  protected function setConfiguration(array $values) {
+    $this->configuration = $values;
+  }
+  
+  /**
+   */
+  public function getDefaultLimitReservation() {
+    if ($this->DefaultLimitReservation === NULL) {
+      $this->getConfiguration();
+      $this->DefaultLimitReservation = (int) $this->BookingConfigType->get('limit_reservation');
+    }
+    return $this->DefaultLimitReservation;
   }
   
   /**
@@ -91,7 +156,11 @@ class ManagerBase {
     if (empty($values['name'])) {
       $values['name'] = 'default';
     }
-    $BookingReservation = BookingReservation::create($values);
+    /**
+     *
+     * @var BookingReservation $BookingReservation
+     */
+    $BookingReservation = $this->entityTypeManager->getStorage(self::ENTITY_RESERVATION)->create($values);
     $reservation = $BookingReservation->save();
     //
     $this->prepareMailToUser($BookingReservation);
@@ -179,30 +248,67 @@ class ManagerBase {
     $results['ban_reason'] = '';
   }
   
-  /**
-   * Permet de recuperer les equipes disponible pour un creneau.
-   *
-   * @param DrupalDateTime $hourBegin
-   * @param array $hour
-   * @return array
-   */
-  protected function getEquipesAvailableByCreneau(DrupalDateTime $hourBegin, array $hour) {
-    $options = [];
-    if (!$this->equipes) {
-      $this->getEquipes($this->booking_config_type_id);
-    }
-    foreach ($this->equipes as $equipe) {
-      $options[] = $equipe->id();
-    }
-    return $options;
-  }
-  
   protected function getEquipes(string $booking_config_type_id) {
     if (!$this->equipes)
       $this->equipes = $this->entityTypeManager->getStorage('booking_equipes')->loadByProperties([
         'booking_config_type' => $booking_config_type_id
       ]);
     return $this->equipes;
+  }
+  
+  /**
+   * Permet d'otenir une liste qui facilite la recherche et le decompte des
+   * reservations par creneaux.
+   *
+   * @return []
+   */
+  protected function getReservationGroupByKeys(DrupalDateTime $date) {
+    $date_string = $date->format('Y-m-d');
+    if (!isset($this->ReservationGroupByKeys[$date_string])) {
+      $this->ReservationGroupByKeys[$date_string] = [];
+      $BookingReservations = $this->getReservationByDate($date);
+      foreach ($BookingReservations as $BookingReservation) {
+        $creneaux = $BookingReservation->get('creneaux')->getValue();
+        foreach ($creneaux as $creneau) {
+          $id = $creneau['equipe'];
+          $hd = $creneau['hour_start'];
+          $hf = $creneau['hour_end'];
+          $this->ReservationGroupByKeys[$date_string][$id . $hd . $hf][] = $creneau;
+        }
+      }
+    }
+    return $this->ReservationGroupByKeys[$date_string];
+  }
+  
+  /**
+   * Permet de recuperation toutes les reservations pour une date.
+   *
+   * @param DrupalDateTime $date
+   * @return BookingReservation[]
+   */
+  protected function getReservationByDate(DrupalDateTime $date) {
+    $date_string = $date->format('Y-m-d');
+    if (!isset($this->ReservationBydate[$date_string])) {
+      $this->ReservationBydate[$date_string] = [];
+      /**
+       *
+       * @var \Drupal\Core\Entity\Query\Sql\Query $query
+       */
+      $query = $this->entityTypeManager->getStorage(self::ENTITY_RESERVATION)->getQuery();
+      $query->condition('creneaux.date_start', [
+        $date_string
+      ]);
+      // dump($query->__toString());
+      $ids = $query->execute();
+      if ($ids) {
+        /**
+         * Afin de reduire le temps d'execution, on cree des clees en fonction
+         * des equipes.
+         */
+        $this->ReservationBydate[$date_string] = $this->entityTypeManager->getStorage(self::ENTITY_RESERVATION)->loadMultiple($ids);
+      }
+    }
+    return $this->ReservationBydate[$date_string];
   }
   
   /**

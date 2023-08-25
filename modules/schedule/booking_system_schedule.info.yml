@@ -1,0 +1,7 @@
+name: Booking system schedule
+type: module
+description: 'Shows the schedule'
+package: 'Booking system'
+core_version_requirement: ^9.3 || ^10
+dependencies:
+  - booking_system:booking_system
