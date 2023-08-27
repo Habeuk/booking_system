@@ -11,12 +11,22 @@ booking_system_app:
 
 booking_system_app2:
   js:
-    https://unpkg.com/vue@3/dist/vue.global.js:
-      { type: external, minified: true }
     filesV2/bookingSystem.umd.js: {}
   css:
     component:
       filesV2/style.css: {}
+  dependencies:
+    - booking_system/vuejs3
+      
+vuejs3:
+  remote: https://vuejs.org
+  version: 3.3.4
+  license:
+    name: MIT
+    url: https://github.com/fntneves/jquery-labelauty/blob/v1.1.0/LICENSE
+    gpl-compatible: true
+  js:
+    https://unpkg.com/vue@3/dist/vue.global.js: { type: external, minified: true, weight: -10 }
 
 # Custom module library for general purposes.
 booking_system:

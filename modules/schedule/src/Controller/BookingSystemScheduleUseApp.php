@@ -7,15 +7,32 @@ use Symfony\Component\HttpFoundation\Request;
 use Stephane888\DrupalUtility\HttpResponse;
 use Stephane888\Debug\ExceptionExtractMessage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\booking_system\Services\BookingManager\ManagerDate;
-use Drupal\booking_system\Services\BookingManager\ManagerCreneaux;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Url;
+use Drupal\booking_system_schedule\Services\ManageSchedule;
 
 /**
  * Returns responses for booking_system routes.
  */
 class BookingSystemScheduleUseApp extends ControllerBase {
+  
+  /**
+   *
+   * @var ManageSchedule
+   */
+  protected $ManageSchedule;
+  
+  public function __construct(ManageSchedule $ManageSchedule) {
+    $this->ManageSchedule = $ManageSchedule;
+  }
+  
+  /**
+   *
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static($container->get('booking_system_schedule.manager'));
+  }
   
   /**
    * Builds the response to showing the Vue-js app.

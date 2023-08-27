@@ -53,6 +53,25 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
     return $disabledDays;
   }
   
+  public function loadReservations($booking_config_type_id, DrupalDateTime $date) {
+    $this->loadBookingConfigType($booking_config_type_id);
+    $results = [];
+    $BookingReservations = $this->getReservationByDate($date);
+    foreach ($BookingReservations as $BookingReservation) {
+      $creneaux = $BookingReservation->get('creneaux')->getValue();
+      foreach ($creneaux as $creneau) {
+        $hd = \explode(':', $creneau['hour_start']);
+        $hf = \explode(':', $creneau['hour_end']);
+        $results[] = [
+          'start' => $date->setTime($hd[0], $hd[1])->format("Y-m-d H:i"),
+          'end' => $date->setTime($hf[0], $hf[1])->format("Y-m-d H:i"),
+          'title' => ''
+        ];
+      }
+    }
+    return $results;
+  }
+  
   /**
    * On construit les creneaux de la journée independament de l'heure.
    */
@@ -186,7 +205,6 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
     $i = 0;
     while ($i < $maxCreneauxIds && $hourBegin < $hourEnd) {
       $hourAddduration = $this->getNewInstanceDate($hourBegin);
-      
       $hourAddduration->modify("+ " . $duration . " minutes");
       $times[$i]['gap'] = $gap;
       $times[$i]['active'] = false;

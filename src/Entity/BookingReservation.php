@@ -249,7 +249,7 @@ class BookingReservation extends EditorialContentEntityBase implements BookingRe
         }
         else {
           $equipe = BookingEquipes::load($value['equipe']);
-          $labelEquipe = $equipe->$equipe->label();
+          $labelEquipe = $equipe->label();
         }
         $date = new DrupalDateTime($value['date_end']);
         $creneauxRead[] = [

@@ -156,6 +156,11 @@ class ManagerBase {
     if (empty($values['name'])) {
       $values['name'] = 'default';
     }
+    foreach ($values['creneaux'] as $k => $creneau) {
+      if (is_array($creneau['equipe'])) {
+        $values['creneaux'][$k]['equipe'] = $creneau['equipe']['id'];
+      }
+    }
     /**
      *
      * @var BookingReservation $BookingReservation
@@ -301,10 +306,6 @@ class ManagerBase {
       // dump($query->__toString());
       $ids = $query->execute();
       if ($ids) {
-        /**
-         * Afin de reduire le temps d'execution, on cree des clees en fonction
-         * des equipes.
-         */
         $this->ReservationBydate[$date_string] = $this->entityTypeManager->getStorage(self::ENTITY_RESERVATION)->loadMultiple($ids);
       }
     }

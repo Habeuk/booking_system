@@ -7,7 +7,7 @@ booking_system_schedule.views:
     _permission: "access content"
     
 booking_system_schedule.app_load_config_schedule:
-  path: "/booking-system/views-app-calendar/{booking_config_type_id}/"
+  path: "/booking-system-schedule/views-app-calendar/{booking_config_type_id}/"
   defaults:
     _title: "Load config calendar"
     _controller: '\Drupal\booking_system_schedule\Controller\BookingSystemScheduleUseApp::loadConfigSchedule'
