@@ -88,24 +88,34 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
      * Doit être caluler en function d'autres paramettres.
      */
     $datas['creneau_config']['limit_reservation'] = $this->getLimitReservation();
-    $datas['monitor_list'] = $this->getEquipesOptions($this->booking_config_type_id);
+    $monitor_list = $this->getEquipesOptions($this->booking_config_type_id);
+    $datas['monitor_list'] = $monitor_list;
+    /**
+     * Afin d'accelerer la recherche au niveau de drupal, on va modifier les
+     * index de $monitor_list
+     */
+    $monitor_list_byId = [];
+    foreach ($monitor_list as $monitor) {
+      $monitor_list_byId[$monitor['id']] = $monitor;
+    }
     $creneaux = [];
     foreach ($dayconf['periodes'] as $p => $periode) {
-      $creneaux[$p] = [
-        'name' => $periode['label'],
-        'status' => $periode['status'],
-        'gap' => 0,
-        'horaires' => [
-          'begin' => $periode['h_d'] . ':' . $periode['m_d'],
-          'end' => $periode['h_f'] . ':' . $periode['m_f']
-        ],
-        'times' => []
-      ];
       if ($periode['status']) {
+        $creneaux[$p] = [
+          'name' => $periode['label'],
+          'status' => $periode['status'],
+          'gap' => 0,
+          'horaires' => [
+            'begin' => $periode['h_d'] . ':' . $periode['m_d'],
+            'end' => $periode['h_f'] . ':' . $periode['m_f']
+          ],
+          'times' => []
+        ];
         // Merge default config with override config.
         $periode += $values['creneau'];
         $creneaux[$p]['gap'] = $periode['gap'];
-        $this->genereateCreneauForPeriode($creneaux[$p]['times'], $periode);
+        
+        $this->genereateCreneauForPeriode($creneaux[$p]['times'], $periode, $monitor_list_byId);
       }
     }
     $datas['schedules_list'] = $creneaux;
@@ -145,30 +155,39 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
   
   /**
    * Permet de recuperer les equipes disponible pour un creneau.
+   * un utilisateur ne doit pas pouvoir reserver un creneau deux foix.
    *
    * @param DrupalDateTime $hourBegin
    * @param array $hour
    * @return array
    */
-  protected function getEquipesAvailableByCreneau(DrupalDateTime $hourBegin, array $hour) {
+  protected function getEquipesAvailableByCreneau(DrupalDateTime $hourBegin, array $hour, array $monitor_list_byId) {
     $options = [];
     if (!$this->equipes) {
       $this->getEquipes($this->booking_config_type_id);
     }
+    $hd = $hour['start'];
+    $hf = $hour['end'];
+    $uid = $this->currentUser->id();
     $ReservationGroupByKeys = $this->getReservationGroupByKeys($hourBegin);
+    // dump($ReservationGroupByKeys);
     foreach ($this->equipes as $equipe) {
       $equipeId = $equipe->id();
-      $hd = $hour['start'];
-      $hf = $hour['end'];
       $key = $equipeId . $hd . $hf;
       $crex = isset($ReservationGroupByKeys[$key]) ? $ReservationGroupByKeys[$key] : [];
       if ($crex) {
         $nbre_reserve = count($crex);
-        if ($this->getDefaultLimitReservation() > $nbre_reserve)
-          $options[] = $equipe->id();
+        if ($this->getDefaultLimitReservation() > $nbre_reserve && isset($monitor_list_byId[$equipeId]['value'])) {
+          // if same user ? // si cest le meme utilisateur il ne peut plus
+          // reservé ce creneau meme avec un autre moniteur.
+          if ($crex[0]['user_id'] == $uid) {
+            return [];
+          }
+          $options[] = (int) $monitor_list_byId[$equipeId]['value'];
+        }
       }
-      else
-        $options[] = $equipe->id();
+      elseif (isset($monitor_list_byId[$equipeId]['value']))
+        $options[] = (int) $monitor_list_byId[$equipeId]['value'];
     }
     return $options;
   }
@@ -180,7 +199,7 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
    * @param string $date_string
    * @param array $creneauConfig
    */
-  protected function genereateCreneauForPeriode(array &$times, array $creneauConfig) {
+  protected function genereateCreneauForPeriode(array &$times, array $creneauConfig, $monitor_list_byId) {
     $duration = $creneauConfig['duration'];
     $interval = $creneauConfig['interval'];
     $gap = $creneauConfig['gap'];
@@ -212,7 +231,7 @@ class ManagerCreneaux extends ManagerBase implements ManagerCreneauxInterface {
         'start' => $hourBegin->format("H:i"),
         'end' => $hourAddduration->format("H:i")
       ];
-      $monitors = $this->getEquipesAvailableByCreneau($hourBegin, $times[$i]['hour']);
+      $monitors = $this->getEquipesAvailableByCreneau($hourBegin, $times[$i]['hour'], $monitor_list_byId);
       $times[$i]['monitors'] = $monitors;
       // S'il ny'a pas d'equipe disponible pour ce creneau, on le garde
       // desactivé.

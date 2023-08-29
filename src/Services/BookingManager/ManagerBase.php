@@ -123,7 +123,13 @@ class ManagerBase {
     if (!$this->configuration) {
       if (!$this->BookingConfigType)
         throw BookingSystemException::exception("BookingConfigType not define");
-      $this->configuration = $this->BookingConfigType->toArray();
+      $configuration = $this->BookingConfigType->toArray();
+      $configuration['creneau']['duration'] = (int) $configuration['creneau']['duration'];
+      $configuration['creneau']['interval'] = (int) $configuration['creneau']['interval'];
+      $configuration['creneau']['gap'] = (int) $configuration['creneau']['gap'];
+      $configuration['limit_reservation'] = (int) $configuration['limit_reservation'];
+      $this->configuration = $configuration;
+      // dump($this->configuration);
     }
     return $this->configuration;
   }
@@ -278,6 +284,9 @@ class ManagerBase {
           $id = $creneau['equipe'];
           $hd = $creneau['hour_start'];
           $hf = $creneau['hour_end'];
+          // On ajoute l'id de l'utilisateur qui a effectuer la reservation afin
+          // de l'empecher de reserver le meme creneau.
+          $creneau['user_id'] = $BookingReservation->getOwnerId();
           $this->ReservationGroupByKeys[$date_string][$id . $hd . $hf][] = $creneau;
         }
       }
@@ -325,8 +334,9 @@ class ManagerBase {
     foreach ($this->equipes as $equipe) {
       $options[] = [
         'name' => $equipe->label(),
-        'value' => $indice,
-        'id' => $equipe->id()
+        'value' => $indice, // Value => represente l'index dans le tableaux de
+                             // moniteurs.(front)
+        'id' => (int) $equipe->id()
       ];
       $indice++;
     }

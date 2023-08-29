@@ -10,25 +10,39 @@ namespace Drupal\booking_system;
 interface DaysSettingsInterface /* extends PluginInspectionInterface */
 {
   const DAYS = [
-
+    
     [
       'label' => 'Lundi',
       'status' => true, // status pour le jour
       'indice' => 1,
       'periodes' => [
         [
-          'label' => 'Plage horaire',
+          'label' => 'Plage horaire: 1',
           'status' => true, // status pour période
           'h_d' => 07,
           'm_d' => 00,
           'h_f' => 17,
           'm_f' => 00,
-          'metadata' => [], // peut contenir des informations utile pour
-                              // d'autre application.
-          'decallage' => 5, // remove
-          'intervalle' => 15, // remove
-          'reduction' => 20, // remove
-          'creneaux' => [] // remove
+          'metadata' => [] // peut contenir des informations utile pour
+                            // d'autre application.
+        ],
+        [
+          'label' => 'Plage horaire : 2',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
+        ],
+        [
+          'label' => 'Plage horaire : 3',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
         ]
       ]
     ],
@@ -50,6 +64,24 @@ interface DaysSettingsInterface /* extends PluginInspectionInterface */
           'intervalle' => 15, // remove
           'reduction' => 20, // remove
           'creneaux' => [] // remove
+        ],
+        [
+          'label' => 'Plage horaire : 2',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
+        ],
+        [
+          'label' => 'Plage horaire : 3',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
         ]
       ]
     ],
@@ -71,6 +103,24 @@ interface DaysSettingsInterface /* extends PluginInspectionInterface */
           'intervalle' => 15, // remove
           'reduction' => 20, // remove
           'creneaux' => [] // remove
+        ],
+        [
+          'label' => 'Plage horaire : 2',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
+        ],
+        [
+          'label' => 'Plage horaire : 3',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
         ]
       ]
     ],
@@ -92,6 +142,24 @@ interface DaysSettingsInterface /* extends PluginInspectionInterface */
           'intervalle' => 15, // remove
           'reduction' => 20, // remove
           'creneaux' => [] // remove
+        ],
+        [
+          'label' => 'Plage horaire : 2',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
+        ],
+        [
+          'label' => 'Plage horaire : 3',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
         ]
       ]
     ],
@@ -113,6 +181,24 @@ interface DaysSettingsInterface /* extends PluginInspectionInterface */
           'intervalle' => 15, // remove
           'reduction' => 20, // remove
           'creneaux' => [] // remove
+        ],
+        [
+          'label' => 'Plage horaire : 2',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
+        ],
+        [
+          'label' => 'Plage horaire : 3',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
         ]
       ]
     ],
@@ -134,6 +220,24 @@ interface DaysSettingsInterface /* extends PluginInspectionInterface */
           'intervalle' => 15, // remove
           'reduction' => 20, // remove
           'creneaux' => [] // remove
+        ],
+        [
+          'label' => 'Plage horaire : 2',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
+        ],
+        [
+          'label' => 'Plage horaire : 3',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
         ]
       ]
     ],
@@ -155,9 +259,27 @@ interface DaysSettingsInterface /* extends PluginInspectionInterface */
           'intervalle' => 15, // remove
           'reduction' => 20, // remove
           'creneaux' => [] // remove
+        ],
+        [
+          'label' => 'Plage horaire : 2',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
+        ],
+        [
+          'label' => 'Plage horaire : 3',
+          'status' => false,
+          'h_d' => 07,
+          'm_d' => 00,
+          'h_f' => 17,
+          'm_f' => 00,
+          'metadata' => []
         ]
       ]
     ]
   ];
-
+  
 }

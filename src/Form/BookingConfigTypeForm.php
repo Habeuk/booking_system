@@ -5,6 +5,7 @@ namespace Drupal\booking_system\Form;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\Component\Utility\NestedArray;
 
 /**
  * Class BookingConfigTypeForm.
@@ -42,9 +43,16 @@ class BookingConfigTypeForm extends EntityForm {
     ];
     /* You will need additional form elements for your custom properties. */
     $config = $booking_config_type->get('days');
+    // dump($config);
     $jours = \Drupal\booking_system\DaysSettingsInterface::DAYS;
-    if ($config)
-      $jours = $config;
+    if ($config) {
+      // Ajouter ce qui manque à la configuration encours.
+      $jours = NestedArray::mergeDeepArray([
+        $jours,
+        $config
+      ], true);
+    }
+    
     $form['days'] = [
       '#type' => 'fieldset',
       '#title' => 'Configuration des dates',

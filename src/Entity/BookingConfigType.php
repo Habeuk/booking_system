@@ -79,6 +79,13 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
   protected $limit_reservation = 1;
   
   /**
+   * Nombre de reservation effectuable simmultannement.
+   *
+   * @var integer
+   */
+  protected $number_reservation = 1;
+  
+  /**
    * user uid
    *
    * @var integer
@@ -168,6 +175,7 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
     // merge data with the default value;
     $jours = \Drupal\booking_system\DaysSettingsInterface::DAYS;
     $days = $this->get('days');
+    
     $final = [];
     if ($days)
       foreach ($days as $k => $day) {
@@ -175,23 +183,27 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
         if ($jours[$k])
           $final[$k] += $jours[$k];
         foreach ($day['periodes'] as $p => $periode) {
-          if (!empty($jours[$k]['periodes'][$p]))
-            $final[$k]['periodes'][$p] = $jours[$k]['periodes'][$p];
+          if (!empty($jours[$k]['periodes'][$p])) {
+            $final[$k]['periodes'][$p] = $periode + $jours[$k]['periodes'][$p];
+          }
           if (!empty($periode['h_d__m_d'])) {
             $h_d__m_d = explode(":", $periode['h_d__m_d']);
             $final[$k]['periodes'][$p]['h_d'] = (int) $h_d__m_d[0];
             $final[$k]['periodes'][$p]['m_d'] = (int) $h_d__m_d[1];
+            unset($final[$k]['periodes'][$p]['h_d__m_d']);
           }
           if (!empty($periode['h_f__m_f'])) {
             $h_f__m_f = explode(":", $periode['h_f__m_f']);
             $final[$k]['periodes'][$p]['h_f'] = (int) $h_f__m_f[0];
             $final[$k]['periodes'][$p]['m_f'] = (int) $h_f__m_f[1];
+            unset($final[$k]['periodes'][$p]['h_f__m_f']);
           }
         }
       }
     else {
       $final = $jours;
     }
+    // dd($days, $jours, $final);
     $this->set("days", $final);
   }
   
@@ -206,7 +218,7 @@ class BookingConfigType extends ConfigEntityBundleBase implements BookingConfigT
     // niveau de la validation de l'entité.
     /**
      *
-     * @var \Drupal\booking_system\Service\BookingManager\ManagerCreneaux $app_manager_creneau
+     * @var \Drupal\booking_system\Services\BookingManager\ManagerCreneaux $app_manager_creneau
      */
     $app_manager_creneau = \Drupal::service('booking_system.app_manager_creneaux');
     /**
