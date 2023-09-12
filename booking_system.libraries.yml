@@ -17,6 +17,15 @@ booking_system_app2:
       filesV2/style.css: {}
   dependencies:
     - booking_system/vuejs3
+
+booking_system_app2_checkout:
+  js:
+    files-checkout/bookingSystem.umd.js: {}
+  css:
+    component:
+      files-checkout/style.css: {}
+  dependencies:
+    - booking_system/vuejs3
       
 vuejs3:
   remote: https://vuejs.org
