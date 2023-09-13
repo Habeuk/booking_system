@@ -6928,9 +6928,9 @@ const _hoisted_5$9 = { class: "monitor-form d-flex" };
 const _hoisted_6$7 = { class: "hours-content" };
 const _hoisted_7$5 = { class: "time-title h6" };
 const _hoisted_8$5 = { class: "time-list justify-content-between" };
-const _hoisted_9$3 = ["disabled", "onClick"];
-const _hoisted_10$2 = { class: "time" };
-const _hoisted_11$2 = { class: "py-3" };
+const _hoisted_9$4 = ["disabled", "onClick"];
+const _hoisted_10$3 = { class: "time" };
+const _hoisted_11$3 = { class: "py-3" };
 const _hoisted_12$2 = { class: "hours-footer d-flex mt-4 justify-content-between" };
 const _hoisted_13$1 = { class: "hours-action w-100 mx-auto justify-content-end d-flex" };
 const _hoisted_14$1 = { class: "btn-container pr-0" };
@@ -7014,7 +7014,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
                     Fragment,
                     null,
                     renderList(time.times, (heure, i) => {
-                      return openBlock(), createElementBlock("button", {
+                      return openBlock(), createElementBlock("span", {
                         class: normalizeClass(["mb-2 time-btn", {
                           "active-btn": heure.active && $props.canSelect && !heure.filtred && !heure.scheduleFiltred || heure.selected,
                           "desabled-btn": !(heure.active && $props.canSelect) && !heure.selected || heure.filtred || heure.scheduleFiltred,
@@ -7026,12 +7026,12 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
                       }, [
                         createElementVNode(
                           "span",
-                          _hoisted_10$2,
+                          _hoisted_10$3,
                           toDisplayString(heure.hour),
                           1
                           /* TEXT */
                         )
-                      ], 10, _hoisted_9$3);
+                      ], 10, _hoisted_9$4);
                     }),
                     128
                     /* KEYED_FRAGMENT */
@@ -7054,7 +7054,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
         createCommentVNode(" cette partie ne fait pas partie de l'application, il faudra voir comment on y procede. "),
         createElementVNode(
           "div",
-          _hoisted_11$2,
+          _hoisted_11$3,
           "Creneaux restant : " + toDisplayString($props.hoursRemaining),
           1
           /* TEXT */
@@ -7240,9 +7240,9 @@ const _hoisted_5$8 = { class: "offers-content" };
 const _hoisted_6$6 = { class: "first-line" };
 const _hoisted_7$4 = { class: "cc-titre" };
 const _hoisted_8$4 = { class: "check-circle" };
-const _hoisted_9$2 = { class: "cc-rond" };
-const _hoisted_10$1 = ["innerHTML"];
-const _hoisted_11$1 = { class: "cc-description" };
+const _hoisted_9$3 = { class: "cc-rond" };
+const _hoisted_10$2 = ["innerHTML"];
+const _hoisted_11$2 = { class: "cc-description" };
 const _hoisted_12$1 = { key: 0 };
 const _hoisted_13 = { key: 1 };
 const _hoisted_14 = { class: "book-bloc" };
@@ -7282,16 +7282,16 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
                   )
                 ]),
                 createElementVNode("div", _hoisted_8$4, [
-                  createElementVNode("span", _hoisted_9$2, [
+                  createElementVNode("span", _hoisted_9$3, [
                     createElementVNode("p", {
                       class: "mb-0",
                       innerHTML: $props.steps[index3 - 1].icon,
                       "font-scale": "1"
-                    }, null, 8, _hoisted_10$1)
+                    }, null, 8, _hoisted_10$2)
                   ])
                 ])
               ]),
-              createElementVNode("div", _hoisted_11$1, [
+              createElementVNode("div", _hoisted_11$2, [
                 $props.steps[index3 - 1].value instanceof String || typeof $props.steps[index3 - 1].value == "string" ? (openBlock(), createElementBlock(
                   "span",
                   _hoisted_12$1,
@@ -7892,15 +7892,23 @@ const _sfc_main$j = {
     const resetApp = () => {
       emit("resetApp");
     };
+    const submitBtn = ref(null);
+    onMounted(() => {
+      setTimeout(() => {
+        submitBtn.value.click();
+      }, 300);
+    });
     return {
       ...props,
       getMessage,
       getDescription,
-      resetApp
+      resetApp,
+      submitBtn
     };
   },
   components: { ProgressSpinner: script }
 };
+const ShowReport_vue_vue_type_style_index_0_lang = "";
 const _hoisted_1$e = /* @__PURE__ */ createElementVNode(
   "div",
   { class: "dot" },
@@ -7929,10 +7937,80 @@ const _hoisted_4$4 = /* @__PURE__ */ createElementVNode(
   -1
   /* HOISTED */
 );
-const _hoisted_5$4 = { class: "message" };
+const _hoisted_5$4 = { class: "message d-none" };
 const _hoisted_6$2 = { class: "report-title alert" };
 const _hoisted_7$2 = { class: "report-description" };
 const _hoisted_8$2 = { class: "report-title green" };
+const _hoisted_9$2 = {
+  ref: "submitBtn",
+  class: "button-box d-none"
+};
+const _hoisted_10$1 = { class: "report-title green" };
+const _hoisted_11$1 = /* @__PURE__ */ createElementVNode(
+  "div",
+  null,
+  [
+    /* @__PURE__ */ createElementVNode("svg", {
+      version: "1.1",
+      xmlns: "http://www.w3.org/2000/svg",
+      "xmlns:xlink": "http://www.w3.org/1999/xlink",
+      x: "0px",
+      y: "0px",
+      viewBox: "-20 0 100 100",
+      "enable-background": "new 0 0 0 0",
+      "xml:space": "preserve",
+      class: "icon-loader"
+    }, [
+      /* @__PURE__ */ createElementVNode("circle", {
+        fill: "#fff",
+        stroke: "none",
+        cx: "6",
+        cy: "50",
+        r: "6"
+      }, [
+        /* @__PURE__ */ createElementVNode("animate", {
+          attributeName: "opacity",
+          dur: "1s",
+          values: "0;1;0",
+          repeatCount: "indefinite",
+          begin: "0.1"
+        })
+      ]),
+      /* @__PURE__ */ createElementVNode("circle", {
+        fill: "#fff",
+        stroke: "none",
+        cx: "26",
+        cy: "50",
+        r: "6"
+      }, [
+        /* @__PURE__ */ createElementVNode("animate", {
+          attributeName: "opacity",
+          dur: "1s",
+          values: "0;1;0",
+          repeatCount: "indefinite",
+          begin: "0.2"
+        })
+      ]),
+      /* @__PURE__ */ createElementVNode("circle", {
+        fill: "#fff",
+        stroke: "none",
+        cx: "46",
+        cy: "50",
+        r: "6"
+      }, [
+        /* @__PURE__ */ createElementVNode("animate", {
+          attributeName: "opacity",
+          dur: "1s",
+          values: "0;1;0",
+          repeatCount: "indefinite",
+          begin: "0.3"
+        })
+      ])
+    ])
+  ],
+  -1
+  /* HOISTED */
+);
 function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_ProgressSpinner = resolveComponent("ProgressSpinner");
   return openBlock(), createElementBlock(
@@ -8018,7 +8096,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
           ]),
           createElementVNode("button", {
             onClick: _cache[0] || (_cache[0] = ($event) => $setup.resetApp()),
-            class: "button-box"
+            class: "button-box d-none"
           }, [
             createElementVNode(
               "div",
@@ -8027,7 +8105,23 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
               1
               /* TEXT */
             )
-          ])
+          ]),
+          createElementVNode(
+            "button",
+            _hoisted_9$2,
+            [
+              createElementVNode(
+                "div",
+                _hoisted_10$1,
+                toDisplayString($props.btnLabel),
+                1
+                /* TEXT */
+              )
+            ],
+            512
+            /* NEED_PATCH */
+          ),
+          _hoisted_11$1
         ],
         2
         /* CLASS */
@@ -8043,7 +8137,7 @@ const _hoisted_2$c = {
   key: 0,
   class: "main-app w-100 d-flex"
 };
-const _hoisted_3$a = { class: "app-main-contain px-md-5 px-2 mx-auto mt-5 mh-50 space-bottom" };
+const _hoisted_3$a = { class: "app-main-contain px-2 mx-auto mt-5 mh-50 space-bottom" };
 const _hoisted_4$3 = {
   key: 0,
   class: "px-md-5"

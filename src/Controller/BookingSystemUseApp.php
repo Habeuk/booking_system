@@ -99,11 +99,10 @@ class BookingSystemUseApp extends ControllerBase {
   
   /**
    * Permet de charger la configuration par defaut.
-   * ( Actuelment pour les tests ).
+   * ( Actuelment pour les tests, et peut etre surcharger par d'autre module ).
    */
   public function loadConfigCalandar(Request $Request) {
     $booking_config_type_id = "test";
-    // return HttpResponse::response($configs);
     return $this->Views($Request, $booking_config_type_id);
   }
   
