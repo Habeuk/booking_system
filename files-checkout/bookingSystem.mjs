@@ -7896,7 +7896,7 @@ const _sfc_main$j = {
     onMounted(() => {
       setTimeout(() => {
         submitBtn.value.click();
-      }, 300);
+      }, 150);
     });
     return {
       ...props,

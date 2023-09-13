@@ -7899,7 +7899,7 @@
       vue.onMounted(() => {
         setTimeout(() => {
           submitBtn.value.click();
-        }, 300);
+        }, 150);
       });
       return {
         ...props,
