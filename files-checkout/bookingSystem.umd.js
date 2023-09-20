@@ -421,7 +421,7 @@
     var isRoot = !path.length;
     var namespace = store2._modules.getNamespace(path);
     if (module2.namespaced) {
-      if (store2._modulesNamespaceMap[namespace] && { "NODE_ENV": "production", "USER": "stephane", "npm_config_user_agent": "npm/8.19.2 node/v19.0.0 linux x64 workspaces/false", "SSH_AGENT_PID": "2254", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/stephane/.nvm/versions/node/v19.0.0/bin/node", "SHLVL": "1", "npm_config_noproxy": "", "HOME": "/home/stephane", "DESKTOP_SESSION": "gnome-xorg", "NVM_BIN": "/home/stephane/.nvm/versions/node/v19.0.0/bin", "npm_package_json": "/siteweb/AppVuejs/booking-app-checkout/package.json", "NVM_INC": "/home/stephane/.nvm/versions/node/v19.0.0/include/node", "GTK_MODULES": "gail:atk-bridge", "npm_config_userconfig": "/home/stephane/.npmrc", "npm_config_local_prefix": "/siteweb/AppVuejs/booking-app-checkout", "DBUS_STARTER_BUS_TYPE": "session", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus,guid=6ea28e68da9f65fbd356b6c664fd30ac", "COLORTERM": "truecolor", "COLOR": "1", "NVM_DIR": "/home/stephane/.nvm", "npm_config_metrics_registry": "https://registry.npmjs.org/", "IM_CONFIG_PHASE": "1", "LOGNAME": "stephane", "_": "/home/stephane/.nvm/versions/node/v19.0.0/bin/npm", "npm_config_prefix": "/home/stephane/.nvm/versions/node/v19.0.0", "XDG_SESSION_CLASS": "user", "USERNAME": "stephane", "TERM": "xterm-256color", "npm_config_cache": "/home/stephane/.npm", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "WINDOWPATH": "2", "npm_config_node_gyp": "/home/stephane/.nvm/versions/node/v19.0.0/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js", "PATH": "/siteweb/AppVuejs/booking-app-checkout/node_modules/.bin:/siteweb/AppVuejs/node_modules/.bin:/siteweb/node_modules/.bin:/node_modules/.bin:/home/stephane/.nvm/versions/node/v19.0.0/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/stephane/.nvm/versions/node/v19.0.0/bin: /root/Komodo-IDE-10/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/stephane/.config/composer/vendor/bin:/home/stephane/.rvm/bin:/home/stephane/.rvm/bin", "SESSION_MANAGER": "local/habeuk.kksa:@/tmp/.ICE-unix/2295,unix/habeuk.kksa:/tmp/.ICE-unix/2295", "GDM_LANG": "fr_FR.UTF-8", "NODE": "/home/stephane/.nvm/versions/node/v19.0.0/bin/node", "npm_package_name": "booking-app", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/d42710e2_75a5_4cb9_a771_be981e8c2b6b", "XDG_RUNTIME_DIR": "/run/user/1000", "DISPLAY": ":0", "LANG": "fr_FR.UTF-8", "XDG_CURRENT_DESKTOP": "GNOME", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "gnome-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.127", "npm_lifecycle_script": "vite build --watch --mode development  --outDir files-checkout ", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "SHELL": "/bin/bash", "npm_package_version": "0.0.0", "npm_lifecycle_event": "Dev", "QT_ACCESSIBILITY": "1", "GDMSESSION": "gnome-xorg", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "QT_IM_MODULE": "ibus", "npm_config_globalconfig": "/home/stephane/.nvm/versions/node/v19.0.0/etc/npmrc", "npm_config_init_module": "/home/stephane/.npm-init.js", "PWD": "/siteweb/AppVuejs/booking-app-checkout", "npm_execpath": "/home/stephane/.nvm/versions/node/v19.0.0/lib/node_modules/npm/bin/npm-cli.js", "NVM_CD_FLAGS": "", "DBUS_STARTER_ADDRESS": "unix:path=/run/user/1000/bus,guid=6ea28e68da9f65fbd356b6c664fd30ac", "XDG_DATA_DIRS": "/usr/share/gnome:/usr/local/share/:/usr/share/", "npm_config_global_prefix": "/home/stephane/.nvm/versions/node/v19.0.0", "npm_command": "run-script", "VTE_VERSION": "6203", "INIT_CWD": "/siteweb/AppVuejs/booking-app-checkout", "EDITOR": "vi", "VITE_USER_NODE_ENV": "development" }.NODE_ENV !== "production") {
+      if (store2._modulesNamespaceMap[namespace] && { "NODE_ENV": "production", "USER": "stephane", "npm_config_user_agent": "npm/8.19.2 node/v19.0.0 linux x64 workspaces/false", "SSH_AGENT_PID": "2237", "XDG_SESSION_TYPE": "x11", "npm_node_execpath": "/home/stephane/.nvm/versions/node/v19.0.0/bin/node", "SHLVL": "1", "npm_config_noproxy": "", "HOME": "/home/stephane", "DESKTOP_SESSION": "gnome-xorg", "NVM_BIN": "/home/stephane/.nvm/versions/node/v19.0.0/bin", "npm_package_json": "/siteweb/AppVuejs/booking-app-checkout/package.json", "NVM_INC": "/home/stephane/.nvm/versions/node/v19.0.0/include/node", "GTK_MODULES": "gail:atk-bridge", "npm_config_userconfig": "/home/stephane/.npmrc", "npm_config_local_prefix": "/siteweb/AppVuejs/booking-app-checkout", "DBUS_STARTER_BUS_TYPE": "session", "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1000/bus,guid=74cc7a1ab3711e3cc161df876509d564", "COLORTERM": "truecolor", "COLOR": "1", "NVM_DIR": "/home/stephane/.nvm", "npm_config_metrics_registry": "https://registry.npmjs.org/", "IM_CONFIG_PHASE": "1", "LOGNAME": "stephane", "_": "/home/stephane/.nvm/versions/node/v19.0.0/bin/npm", "npm_config_prefix": "/home/stephane/.nvm/versions/node/v19.0.0", "XDG_SESSION_CLASS": "user", "USERNAME": "stephane", "TERM": "xterm-256color", "npm_config_cache": "/home/stephane/.npm", "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated", "WINDOWPATH": "2", "npm_config_node_gyp": "/home/stephane/.nvm/versions/node/v19.0.0/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js", "PATH": "/siteweb/AppVuejs/booking-app-checkout/node_modules/.bin:/siteweb/AppVuejs/node_modules/.bin:/siteweb/node_modules/.bin:/node_modules/.bin:/home/stephane/.nvm/versions/node/v19.0.0/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/home/stephane/.nvm/versions/node/v19.0.0/bin: /root/Komodo-IDE-10/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/stephane/.config/composer/vendor/bin:/home/stephane/.rvm/bin:/home/stephane/.rvm/bin", "SESSION_MANAGER": "local/habeuk.kksa:@/tmp/.ICE-unix/2279,unix/habeuk.kksa:/tmp/.ICE-unix/2279", "GDM_LANG": "fr_FR.UTF-8", "NODE": "/home/stephane/.nvm/versions/node/v19.0.0/bin/node", "npm_package_name": "booking-app", "XDG_MENU_PREFIX": "gnome-", "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/c86be0ac_2a99_46e4_8d14_22bceafb667d", "XDG_RUNTIME_DIR": "/run/user/1000", "DISPLAY": ":0", "LANG": "fr_FR.UTF-8", "XDG_CURRENT_DESKTOP": "GNOME", "XMODIFIERS": "@im=ibus", "XDG_SESSION_DESKTOP": "gnome-xorg", "XAUTHORITY": "/run/user/1000/gdm/Xauthority", "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", "GNOME_TERMINAL_SERVICE": ":1.127", "npm_lifecycle_script": "vite build --watch --mode development  --outDir files-checkout ", "SSH_AUTH_SOCK": "/run/user/1000/keyring/ssh", "SHELL": "/bin/bash", "npm_package_version": "0.0.0", "npm_lifecycle_event": "Dev", "QT_ACCESSIBILITY": "1", "GDMSESSION": "gnome-xorg", "GPG_AGENT_INFO": "/run/user/1000/gnupg/S.gpg-agent:0:1", "QT_IM_MODULE": "ibus", "npm_config_globalconfig": "/home/stephane/.nvm/versions/node/v19.0.0/etc/npmrc", "npm_config_init_module": "/home/stephane/.npm-init.js", "PWD": "/siteweb/AppVuejs/booking-app-checkout", "npm_execpath": "/home/stephane/.nvm/versions/node/v19.0.0/lib/node_modules/npm/bin/npm-cli.js", "NVM_CD_FLAGS": "", "DBUS_STARTER_ADDRESS": "unix:path=/run/user/1000/bus,guid=74cc7a1ab3711e3cc161df876509d564", "XDG_DATA_DIRS": "/usr/share/gnome:/usr/local/share/:/usr/share/", "npm_config_global_prefix": "/home/stephane/.nvm/versions/node/v19.0.0", "npm_command": "run-script", "VTE_VERSION": "6203", "INIT_CWD": "/siteweb/AppVuejs/booking-app-checkout", "EDITOR": "vi", "VITE_USER_NODE_ENV": "development" }.NODE_ENV !== "production") {
         console.error("[vuex] duplicate namespace " + namespace + " for the namespaced module " + path.join("/"));
       }
       store2._modulesNamespaceMap[namespace] = module2;
@@ -6934,7 +6934,7 @@
   const _hoisted_9$4 = ["disabled", "onClick"];
   const _hoisted_10$3 = { class: "time" };
   const _hoisted_11$3 = { class: "py-3" };
-  const _hoisted_12$2 = { class: "hours-footer d-flex mt-4 justify-content-between" };
+  const _hoisted_12$3 = { class: "hours-footer d-flex mt-4 justify-content-between" };
   const _hoisted_13$1 = { class: "hours-action w-100 mx-auto justify-content-end d-flex" };
   const _hoisted_14$1 = { class: "btn-container pr-0" };
   const _hoisted_15 = { class: "mt-2" };
@@ -7062,7 +7062,7 @@
             1
             /* TEXT */
           ),
-          vue.createElementVNode("div", _hoisted_12$2, [
+          vue.createElementVNode("div", _hoisted_12$3, [
             vue.createElementVNode("div", _hoisted_13$1, [
               vue.createElementVNode("div", _hoisted_14$1, [
                 vue.createVNode(_component_pButton, {
@@ -7246,7 +7246,7 @@
   const _hoisted_9$3 = { class: "cc-rond" };
   const _hoisted_10$2 = ["innerHTML"];
   const _hoisted_11$2 = { class: "cc-description" };
-  const _hoisted_12$1 = { key: 0 };
+  const _hoisted_12$2 = { key: 0 };
   const _hoisted_13 = { key: 1 };
   const _hoisted_14 = { class: "book-bloc" };
   function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
@@ -7297,7 +7297,7 @@
                 vue.createElementVNode("div", _hoisted_11$2, [
                   $props.steps[index2 - 1].value instanceof String || typeof $props.steps[index2 - 1].value == "string" ? (vue.openBlock(), vue.createElementBlock(
                     "span",
-                    _hoisted_12$1,
+                    _hoisted_12$2,
                     vue.toDisplayString($props.steps[index2 - 1].value),
                     1
                     /* TEXT */
@@ -7895,8 +7895,10 @@
       const resetApp = () => {
         emit("resetApp");
       };
-      const submitBtn = vue.ref(null);
+      const submitBtn = vue.ref();
       vue.onMounted(() => {
+        if (submitBtn.value)
+          submitBtn.value.style.display = "none";
         setTimeout(() => {
           submitBtn.value.click();
         }, 150);
@@ -7948,8 +7950,17 @@
     ref: "submitBtn",
     class: "button-box d-none"
   };
-  const _hoisted_10$1 = { class: "report-title green" };
-  const _hoisted_11$1 = /* @__PURE__ */ vue.createElementVNode(
+  const _hoisted_10$1 = /* @__PURE__ */ vue.createElementVNode(
+    "div",
+    { class: "report-title green" },
+    "etape suivante",
+    -1
+    /* HOISTED */
+  );
+  const _hoisted_11$1 = [
+    _hoisted_10$1
+  ];
+  const _hoisted_12$1 = /* @__PURE__ */ vue.createElementVNode(
     "div",
     null,
     [
@@ -8112,19 +8123,11 @@
             vue.createElementVNode(
               "button",
               _hoisted_9$2,
-              [
-                vue.createElementVNode(
-                  "div",
-                  _hoisted_10$1,
-                  vue.toDisplayString($props.btnLabel),
-                  1
-                  /* TEXT */
-                )
-              ],
+              _hoisted_11$1,
               512
               /* NEED_PATCH */
             ),
-            _hoisted_11$1
+            _hoisted_12$1
           ],
           2
           /* CLASS */
