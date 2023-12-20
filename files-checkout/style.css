@@ -7868,7 +7868,6 @@ html {
   flex: 1 1 20%;
   max-height: 50px;
   position: relative;
-  cursor: pointer;
 }
 @media only screen and (min-width: 575px) {
   .app-main-contain .hours-content .time-btn {
@@ -8311,16 +8310,9 @@ html {
     opacity: 1;
     transform: translateY(0);
   }
-}.icon-loader {
-  width: 83px;
-  position: absolute;
-  top: auto;
-  bottom: 0px;
-  left: 50%;
-  transform: translateX(-50%);
-}.main-app .p-breadcrumb[data-v-ec6273ca] {
+}.main-app .p-breadcrumb[data-v-7a7a37b1] {
   padding: 0px;
 }
-.main-app .p-breadcrumb .breadcrumb-element[data-v-ec6273ca] {
+.main-app .p-breadcrumb .breadcrumb-element[data-v-7a7a37b1] {
   padding: 16px;
 }
