@@ -244,7 +244,7 @@ class ManagerBase {
       $message = t(' There was a problem sending your email notification to @email. ', array(
         '@email' => $to
       ));
-      $this->getLogger('booking_system')->alert($message);
+      \Drupal::logger('booking_system')->alert($message);
     }
   }
   
