@@ -29,19 +29,19 @@ class ManagerBase {
    * @var EntityTypeManager
    */
   protected $entityTypeManager;
-  
+
   /**
    *
    * @var BookingConfigType
    */
   private $BookingConfigType;
-  
+
   /**
    *
    * @var string
    */
   protected $booking_config_type_id;
-  
+
   /**
    * Date selectionner par l'utilisateur.
    * Elle est privée afin qu'elle ne soit pas modifiable par d'autre fonction.
@@ -50,48 +50,48 @@ class ManagerBase {
    * @var DrupalDateTime
    */
   private $selecteddate;
-  
+
   /**
    * Date encours, (date sur serveur).
    *
    * @var DrupalDateTime
    */
   protected $currentDate;
-  
+
   /**
    * Days sort by index
    *
    * @var array
    */
   protected $daysSortIndex = NULL;
-  
+
   /**
    *
    * @var array
    */
   protected $equipes = [];
-  
+
   /**
    * Contient les reservations en fonction de la date.
    *
    * @var array
    */
   protected $ReservationBydate = [];
-  
+
   /**
    * Contient les reservations groupées par clées.
    *
    * @var array
    */
   protected $ReservationGroupByKeys = [];
-  
+
   /**
    * Contient la configuration du RDV.
    *
    * @var array
    */
   protected $configuration = [];
-  
+
   /**
    * Retourne la valeur par defaut de la limit de reservation.
    *
@@ -104,7 +104,7 @@ class ManagerBase {
    * @var string
    */
   const ENTITY_RESERVATION = 'booking_reservation';
-  
+
   protected function loadBookingConfigType(string $booking_config_type_id) {
     if (!$this->BookingConfigType) {
       $this->booking_config_type_id = $booking_config_type_id;
@@ -114,7 +114,7 @@ class ManagerBase {
     }
     return $this->BookingConfigType;
   }
-  
+
   /**
    * Retourne la configuration et verifie qu'elle est bien definit.
    *
@@ -134,14 +134,14 @@ class ManagerBase {
     }
     return $this->configuration;
   }
-  
+
   /**
    * Permet de surcharger la configuration.
    */
   protected function setConfiguration(array $values) {
     $this->configuration = $values;
   }
-  
+
   /**
    */
   public function getDefaultLimitReservation() {
@@ -151,7 +151,7 @@ class ManagerBase {
     }
     return $this->DefaultLimitReservation;
   }
-  
+
   /**
    * Enresgistre les creneaux.
    *
@@ -178,7 +178,7 @@ class ManagerBase {
     $this->prepareMailToUser($BookingReservation);
     return $reservation;
   }
-  
+
   /**
    * Prepare le contenu du mail à envoyer à l'utilisateur.
    *
@@ -203,7 +203,7 @@ class ManagerBase {
       $this->sendMails($email, $subject, $messages);
     }
   }
-  
+
   protected function sendMails(string $to, string $subject, $message, $from = null) {
     $siteInfo = ConfigDrupal::config('system.site');
     $mailSystem = ConfigDrupal::config('mailsystem.settings');
@@ -228,14 +228,14 @@ class ManagerBase {
      * @var \Drupal\Core\Mail\MailManager $PluginMailManger
      */
     $PluginMailManger = \Drupal::service('plugin.manager.mail');
-    
+
     /**
      * On recupere l'instance à partir de l'id du plugin.
      *
      * @var \Drupal\Core\Mail\MailInterface $mailPlugin
      */
     $mailPlugin = $PluginMailManger->createInstance($mailSystem['defaults']['sender']);
-    
+
     $mailbox = new MailboxHeader('From', new Address($siteInfo['mail'], $siteInfo['name']));
     $datas['headers']['From'] = $mailbox->getBodyAsString();
     $message = $mailPlugin->format($datas);
@@ -247,7 +247,7 @@ class ManagerBase {
       $this->getLogger('booking_system')->alert($message);
     }
   }
-  
+
   /**
    * Ce champs est remplie si l'utilisateur n'a pas acces au creneaux.
    * (example il n'a peut plus reserver de nouveau creneaux).
@@ -259,7 +259,7 @@ class ManagerBase {
     $results['access'] = true;
     $results['ban_reason'] = '';
   }
-  
+
   protected function getEquipes(string $booking_config_type_id) {
     if (!$this->equipes)
       $this->equipes = $this->entityTypeManager->getStorage('booking_equipes')->loadByProperties([
@@ -267,7 +267,7 @@ class ManagerBase {
       ]);
     return $this->equipes;
   }
-  
+
   /**
    * Permet d'otenir une liste qui facilite la recherche et le decompte des
    * reservations par creneaux.
@@ -294,7 +294,7 @@ class ManagerBase {
     }
     return $this->ReservationGroupByKeys[$date_string];
   }
-  
+
   /**
    * Permet de recuperation toutes les reservations pour une date.
    *
@@ -321,7 +321,7 @@ class ManagerBase {
     }
     return $this->ReservationBydate[$date_string];
   }
-  
+
   /**
    * Retourne la liste des equipes en function de l'id de configuration.
    *
@@ -336,14 +336,17 @@ class ManagerBase {
       $options[] = [
         'name' => $equipe->label(),
         'value' => $indice, // Value => represente l'index dans le tableaux de
-                             // moniteurs.(front)
+        // moniteurs.(front)
         'id' => (int) $equipe->id()
       ];
       $indice++;
     }
+    if (empty($options)) {
+      throw BookingSystemException::exception("Erreur de configuration: Vous devez créer au moins un moniteur");
+    }
     return $options;
   }
-  
+
   /**
    * La date selectionner par l'utilisateur sur le front.
    * ( il faut faire attention pour ne pas modifier cette date ).
@@ -359,7 +362,7 @@ class ManagerBase {
     // }
     return $this->selecteddate;
   }
-  
+
   /**
    * Recupere la date selectionné par l'utilisateur.
    *
@@ -371,7 +374,7 @@ class ManagerBase {
     // return new DrupalDateTime($this->selecteddate->format("Y-m-d H:i:s"));
     return new DrupalDateTime($this->selecteddate);
   }
-  
+
   /**
    * Les dates sont des objects statiques, donc pour modifier un object sans
    * impacter son origin il faut faire un nouveau new.
@@ -381,7 +384,7 @@ class ManagerBase {
   protected function getNewInstanceDate(DrupalDateTime $date) {
     return new DrupalDateTime($date->__toString());
   }
-  
+
   /**
    * La date encours ( date du jour).
    * Attention On ne peut
@@ -395,7 +398,7 @@ class ManagerBase {
     }
     return $this->currentDate;
   }
-  
+
   /**
    * Recupere la configuration en fonction de l'indice de la journée.
    *
@@ -411,7 +414,4 @@ class ManagerBase {
     // }
     return $this->daysSortIndex[$indexDay];
   }
-  
 }
-
-
