@@ -314,6 +314,7 @@ class ManagerBase {
         $date_string
       ]);
       // dump($query->__toString());
+      $query->accessCheck(true);
       $ids = $query->execute();
       if ($ids) {
         $this->ReservationBydate[$date_string] = $this->entityTypeManager->getStorage(self::ENTITY_RESERVATION)->loadMultiple($ids);
