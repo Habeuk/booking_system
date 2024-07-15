@@ -12,7 +12,6 @@ use Stephane888\Debug\Repositories\ConfigDrupal;
 use Symfony\Component\Mime\Header\MailboxHeader;
 use Symfony\Component\Mime\Address;
 use Drupal\booking_system\Entity\BookingReservation;
-use Drupal\lesroidelareno\lesroidelareno;
 
 /**
  * Manage the booking system
@@ -161,7 +160,11 @@ class ManagerBase {
    */
   public function saveCreneaux(string $booking_config_type_id, array $values) {
     if (empty($values['name'])) {
-      $values['name'] = lesroidelareno::getCurrentPrefixDomain();
+      if (\Drupal::moduleHandler()->moduleExists('lesroidelareno')) {
+        $values['name'] = \Drupal\lesroidelareno\lesroidelareno::getCurrentPrefixDomain();
+      } else {
+        $values['name'] = $booking_config_type_id;
+      }
     }
     foreach ($values['creneaux'] as $k => $creneau) {
       if (is_array($creneau['equipe'])) {
